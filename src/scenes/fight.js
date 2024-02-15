@@ -1,7 +1,8 @@
 import Phaser from 'phaser'
 import Fighter from '../fighters/fighter.js';
 
-import player from '../../assets/sprites/player.png';
+import crystal from '../../assets/sprites/crystal/crystal_mauler.png';
+import crystalJSON from '../../assets/sprites/crystal/crystal_mauler.json';
 
 /**
  * Escena principal del juego. La escena se compone de una serie de plataformas 
@@ -20,14 +21,19 @@ export default class Fight extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('player', player);
+        //this.load.image('player', player);
+		this.load.aseprite({key : 'crystal', textureURL : crystal, atlasURL: crystalJSON});
     }
 
     /**
      * Creación de los elementos de la escena principal de juego
      */
     create() {
-        this.fighter = new Fighter(this, 200, 300);
-        this.fighter2 = new Fighter(this, 800, 300);
+        //this.fighter = new Fighter(this, 200, 300);
+        //this.fighter2 = new Fighter(this, 800, 300);
+		let x = this.anims.createFromAseprite('crystal');
+		let y = this.add.sprite(200, 300).play({ key: '3_atk', repeat: -1 }).setScale(3);
+		console.log(x);
+		console.log(y);
     }
 }

@@ -21,6 +21,7 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
     this.speed = 300;
     this.jumpSpeed = -400;
     this.cursors = this.scene.input.keyboard.createCursorKeys();
+	
   }
 
   /**

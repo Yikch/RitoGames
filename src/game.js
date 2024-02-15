@@ -7,14 +7,15 @@ import Phaser from 'phaser'
  */
 let config = {
     type: Phaser.AUTO,
-    width: 1000,
-    height: 500,
+    width: 900,
+    height: 600,
     scale: {
         // mode: Phaser.Scale.FIT,  
         autoCenter: Phaser.Scale.CENTER_HORIZONTALLY
     },
     pixelArt: true,
-    scene: [Fight],
+	//transparent: true,
+    scene: Fight,
     physics: {
         default: 'arcade',
         arcade: {
@@ -24,4 +25,4 @@ let config = {
     }
 };
 
-new Phaser.Game(config);
+const game = new Phaser.Game(config);
