@@ -16,9 +16,10 @@ let config = {
     pixelArt: true,
     scene: [Fight],
     physics: {
-        default: 'matter',
-        matter: {
-            
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 400 },
+            debug: false
         }
     }
 };
