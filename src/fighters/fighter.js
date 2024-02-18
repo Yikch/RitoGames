@@ -1,5 +1,8 @@
 import Phaser from 'phaser'
 
+import crystal from '../../assets/sprites/crystal/crystal_mauler.png';
+import crystalJSON from '../../assets/sprites/crystal/crystal_mauler.json';
+
 /**
  * Clase que representa el jugador del juego. El jugador se mueve por el mundo usando los cursores.
  * También almacena la puntuación o número de estrellas que ha recogido hasta el momento.
@@ -19,9 +22,12 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
     // Queremos que el jugador no se salga de los límites del mundo
     this.body.setCollideWorldBounds();
     this.speed = 300;
-    this.jumpSpeed = -400;
+    this.jumpSpeed = -100;
     this.cursors = this.scene.input.keyboard.createCursorKeys();
-	
+	scene.load.aseprite({key : 'crystal', textureURL : crystal, atlasURL: crystalJSON});
+	this.anims.createFromAseprite('crystal');
+	this.setScale(5);
+	this.anims.play({key :'idle', repeat: -1});
   }
 
   /**
@@ -32,7 +38,7 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
    */
   preUpdate(t,dt) {
     super.preUpdate(t,dt);
-    if (this.cursors.up.isDown && this.body.onFloor()) {
+    if (this.cursors.up.isDown) {
       this.body.setVelocityY(this.jumpSpeed);
     }
     if (this.cursors.left.isDown) {

@@ -1,8 +1,14 @@
 import Phaser from 'phaser'
+import StaticBody from 'phaser/src/physics/arcade/StaticBody.js';
 import Fighter from '../fighters/fighter.js';
 
 import crystal from '../../assets/sprites/crystal/crystal_mauler.png';
 import crystalJSON from '../../assets/sprites/crystal/crystal_mauler.json';
+import forest_back from '../../assets/background/forest_back.png';
+import forest_mid from '../../assets/background/forest_mid.png';
+import forest_front from '../../assets/background/forest_front.png';
+import forest_lights from '../../assets/background/forest_lights.png';
+
 
 /**
  * Escena principal del juego. La escena se compone de una serie de plataformas 
@@ -22,6 +28,10 @@ export default class Fight extends Phaser.Scene {
 
     preload() {
         //this.load.image('player', player);
+		this.load.image('forest_back', forest_back);
+		this.load.image('forest_mid', forest_mid);
+		this.load.image('forest_front', forest_front);
+		this.load.image('forest_lights', forest_lights);
 		this.load.aseprite({key : 'crystal', textureURL : crystal, atlasURL: crystalJSON});
     }
 
@@ -29,11 +39,23 @@ export default class Fight extends Phaser.Scene {
      * Creación de los elementos de la escena principal de juego
      */
     create() {
-        //this.fighter = new Fighter(this, 200, 300);
+
+		const { width, height } = this.scale;
+		this.add.image(0,0, 'forest_back').setDisplaySize(width, height).setOrigin(0,0);
+		this.add.image(0, 0, 'forest_mid').setDisplaySize(width, height).setOrigin(0,0);
+		this.add.image(0,0, 'forest_lights').setDisplaySize(width, height).setOrigin(0,0);
+		this.add.image(0,0, 'forest_front').setDisplaySize(width, height).setOrigin(0,0);
+
+		let floor = this.physics.add.staticGroup().create(0, height);
+		floor.setDisplaySize(width, 150).setOrigin(0, 1).refreshBody();
+		floor.setImmovable(true);
+		floor.body.allowGravity = false;
+		floor.renderFlags = 0;
+		this.fighter = new Fighter(this, 0, 0);
+
+		this.physics.add.collider(this.fighter, floor);
+
         //this.fighter2 = new Fighter(this, 800, 300);
-		let x = this.anims.createFromAseprite('crystal');
-		let y = this.add.sprite(200, 300).play({ key: '3_atk', repeat: -1 }).setScale(3);
-		console.log(x);
-		console.log(y);
+		
     }
 }

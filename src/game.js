@@ -7,20 +7,20 @@ import Phaser from 'phaser'
  */
 let config = {
     type: Phaser.AUTO,
-    width: 900,
-    height: 600,
+    width: 1200,
+    height: 900,
     scale: {
-        // mode: Phaser.Scale.FIT,  
+        //mode: Phaser.Scale.FIT,  
         autoCenter: Phaser.Scale.CENTER_HORIZONTALLY
     },
     pixelArt: true,
 	//transparent: true,
-    scene: Fight,
+    scene: [Fight],
     physics: {
         default: 'arcade',
         arcade: {
             gravity: { y: 400 },
-            debug: false
+            debug: true
         }
     }
 };
