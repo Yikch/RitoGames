@@ -19,7 +19,7 @@ let config = {
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 400 },
+            gravity: { y: 1000 },
             debug: true
         }
     }
