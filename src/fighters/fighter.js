@@ -1,8 +1,5 @@
 import Phaser from 'phaser'
 
-import crystal from '../../assets/sprites/crystal/crystal_mauler.png';
-import crystalJSON from '../../assets/sprites/crystal/crystal_mauler.json';
-
 /**
  * Clase que representa el jugador del juego. El jugador se mueve por el mundo usando los cursores.
  * También almacena la puntuación o número de estrellas que ha recogido hasta el momento.
@@ -15,7 +12,7 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
 	 * @param {number} x Coordenada X
 	 * @param {number} y Coordenada Y
 	 */
-	constructor(scene, x, y) {
+	constructor(scene, x, y, name, speed) {
 		super(scene, x, y, 'player');
 		this.STATES = {
 			idle: 'idle',
@@ -24,19 +21,18 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
 			fall: 'j_down_loop',
 			defend: 'defend',
 		}
+		this.name = name;
+		this.position = {x, y};
 		this.scene.add.existing(this);
 		this.scene.physics.add.existing(this);
 		// Queremos que el jugador no se salga de los límites del mundo
 		this.body.setCollideWorldBounds();
 		this.body.setSize(35, 45);
-		this.speed = 350;
+		this.speed = speed;
 		this.jumpSpeed = -800;
 		this.cursors = this.scene.input.keyboard.createCursorKeys();
-		scene.load.aseprite({key : 'crystal', textureURL : crystal, atlasURL: crystalJSON});
-		this.anims.createFromAseprite('crystal');
 		this.setScale(5);
-		this.state = this.STATES.idle;
-		this.anims.play({key :this.state, repeat: -1});
+		this.currentstate = this.STATES.idle;
 	}
 
 	updateAnimation(newState, oldState) {
@@ -47,9 +43,9 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
 			else if (this.body.velocity.y == 0){
 				newState = this.STATES.idle;
 			}
-			}
+		}
 		if(newState !== oldState){
-			this.state = newState;
+			this.currentstate = newState;
 			this.anims.play({key :newState, repeat: -1});
 		}
 	}
@@ -63,8 +59,8 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
 	preUpdate(t,dt) {
 		super.preUpdate(t,dt);
 		let newState;
-		if(this.state === this.STATES.jump || this.state === this.STATES.fall){
-			newState = this.state;
+		if(this.currentstate === this.STATES.jump || this.currentstate === this.STATES.fall){
+			newState = this.currentstate;
 		}
 		else if (this.cursors.up.isDown) {
 			this.body.setVelocityY(this.jumpSpeed);
@@ -86,6 +82,6 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
 			this.body.setVelocityX(0);
 			newState = this.STATES.idle
 		}
-		this.updateAnimation(newState, this.state);
+		this.updateAnimation(newState, this.currentstate);
 	}
 }

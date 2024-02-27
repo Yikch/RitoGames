@@ -1,6 +1,7 @@
 import Phaser from 'phaser'
 import StaticBody from 'phaser/src/physics/arcade/StaticBody.js';
 import Fighter from '../fighters/fighter.js';
+import Crystal from '../fighters/crystal.js';
 
 import crystal from '../../assets/sprites/crystal/crystal_mauler.png';
 import crystalJSON from '../../assets/sprites/crystal/crystal_mauler.json';
@@ -51,7 +52,7 @@ export default class Fight extends Phaser.Scene {
 		floor.setImmovable(true);
 		floor.body.allowGravity = false;
 		floor.renderFlags = 0;
-		this.fighter = new Fighter(this, 0, 0);
+		this.fighter = new Crystal(this, 0, 0, "crystal", 350);
 
 		this.physics.add.collider(this.fighter, floor);
 
