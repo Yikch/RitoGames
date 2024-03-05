@@ -49,7 +49,7 @@ Se ejecuta en web sobre pc con teclado "y gamepad" y en la misma máquina, no ha
 | **Puñetazos**       | Debiles | Fuertes |
 | **Salto**           | Simple  | "Doble" |
 | **Bloqueo**         | Simple  |         |
-| **Dash**            | Simple  |         |
+| **Dash/Roll**       | Simple  |         |
 
 | Ataques especiales |     |
 | ------------------ | --- |
@@ -101,25 +101,123 @@ Lucha de artistas (Habría que hacer el arte):
 
 Lucha de Elementales (sacado de itch.io): 
 
-- Luchador de crystal
+- **Luchador de crystal**
 
-- Arquero de planta
+![Alt Text](https://img.itch.zone/aW1nLzk3MDQ4MzQuZ2lm/original/o8JO%2Fj.gif)
 
-- Shinobi ninja
+- **Arquero de planta**
 
-- Wizard on water
+![Alt Text](https://img.itch.zone/aW1nLzkwMTIyMzIuZ2lm/original/BLk6Hw.gif)
 
-- Monje de piedra
+- **Shinobi ninja**
 
-- Garen de fuego
+![ninja](https://img.itch.zone/aW1nLzgzMjgyMzYuZ2lm/original/yySo5B.gif)
+
+- **Hechicera de agua**
+
+![wizard](https://img.itch.zone/aW1nLzY1NzM5NTAuZ2lm/original/3lANZ7.gif)
+
+- **Monje de piedra**
+
+![monje](https://img.itch.zone/aW1nLzg3MjU0MDUuZ2lm/original/M%2FqyHe.gif)
+
+- **Garen de fuego**
+
+![garen](https://img.itch.zone/aW1nLzcwMzM3MjcuZ2lm/original/03hMDn.gif)
 
 ## Candidatos a personaje inicial
 
-**Enlaces:**
+> **Enlaces:**
+> 
+> [ELEMENTALS](https://itch.io/c/1853936/elementals)
+> 
+> [Parallax Forest by ansimuz](https://ansimuz.itch.io/parallax-forest)
 
-[ELEMENTALS](https://itch.io/c/1853936/elementals)
+> ##### Crystal
 
-https://ansimuz.itch.io/parallax-forest
+- [x] Run
+
+![](https://img.itch.zone/aW1nLzk3MDQ4NDQuZ2lm/original/20MVrz.gif)
+
+- [x] Jump
+
+![](https://img.itch.zone/aW1nLzk3MDQ4NTEuZ2lm/original/ymMPNY.gif)
+
+- [ ] Roll
+
+![](https://img.itch.zone/aW1nLzk3MDQ4NzEuZ2lm/original/caBuJ%2F.gif)
+
+- [x] Defend
+
+![](https://img.itch.zone/aW1nLzk3MDQ4OTguZ2lm/original/ZxQTS%2B.gif)
+
+- [ ] Atack
+
+![](https://img.itch.zone/aW1nLzk3MDQ4ODUuZ2lm/original/mSWIzV.gif)
+
+- [ ] SP_atack_1
+
+![](https://img.itch.zone/aW1nLzk3MDQ4OTQuZ2lm/original/TeCva6.gif)
+
+- [ ] SP_atack_2
+
+![](https://img.itch.zone/aW1nLzk3MDQ4OTcuZ2lm/original/7xcND0.gif)
+
+- [ ] Take hit 
+
+![](https://img.itch.zone/aW1nLzk3MDQ5MDAuZ2lm/original/fCMe3T.gif)
+
+- [ ] Death
+
+![](https://img.itch.zone/aW1nLzk3MDQ5MDEuZ2lm/original/nyoDn2.gif)
+
+
+
+> ##### Arquero de planta
+
+- [ ] Run
+
+![](https://img.itch.zone/aW1nLzkwMTIyNDQuZ2lm/original/sdY5dT.gif)
+
+- [ ] Jump
+
+![](https://img.itch.zone/aW1nLzkwMTIyNDcuZ2lm/original/Y5XxPU.gif)
+
+- [ ] Roll
+
+![](https://img.itch.zone/aW1nLzkwMTIyNTguZ2lm/original/CeJlwt.gif)
+
+- [ ] Defend
+
+![](https://img.itch.zone/aW1nLzkwMTIyNzguZ2lm/original/oADQR3.gif)
+
+- [ ] Atack
+
+![](https://img.itch.zone/aW1nLzkwMTIyNjAuZ2lm/original/NwXILb.gif)
+
+- [ ] Atack_2
+
+![](https://img.itch.zone/aW1nLzkwMTIyNjUuZ2lm/original/d3Tfic.gif)
+
+- [ ] SP_atack_1
+
+![](https://img.itch.zone/aW1nLzkwMTIyNjkuZ2lm/original/Ja9zVQ.gif)
+
+- [ ] SP_atack_2
+
+![](https://img.itch.zone/aW1nLzkwMTIyNzMuZ2lm/original/WiYZa1.gif)
+
+- [ ] SP_atack_3
+
+![](https://img.itch.zone/aW1nLzkwMTIyNzcuZ2lm/original/sGgw4r.gif)
+
+- [ ] Take hit
+
+![](https://img.itch.zone/aW1nLzkwMTIyODEuZ2lm/original/m8tBPi.gif)
+
+- [ ] Death
+
+![](https://img.itch.zone/aW1nLzkwMTIyODMuZ2lm/original/IrvbT8.gif)
 
 ## Historia
 
