@@ -1,7 +1,7 @@
 import Phaser from 'phaser'
 
-import crystal from '../../assets/sprites/crystal/crystal_mauler.png';
-import crystalJSON from '../../assets/sprites/crystal/crystal_mauler.json';
+import leaf from '../../assets/sprites/leaf/leaf_fighter.png';
+import leafJSON from '../../assets/sprites/leaf/leaf_fighter.json';
 
 /**
  * Clase que representa el jugador del juego. El jugador se mueve por el mundo usando los cursores.
@@ -16,27 +16,34 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
 	 * @param {number} y Coordenada Y
 	 */
 	constructor(scene, x, y) {
-		super(scene, x, y, 'player');
+		super(scene, x, y);
 		this.STATES = {
 			idle: 'idle',
 			run: 'run',
-			jump: 'j_up_loop',
-			fall: 'j_down_loop',
+			jump: 'j_up',
+			fall: 'j_down',
 			defend: 'defend',
 		}
-		this.scene.add.existing(this);
+		this.cursors = this.scene.input.keyboard.createCursorKeys();
+
+		scene.load.aseprite({key : 'leaf', textureURL : leaf, atlasURL: leafJSON});
+		scene.add.sprite(x, y);
+		this.anims.createFromAseprite('leaf')
+		
+		this.speed = 350;
+		this.jumpSpeed = -800;
+
+		this.scene.add.existing(this).setDisplaySize(35, 45);
 		this.scene.physics.add.existing(this);
 		// Queremos que el jugador no se salga de los límites del mundo
 		this.body.setCollideWorldBounds();
 		this.body.setSize(35, 45);
-		this.speed = 350;
-		this.jumpSpeed = -800;
-		this.cursors = this.scene.input.keyboard.createCursorKeys();
-		scene.load.aseprite({key : 'crystal', textureURL : crystal, atlasURL: crystalJSON});
-		this.anims.createFromAseprite('crystal');
+
 		this.setScale(5);
+
 		this.state = this.STATES.idle;
 		this.anims.play({key :this.state, repeat: -1});
+		console.log(this.originX, this.originY);
 	}
 
 	updateAnimation(newState, oldState) {
@@ -87,5 +94,6 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
 			newState = this.STATES.idle
 		}
 		this.updateAnimation(newState, this.state);
+		//console.log(this.x, this.y, this.state)
 	}
 }
