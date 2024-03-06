@@ -1,13 +1,12 @@
 import Phaser from 'phaser'
 
-import leaf from '../../assets/sprites/leaf/leaf_fighter.png';
-import leafJSON from '../../assets/sprites/leaf/leaf_fighter.json';
+import leaf from '../../assets/sprites/leaf/leaf_fighter_good.png';
 
 /**
  * Clase que representa el jugador del juego. El jugador se mueve por el mundo usando los cursores.
  * También almacena la puntuación o número de estrellas que ha recogido hasta el momento.
  */
-export default class Fighter extends Phaser.GameObjects.Sprite {
+export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 
 	/**
 	 * Constructor del jugador
@@ -16,7 +15,7 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
 	 * @param {number} y Coordenada Y
 	 */
 	constructor(scene, x, y) {
-		super(scene, x, y);
+		super(scene, x, y, 'leaf');
 		this.STATES = {
 			idle: 'idle',
 			run: 'run',
@@ -26,24 +25,33 @@ export default class Fighter extends Phaser.GameObjects.Sprite {
 		}
 		this.cursors = this.scene.input.keyboard.createCursorKeys();
 
-		scene.load.aseprite({key : 'leaf', textureURL : leaf, atlasURL: leafJSON});
-		scene.add.sprite(x, y);
-		this.anims.createFromAseprite('leaf')
-		
 		this.speed = 350;
 		this.jumpSpeed = -800;
+		this.setScale(3);
 
-		this.scene.add.existing(this).setDisplaySize(35, 45);
-		this.scene.physics.add.existing(this);
+		this.scene.add.existing(this);
+		this.scene.physics.add.existing(this, false);
+		this.body.setSize(30, 50);
+		this.body.setOffset(this.width/2 - 15, this.height - 50);
+
 		// Queremos que el jugador no se salga de los límites del mundo
 		this.body.setCollideWorldBounds();
-		this.body.setSize(35, 45);
 
-		this.setScale(5);
+		this.anims.create({
+			key: this.STATES.idle,
+			frames: this.anims.generateFrameNumbers('leaf', { start: 0, end: 7 }),
+			frameRate: 10,
+			repeat: -1
+		});
+		this.anims.create({
+			key: this.STATES.run,
+			frames: this.anims.generateFrameNumbers('leaf', { start: 22, end: 31 }),
+			frameRate: 12,
+			repeat: -1
+		});
 
 		this.state = this.STATES.idle;
 		this.anims.play({key :this.state, repeat: -1});
-		console.log(this.originX, this.originY);
 	}
 
 	updateAnimation(newState, oldState) {
