@@ -1,7 +1,17 @@
 import Phaser from 'phaser'
+import StaticBody from 'phaser/src/physics/arcade/StaticBody.js';
 import Fighter from '../fighters/fighter.js';
 
-import player from '../../assets/sprites/player.png';
+import leaf from '../../assets/sprites/leaf/leaf_fighter.png';
+import metal from '../../assets/sprites/metal/metal_fighter.png';
+
+import metalJSON from '../../assets/sprites/metal/metal_fighter.json';
+
+import forest_back from '../../assets/background/forest_back.png';
+import forest_mid from '../../assets/background/forest_mid.png';
+import forest_front from '../../assets/background/forest_front.png';
+import forest_lights from '../../assets/background/forest_lights.png';
+
 
 /**
  * Escena principal del juego. La escena se compone de una serie de plataformas 
@@ -20,14 +30,38 @@ export default class Fight extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('player', player);
+        //this.load.image('player', player);
+		this.load.image('forest_back', forest_back);
+		this.load.image('forest_mid', forest_mid);
+		this.load.image('forest_front', forest_front);
+		this.load.image('forest_lights', forest_lights);
+		this.load.spritesheet('leaf', leaf, { frameWidth: 288, frameHeight: 128 });
+		this.load.atlas('metal', metal, metalJSON);
     }
 
     /**
      * Creación de los elementos de la escena principal de juego
      */
     create() {
-        this.fighter = new Fighter(this, 200, 300);
-        this.fighter2 = new Fighter(this, 800, 300);
+
+		const { width, height } = this.scale;
+		this.add.image(0,0, 'forest_back').setDisplaySize(width, height).setOrigin(0,0);
+		this.add.image(0, 0, 'forest_mid').setDisplaySize(width, height).setOrigin(0,0);
+		this.add.image(0,0, 'forest_lights').setDisplaySize(width, height).setOrigin(0,0);
+		this.add.image(0,0, 'forest_front').setDisplaySize(width, height).setOrigin(0,0);
+
+		let floor = this.physics.add.staticGroup().create(0, height);
+		floor.setDisplaySize(width, 150).setOrigin(0, 1).refreshBody();
+		floor.setImmovable(true);
+		floor.body.allowGravity = false;
+		floor.renderFlags = 0;
+
+		this.fighter = new Fighter(this, 300, 300, 'right');
+		this.physics.add.collider(this.fighter, floor);
+		console.log(this.fighter.originX, this.fighter.originY);
+
+        this.fighter2 = new Fighter(this, 1000, 300, 'left');
+		this.physics.add.collider(this.fighter2, floor);
+		this.physics.add.collider(this.fighter, this.fighter2);
     }
 }

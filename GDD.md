@@ -26,6 +26,7 @@ Se estima que en cada partida cada jugador podrá elegir 5 de estos ataques espe
 En cada partida habrá como máximo 3 rondas, siendo el ganador aquel que gane 2 de las 3 rondas.
 Ganará una ronda el jugador que sea capaz de quitarle todos los puntos de vida a su rival.
 
+
 ## Género
 
 El genero del juego es un juego de lucha 2D con una vista lateral de 1 personaje contra 1 personaje.
