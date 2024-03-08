@@ -1,4 +1,5 @@
 import Fight from './scenes/fight.js'
+import InitialScreen from './scenes/initialScreen.js'
 import Phaser from 'phaser'
 
 /**
@@ -15,7 +16,7 @@ let config = {
     },
     pixelArt: true,
 	//transparent: true,
-    scene: [Fight],
+    scene: [InitialScreen, Fight],
     physics: {
         default: 'arcade',
         arcade: {

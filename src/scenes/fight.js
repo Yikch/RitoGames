@@ -1,5 +1,4 @@
 import Phaser from 'phaser'
-import StaticBody from 'phaser/src/physics/arcade/StaticBody.js';
 import Fighter from '../fighters/fighter.js';
 
 import leaf from '../../assets/sprites/leaf/leaf_fighter.png';
