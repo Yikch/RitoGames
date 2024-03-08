@@ -2,7 +2,11 @@ import Phaser from 'phaser'
 import StaticBody from 'phaser/src/physics/arcade/StaticBody.js';
 import Fighter from '../fighters/fighter.js';
 
-import leaf from '../../assets/sprites/leaf/leaf_fighter_good.png';
+import leaf from '../../assets/sprites/leaf/leaf_fighter.png';
+import metal from '../../assets/sprites/metal/metal_fighter.png';
+
+import metalJSON from '../../assets/sprites/metal/metal_fighter.json';
+
 import forest_back from '../../assets/background/forest_back.png';
 import forest_mid from '../../assets/background/forest_mid.png';
 import forest_front from '../../assets/background/forest_front.png';
@@ -32,6 +36,7 @@ export default class Fight extends Phaser.Scene {
 		this.load.image('forest_front', forest_front);
 		this.load.image('forest_lights', forest_lights);
 		this.load.spritesheet('leaf', leaf, { frameWidth: 288, frameHeight: 128 });
+		this.load.atlas('metal', metal, metalJSON);
     }
 
     /**
@@ -51,12 +56,12 @@ export default class Fight extends Phaser.Scene {
 		floor.body.allowGravity = false;
 		floor.renderFlags = 0;
 
-		this.fighter = new Fighter(this, 1000, 300);
+		this.fighter = new Fighter(this, 300, 300, 'right');
 		this.physics.add.collider(this.fighter, floor);
 		console.log(this.fighter.originX, this.fighter.originY);
 
-        //this.fighter2 = new Fighter(this, 1000, 300, true);
-		//this.physics.add.collider(this.fighter2, floor);
-		//this.physics.add.collider(this.fighter, this.fighter2);
+        this.fighter2 = new Fighter(this, 1000, 300, 'left');
+		this.physics.add.collider(this.fighter2, floor);
+		this.physics.add.collider(this.fighter, this.fighter2);
     }
 }

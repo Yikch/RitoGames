@@ -1,7 +1,5 @@
 import Phaser from 'phaser'
 
-import leaf from '../../assets/sprites/leaf/leaf_fighter_good.png';
-
 /**
  * Clase que representa el jugador del juego. El jugador se mueve por el mundo usando los cursores.
  * También almacena la puntuación o número de estrellas que ha recogido hasta el momento.
@@ -14,8 +12,11 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 	 * @param {number} x Coordenada X
 	 * @param {number} y Coordenada Y
 	 */
-	constructor(scene, x, y) {
-		super(scene, x, y, 'leaf');
+	constructor(scene, x, y, facing) {
+		super(scene, x, y, 'metal');
+		
+		this.facing = facing;
+		
 		this.STATES = {
 			idle: 'idle',
 			run: 'run',
@@ -23,6 +24,13 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 			fall: 'j_down',
 			defend: 'defend',
 		}
+
+		this.stats = {
+			health: 100,
+			xSpeed: 350,
+			ySpeed: -800,
+		}
+
 		this.cursors = this.scene.input.keyboard.createCursorKeys();
 
 		this.speed = 350;
@@ -36,19 +44,27 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 
 		// Queremos que el jugador no se salga de los límites del mundo
 		this.body.setCollideWorldBounds();
-
+		this.flipX = facing == 'left';
 		this.anims.create({
 			key: this.STATES.idle,
-			frames: this.anims.generateFrameNumbers('leaf', { start: 0, end: 7 }),
+			frames: this.anims.generateFrameNames('metal', { 
+				prefix: 'idle_',
+				start: 1}),
 			frameRate: 10,
 			repeat: -1
 		});
-		this.anims.create({
-			key: this.STATES.run,
-			frames: this.anims.generateFrameNumbers('leaf', { start: 22, end: 31 }),
-			frameRate: 12,
-			repeat: -1
-		});
+		// this.anims.create({
+		// 	key: this.STATES.run,
+		// 	frames: this.anims.generateFrameNumbers('metal', { start: 22, end: 31 }),
+		// 	frameRate: 12,
+		// 	repeat: -1
+		// });
+		// this.anims.create({
+		// 	key: this.STATES.defend,
+		// 	frames: this.anims.generateFrameNumbers('metal', { start: 286, end: 303 }),
+		// 	frameRate: 24,
+		// 	repeat: -1
+		// });
 
 		this.state = this.STATES.idle;
 		this.anims.play({key :this.state, repeat: -1});
