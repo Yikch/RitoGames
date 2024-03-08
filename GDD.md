@@ -11,7 +11,6 @@ Es un juego de lucha 1vs1, en 2D donde cada jugador tiene un personaje, tendrá 
 ## Candidatos a personaje inicial
 
 [ELEMENTALS](https://itch.io/c/1853936/elementals)
-![Alt Text](https://img.itch.zone/aW1nLzk3MDQ4MzQuZ2lm/original/o8JO%2Fj.gif)
 
 [2D Fighter 5 by Asset Bakery](https://assetbakery.itch.io/2d-fighter-5)
 
