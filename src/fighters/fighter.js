@@ -25,6 +25,7 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 			defend: 'defend',
 		}
 		this.cursors = this.scene.input.keyboard.createCursorKeys();
+		this.gamepad = null;
 
 		this.scene.add.existing(this);
 		this.scene.physics.add.existing(this, false);
@@ -39,6 +40,10 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		//Estadisticas de los personajes
 		this.stats = this.iniStats()
 		this.state = this.STATES.idle;
+	}
+
+	initPad(gamepad){
+		this.gamepad = gamepad;
 	}
 
 	iniAnimations(){
@@ -76,15 +81,15 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		if(this.state === this.STATES.jump || this.state === this.STATES.fall){
 			newState = this.state;
 		}
-		else if (this.cursors.up.isDown) {
+		else if (this.cursors.up.isDown || (this.gamepad != null && this.gamepad.A)) {
 			this.body.setVelocityY(this.stats.jumpSpeed);
 			newState = this.STATES.jump;
 		}
-		else if (this.cursors.left.isDown) {
+		else if (this.cursors.left.isDown || (this.gamepad != null && this.gamepad.rightStick.x < 0)) {
 			this.body.setVelocityX(-this.stats.speed);
 			newState = this.STATES.run;
 		}
-		else if (this.cursors.right.isDown) {
+		else if (this.cursors.right.isDown || (this.gamepad != null && this.gamepad.rightStick.x > 0)) {
 			this.body.setVelocityX(this.stats.speed);
 			newState = this.STATES.run;
 		}
