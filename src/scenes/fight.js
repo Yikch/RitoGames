@@ -11,6 +11,7 @@ import forest_back from '../../assets/background/forest_back.png';
 import forest_mid from '../../assets/background/forest_mid.png';
 import forest_front from '../../assets/background/forest_front.png';
 import forest_lights from '../../assets/background/forest_lights.png';
+import MetalFighter from '../fighters/metalFighter.js';
 
 
 /**
@@ -56,11 +57,11 @@ export default class Fight extends Phaser.Scene {
 		floor.body.allowGravity = false;
 		floor.renderFlags = 0;
 
-		this.fighter = new Fighter(this, 300, 300, 'right');
+		this.fighter = new MetalFighter(this, 300, 300, 'right');
 		this.physics.add.collider(this.fighter, floor);
 		console.log(this.fighter.originX, this.fighter.originY);
 
-        this.fighter2 = new Fighter(this, 1000, 300, 'left');
+        this.fighter2 = new MetalFighter(this, 1000, 300, 'left');
 		this.physics.add.collider(this.fighter2, floor);
 		this.physics.add.collider(this.fighter, this.fighter2);
     }

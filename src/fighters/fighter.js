@@ -12,11 +12,11 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 	 * @param {number} x Coordenada X
 	 * @param {number} y Coordenada Y
 	 */
-	constructor(scene, x, y, facing) {
-		super(scene, x, y, 'metal');
-		
+	constructor(scene, x, y, sprite, facing) {
+		super(scene, x, y, sprite);
+
 		this.facing = facing;
-		
+		this.id = "";
 		this.STATES = {
 			idle: 'idle',
 			run: 'run',
@@ -24,50 +24,29 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 			fall: 'j_down',
 			defend: 'defend',
 		}
-
-		this.stats = {
-			health: 100,
-			xSpeed: 350,
-			ySpeed: -800,
-		}
-
 		this.cursors = this.scene.input.keyboard.createCursorKeys();
-
-		this.speed = 350;
-		this.jumpSpeed = -800;
-		this.setScale(3);
 
 		this.scene.add.existing(this);
 		this.scene.physics.add.existing(this, false);
-		this.body.setSize(30, 50);
-		this.body.setOffset(this.width/2 - 15, this.height - 50);
+		this.body.setCollideWorldBounds();
 
 		// Queremos que el jugador no se salga de los límites del mundo
-		this.body.setCollideWorldBounds();
 		this.flipX = facing == 'left';
-		this.anims.create({
-			key: this.STATES.idle,
-			frames: this.anims.generateFrameNames('metal', { 
-				prefix: 'idle_',
-				start: 1}),
-			frameRate: 10,
-			repeat: -1
-		});
-		// this.anims.create({
-		// 	key: this.STATES.run,
-		// 	frames: this.anims.generateFrameNumbers('metal', { start: 22, end: 31 }),
-		// 	frameRate: 12,
-		// 	repeat: -1
-		// });
-		// this.anims.create({
-		// 	key: this.STATES.defend,
-		// 	frames: this.anims.generateFrameNumbers('metal', { start: 286, end: 303 }),
-		// 	frameRate: 24,
-		// 	repeat: -1
-		// });
 
+		// Animaciones del jugador
+		this.iniAnimations();
+
+		//Estadisticas de los personajes
+		this.stats = this.iniStats()
 		this.state = this.STATES.idle;
-		this.anims.play({key :this.state, repeat: -1});
+	}
+
+	iniAnimations(){
+		throw new Error('createAnimations() must be implemented');
+	}
+
+	iniStats(){
+		throw new Error('createStats() must be implemented');
 	}
 
 	updateAnimation(newState, oldState) {
@@ -81,7 +60,7 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 			}
 		if(newState !== oldState){
 			this.state = newState;
-			this.anims.play({key :newState, repeat: -1});
+			this.anims.play({key : this.id + newState, repeat: -1});
 		}
 	}
 
@@ -98,15 +77,15 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 			newState = this.state;
 		}
 		else if (this.cursors.up.isDown) {
-			this.body.setVelocityY(this.jumpSpeed);
+			this.body.setVelocityY(this.stats.jumpSpeed);
 			newState = this.STATES.jump;
 		}
 		else if (this.cursors.left.isDown) {
-			this.body.setVelocityX(-this.speed);
+			this.body.setVelocityX(-this.stats.speed);
 			newState = this.STATES.run;
 		}
 		else if (this.cursors.right.isDown) {
-			this.body.setVelocityX(this.speed);
+			this.body.setVelocityX(this.stats.speed);
 			newState = this.STATES.run;
 		}
 		else if(this.cursors.down.isDown){
