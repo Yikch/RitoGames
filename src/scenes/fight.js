@@ -63,6 +63,29 @@ export default class Fight extends Phaser.Scene {
 
         this.fighter2 = new MetalFighter(this, 1000, 300, 'left');
 		this.physics.add.collider(this.fighter2, floor);
-		this.physics.add.collider(this.fighter, this.fighter2);
+		this.physics.add.overlap(this.fighter, this.fighter2, this.loseHP, null, this)
+
+		this.hpbar = this.add.graphics();
+		this.hpbar.cantidad = 500;
     }
+
+	update ()
+    {
+        this.hpbar.clear();
+
+		this.hpbar.displayWidth = this.hpbar.cantidad;
+
+        this.hpbar.fillStyle(0x2d2d2d);
+        this.hpbar.fillRect(64, 64, 500, 48);
+
+        this.hpbar.fillStyle(0xff0000); // color red
+        this.hpbar.fillRect(64, 64, this.hpbar.displayWidth, 48);
+    }
+
+	loseHP()
+	{
+		if (this.hpbar.cantidad > 0){
+			this.hpbar.cantidad = this.hpbar.cantidad - 10;
+		}
+	}
 }

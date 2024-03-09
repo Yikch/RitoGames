@@ -73,30 +73,32 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 	preUpdate(t,dt) {
 		super.preUpdate(t,dt);
 		let newState;
-		if(this.state === this.STATES.jump || this.state === this.STATES.fall){
-			newState = this.state;
+		if(this.facing === 'right'){
+			if(this.state === this.STATES.jump || this.state === this.STATES.fall){
+				newState = this.state;
+			}
+			else if (this.cursors.up.isDown) {
+				this.body.setVelocityY(this.stats.jumpSpeed);
+				newState = this.STATES.jump;
+			}
+			else if (this.cursors.left.isDown) {
+				this.body.setVelocityX(-this.stats.speed);
+				newState = this.STATES.run;
+			}
+			else if (this.cursors.right.isDown) {
+				this.body.setVelocityX(this.stats.speed);
+				newState = this.STATES.run;
+			}
+			else if(this.cursors.down.isDown){
+				this.body.setVelocityX(0);
+				newState = this.STATES.defend;
+			}
+			else {
+				this.body.setVelocityX(0);
+				newState = this.STATES.idle
+			}
+			this.updateAnimation(newState, this.state);
 		}
-		else if (this.cursors.up.isDown) {
-			this.body.setVelocityY(this.stats.jumpSpeed);
-			newState = this.STATES.jump;
-		}
-		else if (this.cursors.left.isDown) {
-			this.body.setVelocityX(-this.stats.speed);
-			newState = this.STATES.run;
-		}
-		else if (this.cursors.right.isDown) {
-			this.body.setVelocityX(this.stats.speed);
-			newState = this.STATES.run;
-		}
-		else if(this.cursors.down.isDown){
-			this.body.setVelocityX(0);
-			newState = this.STATES.defend;
-		}
-		else {
-			this.body.setVelocityX(0);
-			newState = this.STATES.idle
-		}
-		this.updateAnimation(newState, this.state);
 		//console.log(this.x, this.y, this.state)
 	}
 }
