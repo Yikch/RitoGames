@@ -36,45 +36,42 @@ export default class MetalFighter extends Fighter {
 	iniAnimations() {
 		this.scene.anims.create({
 			key: SPRITE + "_" + this.STATES.idle,
-			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'idle_', start: 1, end:7}),
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'idle_', start: 0, end:7}),
 			frameRate: 10,
 			repeat: -1
 		});
 		this.scene.anims.create({
 			key: SPRITE + "_" + this.STATES.run,
-			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'run_', start: 1, end: 7}),
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'run_', start: 0, end: 7}),
 			frameRate: 10,
 			repeat: -1
 		});
 		this.scene.anims.create({
 			key: SPRITE + "_" + this.STATES.jump,
-			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'jump_up_', start: 1, end: 2}),
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'jump_up_', start: 0, end: 2}),
 			frameRate: 10,
 			repeat: -1
 		});
 		this.scene.anims.create({
 			key: SPRITE + "_" + this.STATES.fall,
-			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'jump_down_', start: 1, end: 2}),
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'jump_down_', start: 0, end: 2}),
 			frameRate: 10,
 			repeat: -1
 		});
 		this.scene.anims.create({
 			key: SPRITE + "_" + this.STATES.defend,
-			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'defend_', start: 1, end: 11}),
-			frameRate: 10,
-			repeat: -1
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'defend_', start: 0, end: 11}),
+			frameRate: 10
 		});
 		this.scene.anims.create({
 			key: SPRITE + "_" + this.STATES.light,
-			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: '1_atk_', start: 1, end: 5}),
-			frameRate: 10,
-			repeat: -1
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: '1_atk_', start: 0, end: 5}),
+			frameRate: 10
 		});
 		this.scene.anims.create({
 			key: SPRITE + "_" + this.STATES.hard,
-			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'air_atk_', start: 1, end: 7}),
-			frameRate: 10,
-			repeat: -1
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'air_atk_', start: 0, end: 7}),
+			frameRate: 10
 		});
 	}
 }

@@ -15,6 +15,8 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 	constructor(scene, x, y, sprite, facing) {
 		super(scene, x, y, sprite);
 
+		this.debug = false;
+		this.blocked = false;
 		this.facing = facing;
 		this.id = "";
 		this.STATES = {
@@ -28,8 +30,19 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		}
 		this.cursors = this.scene.input.keyboard.createCursorKeys();
 		this.gamepad = null;
-		this.keyA = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-		this.keyS = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+
+		this.scene.input.keyboard.on('keydown-Z', this.manageLightAttack, this);
+		this.scene.input.keyboard.on('keydown-X', this.manageHardAttack, this);
+
+		this.scene.input.keyboard.on('keydown-M', this.resumeAnimation, this);
+		this.scene.input.keyboard.on('keydown-N', this.nextFrame, this);
+
+		this.on('animationcomplete', function (animation, frame) {
+			if (animation.key === this.id + this.STATES.light || animation.key === this.id + this.STATES.hard){
+				this.blocked = false;
+				this.updateAnimation(this.STATES.idle, this.state);
+			}
+		}, this);
 
 		this.scene.add.existing(this);
 		this.scene.physics.add.existing(this, false);
@@ -58,6 +71,35 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		throw new Error('createStats() must be implemented');
 	}
 
+	setDebug(debug){
+		this.debug = debug;
+		if (!this.debug){
+			this.anims.restart();
+		}
+	}
+
+	nextFrame(){
+		if(this.debug){
+			this.anims.nextFrame();
+		}
+	}
+
+	resumeAnimation(){
+		if (this.debug){
+			this.anims.resume();
+			this.anims.complete();
+		}
+	}
+
+	playAnimation(animation, infinite = false){
+		if (this.debug){
+			this.anims.startAnimation(animation, {start:0, repeat: infinite ? -1 : 1}).stop();
+			this.nextFrame();
+		}
+		else
+			this.anims.play(animation, infinite ? -1 : 1);
+	}
+
 	updateAnimation(newState, oldState) {
 		if(oldState === this.STATES.jump || oldState === this.STATES.fall){
 			if(this.body.velocity.y > 0){
@@ -66,10 +108,10 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 			else if (this.body.velocity.y == 0){
 				newState = this.STATES.idle;
 			}
-			}
+		}
 		if(newState !== oldState){
 			this.state = newState;
-			this.anims.play({key : this.id + newState, repeat: -1});
+			this.playAnimation(this.id + newState, true);
 		}
 	}
 
@@ -82,20 +124,19 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 	preUpdate(t, dt) {
 		super.preUpdate(t, dt);
 		let newState;
+		if(this.state === this.STATES.light || this.state === this.STATES.hard){
+			return;
+		}
 		if (this.state === this.STATES.jump || this.state === this.STATES.fall) {
 			newState = this.state;
-		}
-		if (this.keyA.isDown) {
-			newState = this.STATES.light;
-		}else if (this.keyS.isDown) {
-			newState = this.STATES.hard;
-		}else if (this.cursors.up.isDown || (this.gamepad != null && this.gamepad.A)) {
+		} 
+		else if (this.cursors.up.isDown || (this.gamepad != null && this.gamepad.A)) {
 			this.body.setVelocityY(this.stats.jumpSpeed);
 			newState = this.STATES.jump;
 		} else if (this.cursors.left.isDown || (this.gamepad != null && this.gamepad.rightStick.x < 0)) {
 			this.body.setVelocityX(-this.stats.speed);
 			newState = this.STATES.run;
-		} else if (this.cursors.right.isDown || (this.gamepad != null && this.gamepad.rightStick.x > 0)) {
+		}else if (this.cursors.right.isDown) {
 			this.body.setVelocityX(this.stats.speed);
 			newState = this.STATES.run;
 		} else if (this.cursors.down.isDown) {
@@ -105,9 +146,23 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 			this.body.setVelocityX(0);
 			newState = this.STATES.idle;
 		}
-
-
 		this.updateAnimation(newState, this.state);
 		//console.log(this.x, this.y, this.state)
+	}
+
+	manageLightAttack(){
+		if (this.body.onFloor() && !this.blocked){
+			this.state = this.STATES.light;
+			this.blocked = true
+			this.playAnimation(this.id + this.STATES.light);
+		}
+	}
+
+	manageHardAttack(){
+		if (this.body.onFloor() && !this.blocked){
+			this.state = this.STATES.hard;
+			this.blocked = true
+			this.playAnimation(this.id + this.STATES.hard);
+		}
 	}
 }

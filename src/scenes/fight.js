@@ -57,6 +57,11 @@ export default class Fight extends Phaser.Scene {
 		floor.body.allowGravity = false;
 		floor.renderFlags = 0;
 
+		this.keyboard = this.input.keyboard.addKeys({
+			debug: Phaser.Input.Keyboard.KeyCodes.P,
+		});
+
+		this.physics.world.drawDebug = false;
 		this.fighter = new MetalFighter(this, 300, 300, 'right');
 		this.physics.add.collider(this.fighter, floor);
 
@@ -80,5 +85,17 @@ export default class Fight extends Phaser.Scene {
 				this.numPads++;
 			}
 		});
+		//make it so when someone presses P it will toggle the debug mode
+		this.keyboard.debug.on('down', () => {
+			if (!this.physics.world.drawDebug)
+				this.physics.world.drawDebug = true;
+			else{
+				this.physics.world.drawDebug = false;
+				this.physics.world.debugGraphic.clear();
+			}
+			this.fighter.setDebug(!this.fighter.debug);
+			this.fighter2.setDebug(!this.fighter2.debug);
+		});
     }
+	
 }
