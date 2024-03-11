@@ -5,7 +5,6 @@ import metal from '../../assets/sprites/metal/metal_fighter.png';
 
 import metalJSON from '../../assets/sprites/metal/metal_fighter.json';
 
-import Controller from '../controller/controller.js';
 
 import forest_back from '../../assets/background/forest_back.png';
 import forest_mid from '../../assets/background/forest_mid.png';
@@ -29,7 +28,6 @@ export default class Fight extends Phaser.Scene {
 
     constructor() {
         super({ key: 'fight' });
-		this.controller = new Controller(this);
 		this.numPads = 0;
     }
 
@@ -41,7 +39,6 @@ export default class Fight extends Phaser.Scene {
 		this.load.image('forest_lights', forest_lights);
 		this.load.spritesheet('leaf', leaf, { frameWidth: 288, frameHeight: 128 });
 		this.load.atlas('metal', metal, metalJSON);
-		this.controller = new Controller(this);
     }
 
     /**
@@ -61,6 +58,11 @@ export default class Fight extends Phaser.Scene {
 		floor.body.allowGravity = false;
 		floor.renderFlags = 0;
 
+		this.keyboard = this.input.keyboard.addKeys({
+			debug: Phaser.Input.Keyboard.KeyCodes.P,
+		});
+
+		this.physics.world.drawDebug = false;
 		this.fighter = new MetalFighter(this, 300, 300, 'right');
 		this.physics.add.collider(this.fighter, floor);
 
@@ -84,5 +86,17 @@ export default class Fight extends Phaser.Scene {
 				this.numPads++;
 			}
 		});
+		//make it so when someone presses P it will toggle the debug mode
+		this.keyboard.debug.on('down', () => {
+			if (!this.physics.world.drawDebug)
+				this.physics.world.drawDebug = true;
+			else{
+				this.physics.world.drawDebug = false;
+				this.physics.world.debugGraphic.clear();
+			}
+			this.fighter.setDebug(!this.fighter.debug);
+			this.fighter2.setDebug(!this.fighter2.debug);
+		});
     }
+	
 }
