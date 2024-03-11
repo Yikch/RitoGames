@@ -65,7 +65,12 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	playAnimDebug(){
-		
+		console.log(this.anims.currentAnim.key, this.anims.currentFrame.index);
+		this.anims.stop();
+		this.scene.input.on('keydown-L', (pointer) => {
+			this.framename = this.anims.currentAnim.frames[this.anims.currentFrame.index].textureFrame;
+		}, this);
+		while (this.anims.currentAnim.getLastFrame().textureFrame != this.framename){}
 	}
 
 
@@ -77,7 +82,7 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 			else if (this.body.velocity.y == 0){
 				newState = this.STATES.idle;
 			}
-			}
+		}
 		if(newState !== oldState){
 			this.state = newState;
 			if (this.debug){
@@ -100,7 +105,8 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		let newState;
 		if (this.state === this.STATES.jump || this.state === this.STATES.fall) {
 			newState = this.state;
-		}else if (this.keyJ.isDown) {
+		}
+		if (this.keyJ.isDown) {
 			newState = this.STATES.light;
 		}else if (this.keyK.isDown) {
 			newState = this.STATES.hard;
