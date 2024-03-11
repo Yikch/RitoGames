@@ -29,11 +29,9 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		}
 		this.cursors = this.scene.input.keyboard.createCursorKeys();
 		this.gamepad = null;
-		this.keyA = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-		this.keyS = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
 
-		this.scene.input.keyboard.on('keydown-A', this.manageLightAttack, this);
-		this.scene.input.keyboard.on('keydown-S', this.manageHardAttack, this);
+		this.scene.input.keyboard.on('keydown-Z', this.manageLightAttack, this);
+		this.scene.input.keyboard.on('keydown-X', this.manageHardAttack, this);
 
 		this.on('animationcomplete', function (animation, frame) {
 			if (animation.key === this.id + this.STATES.light || animation.key === this.id + this.STATES.hard){
@@ -99,11 +97,7 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		if (this.state === this.STATES.jump || this.state === this.STATES.fall) {
 			newState = this.state;
 		} 
-		else if (this.keyA.isDown) {
-			newState = this.STATES.light;
-		}else if (this.keyS.isDown) {
-			newState = this.STATES.hard;
-		}else if (this.cursors.up.isDown || (this.gamepad != null && this.gamepad.A)) {
+		else if (this.cursors.up.isDown || (this.gamepad != null && this.gamepad.A)) {
 			this.body.setVelocityY(this.stats.jumpSpeed);
 			newState = this.STATES.jump;
 		} else if (this.cursors.left.isDown || (this.gamepad != null && this.gamepad.rightStick.x < 0)) {

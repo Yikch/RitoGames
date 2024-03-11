@@ -5,8 +5,6 @@ import metal from '../../assets/sprites/metal/metal_fighter.png';
 
 import metalJSON from '../../assets/sprites/metal/metal_fighter.json';
 
-import Controller from '../controller/controller.js';
-
 import forest_back from '../../assets/background/forest_back.png';
 import forest_mid from '../../assets/background/forest_mid.png';
 import forest_front from '../../assets/background/forest_front.png';
@@ -29,7 +27,6 @@ export default class Fight extends Phaser.Scene {
 
     constructor() {
         super({ key: 'fight' });
-		this.controller = new Controller(this);
 		this.numPads = 0;
     }
 
@@ -41,7 +38,6 @@ export default class Fight extends Phaser.Scene {
 		this.load.image('forest_lights', forest_lights);
 		this.load.spritesheet('leaf', leaf, { frameWidth: 288, frameHeight: 128 });
 		this.load.atlas('metal', metal, metalJSON);
-		this.controller = new Controller(this);
     }
 
     /**
