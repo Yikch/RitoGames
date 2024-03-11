@@ -61,20 +61,17 @@ export default class MetalFighter extends Fighter {
 		this.scene.anims.create({
 			key: SPRITE + "_" + this.STATES.defend,
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'defend_', start: 1, end: 11}),
-			frameRate: 10,
-			repeat: -1
+			frameRate: 10
 		});
 		this.scene.anims.create({
 			key: SPRITE + "_" + this.STATES.light,
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: '1_atk_', start: 1, end: 5}),
-			frameRate: 10,
-			repeat: -1
+			frameRate: 10
 		});
 		this.scene.anims.create({
 			key: SPRITE + "_" + this.STATES.hard,
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'air_atk_', start: 1, end: 7}),
-			frameRate: 10,
-			repeat: -1
+			frameRate: 10
 		});
 	}
 }

@@ -15,6 +15,7 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 	constructor(scene, x, y, sprite, facing) {
 		super(scene, x, y, sprite);
 
+		this.blocked = false;
 		this.facing = facing;
 		this.id = "";
 		this.STATES = {
@@ -29,6 +30,16 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		this.cursors = this.scene.input.keyboard.createCursorKeys();
 		this.keyA = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
 		this.keyS = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+
+		this.scene.input.keyboard.on('keydown-A', this.manageLightAttack, this);
+		this.scene.input.keyboard.on('keydown-S', this.manageHardAttack, this);
+
+		this.on('animationcomplete', function (animation, frame) {
+			if (animation.key === this.id + this.STATES.light || animation.key === this.id + this.STATES.hard){
+				this.blocked = false;
+				this.updateAnimation(this.STATES.idle, this.state);
+			}
+		}, this);
 
 		this.scene.add.existing(this);
 		this.scene.physics.add.existing(this, false);
@@ -61,7 +72,7 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 			else if (this.body.velocity.y == 0){
 				newState = this.STATES.idle;
 			}
-			}
+		}
 		if(newState !== oldState){
 			this.state = newState;
 			this.anims.play({key : this.id + newState, repeat: -1});
@@ -77,14 +88,13 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 	preUpdate(t, dt) {
 		super.preUpdate(t, dt);
 		let newState;
+		if(this.state === this.STATES.light || this.state === this.STATES.hard){
+			return;
+		}
 		if (this.state === this.STATES.jump || this.state === this.STATES.fall) {
 			newState = this.state;
 		} 
-		if (this.keyA.isDown) {
-			newState = this.STATES.light;
-		}else if (this.keyS.isDown) {
-			newState = this.STATES.hard;
-		}else if (this.cursors.up.isDown) {
+		else if (this.cursors.up.isDown) {
 			this.body.setVelocityY(this.stats.jumpSpeed);
 			newState = this.STATES.jump;
 		} else if (this.cursors.left.isDown) {
@@ -100,9 +110,23 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 			this.body.setVelocityX(0);
 			newState = this.STATES.idle;
 		}
-
-
 		this.updateAnimation(newState, this.state);
 		//console.log(this.x, this.y, this.state)
+	}
+
+	manageLightAttack(){
+		if (this.body.onFloor() && !this.blocked){
+			this.state = this.STATES.light;
+			this.anims.play({key : this.id + this.STATES.light});
+			this.blocked = true
+		}
+	}
+
+	manageHardAttack(){
+		if (this.body.onFloor() && !this.blocked){
+			this.state = this.STATES.hard;
+			this.anims.play({key : this.id + this.STATES.hard});
+			this.blocked = true
+		}
 	}
 }
