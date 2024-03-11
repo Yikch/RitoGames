@@ -5,7 +5,6 @@ import metal from '../../assets/sprites/metal/metal_fighter.png';
 
 import metalJSON from '../../assets/sprites/metal/metal_fighter.json';
 
-
 import forest_back from '../../assets/background/forest_back.png';
 import forest_mid from '../../assets/background/forest_mid.png';
 import forest_front from '../../assets/background/forest_front.png';
