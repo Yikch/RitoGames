@@ -1,4 +1,4 @@
-import Phaser from 'phaser'
+import Phaser from 'phaser';
 
 /**
  * Clase que representa el jugador del juego. El jugador se mueve por el mundo usando los cursores.
@@ -85,15 +85,15 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 			this.body.setVelocityY(this.stats.jumpSpeed);
 			newState = this.STATES.jump;
 		}
-		else if (this.cursors.left.isDown || (this.gamepad != null && this.gamepad.rightStick.x < 0)) {
+		else if (this.cursors.left.isDown || (this.gamepad != null && this.gamepad.leftStick.x < 0)) {
 			this.body.setVelocityX(-this.stats.speed);
 			newState = this.STATES.run;
 		}
-		else if (this.cursors.right.isDown || (this.gamepad != null && this.gamepad.rightStick.x > 0)) {
+		else if (this.cursors.right.isDown || (this.gamepad != null && this.gamepad.leftStick.x > 0)) {
 			this.body.setVelocityX(this.stats.speed);
 			newState = this.STATES.run;
 		}
-		else if(this.cursors.down.isDown){
+		else if(this.cursors.down.isDown || (this.gamepad != null && this.gamepad.B)){
 			this.body.setVelocityX(0);
 			newState = this.STATES.defend;
 		}
