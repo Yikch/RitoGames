@@ -80,7 +80,7 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		if (this.state === this.STATES.jump || this.state === this.STATES.fall) {
 			newState = this.state;
 		} 
-		else if (this.keyA.isDown) {
+		if (this.keyA.isDown) {
 			newState = this.STATES.light;
 		}else if (this.keyS.isDown) {
 			newState = this.STATES.hard;
