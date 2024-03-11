@@ -23,8 +23,12 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 			jump: 'j_up',
 			fall: 'j_down',
 			defend: 'defend',
+			light: 'light',
+			hard: 'hard'
 		}
 		this.cursors = this.scene.input.keyboard.createCursorKeys();
+		this.keyA = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+		this.keyS = this.scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
 
 		this.scene.add.existing(this);
 		this.scene.physics.add.existing(this, false);
@@ -70,32 +74,34 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 	 * ya son gestionadas por la estrella (no gestionar las colisiones dos veces)
 	 * @override
 	 */
-	preUpdate(t,dt) {
-		super.preUpdate(t,dt);
+	preUpdate(t, dt) {
+		super.preUpdate(t, dt);
 		let newState;
-		if(this.state === this.STATES.jump || this.state === this.STATES.fall){
+		if (this.state === this.STATES.jump || this.state === this.STATES.fall) {
 			newState = this.state;
-		}
-		else if (this.cursors.up.isDown) {
+		} 
+		else if (this.keyA.isDown) {
+			newState = this.STATES.light;
+		}else if (this.keyS.isDown) {
+			newState = this.STATES.hard;
+		}else if (this.cursors.up.isDown) {
 			this.body.setVelocityY(this.stats.jumpSpeed);
 			newState = this.STATES.jump;
-		}
-		else if (this.cursors.left.isDown) {
+		} else if (this.cursors.left.isDown) {
 			this.body.setVelocityX(-this.stats.speed);
 			newState = this.STATES.run;
-		}
-		else if (this.cursors.right.isDown) {
+		} else if (this.cursors.right.isDown) {
 			this.body.setVelocityX(this.stats.speed);
 			newState = this.STATES.run;
-		}
-		else if(this.cursors.down.isDown){
+		} else if (this.cursors.down.isDown) {
 			this.body.setVelocityX(0);
 			newState = this.STATES.defend;
-		}
-		else {
+		} else {
 			this.body.setVelocityX(0);
-			newState = this.STATES.idle
+			newState = this.STATES.idle;
 		}
+
+
 		this.updateAnimation(newState, this.state);
 		//console.log(this.x, this.y, this.state)
 	}
