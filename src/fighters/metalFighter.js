@@ -21,9 +21,6 @@ export default class MetalFighter extends Fighter {
 
 		this.anims.play({key :this.id + this.state, repeat: -1});
 
-		this.scene.input.keyboard.on('keydown-Z', this.manageLightAttack, this);
-		this.scene.input.keyboard.on('keydown-X', this.manageHardAttack, this);
-
 		this.on('animationcomplete', function (animation, frame) {
 			if (animation.key === this.id + this.STATES.light || animation.key === this.id + this.STATES.hard){
 				this.blocked = false;
@@ -36,8 +33,8 @@ export default class MetalFighter extends Fighter {
 	iniStats() {
 		return {
 			health: 100,
-			speed: 200,
-			jumpSpeed: -600,
+			speed: 300,
+			jumpSpeed: -800,
 		}
 	}
 
