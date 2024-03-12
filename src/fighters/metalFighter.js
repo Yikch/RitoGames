@@ -24,8 +24,9 @@ export default class MetalFighter extends Fighter {
 		this.on('animationcomplete', function (animation, frame) {
 			if (animation.key === this.id + this.STATES.light || animation.key === this.id + this.STATES.hard){
 				this.blocked = false;
-				if(this.hb !== null)
-					this.hb.destroy()
+				if(this.hb !== null){
+					this.hb = this.hb.destroy()
+				}
 				this.updateAnimation(this.STATES.idle, this.state);
 			}
 		}, this);
