@@ -76,7 +76,6 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 
 	resumeAnimation(){
 		if (this.debug){
-			this.anims.resume();
 			this.anims.complete();
 		}
 	}

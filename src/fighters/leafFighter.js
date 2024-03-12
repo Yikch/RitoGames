@@ -10,8 +10,8 @@ export default class LeafFighter extends Fighter {
 	 * @param {number} y Coordenada Y
 	 * @param {string} facing Dirección a la que mira el jugador
 	 */
-	constructor(scene, x, y, facing) {
-		super(scene, x, y, SPRITE, facing);
+	constructor(scene, x, y, facing, attackKeys) {
+		super(scene, x, y, SPRITE, facing, attackKeys);
 
 		this.hb = null;
 		this.id = SPRITE + "_";
@@ -62,6 +62,7 @@ export default class LeafFighter extends Fighter {
 				this.y + this.height + 25, 
 				'leafProjectiles', 'arrow')
 				.setScale(5).setVisible(false));
+
 			arrow.flipX = this.facing === 'left'
 			this.scene.tweens.add({
 				targets: arrow,
@@ -69,7 +70,8 @@ export default class LeafFighter extends Fighter {
 				ease: 'linear',
 				duration: 1000,
 				delay: 800,
-				onStart: () => arrow.setVisible(true)
+				onStart: () => {arrow.setVisible(true); this.scene.physics.add.existing(arrow, false);
+								arrow.body.setSize(20,5).setAllowGravity(false);}
 			});
 		}
 	}
