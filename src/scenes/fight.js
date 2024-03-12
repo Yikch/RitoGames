@@ -1,4 +1,4 @@
-import Phaser from 'phaser'
+import Phaser from 'phaser';
 
 import leaf from '../../assets/sprites/leaf/leaf_fighter.png';
 import metal from '../../assets/sprites/metal/metal_fighter.png';
@@ -17,8 +17,6 @@ import forest_mid from '../../assets/background/forest_mid.png';
 import forest_front from '../../assets/background/forest_front.png';
 import forest_lights from '../../assets/background/forest_lights.png';
 import MetalFighter from '../fighters/metalFighter.js';
-import LeafFighter from '../fighters/leafFighter.js';
-
 
 /**
  * Escena principal del juego. La escena se compone de una serie de plataformas 
@@ -44,7 +42,7 @@ export default class Fight extends Phaser.Scene {
 		this.load.image('forest_mid', forest_mid);
 		this.load.image('forest_front', forest_front);
 		this.load.image('forest_lights', forest_lights);
-
+		this.load.spritesheet('leaf', leaf, { frameWidth: 288, frameHeight: 128 });
 		this.load.atlas('metal', metal, metalJSON);
 		this.load.atlas('leaf', leaf, leafJSON);
 		this.load.atlas('leafProjectiles', leafProjectiles, leafProjectilesJSON);
@@ -68,21 +66,25 @@ export default class Fight extends Phaser.Scene {
 		floor.body.allowGravity = false;
 		floor.renderFlags = 0;
 
-		this.keyboard = this.input.keyboard.addKeys({
-			debug: Phaser.Input.Keyboard.KeyCodes.P,
-		});
-
-		this.physics.world.drawDebug = false;
-		this.fighter = new MetalFighter(this, 300, 300, 'right');
-		this.physics.add.collider(this.fighter, floor);
-
-        this.fighter2 = new LeafFighter(this, 1000, 300, 'left');
-		this.fighter2.cursors = this.input.keyboard.addKeys({
+		const attackKeysP1 = ['keydown-Q', 'keydown-E'];
+		this.fighter = new MetalFighter(this, 300, 300, 'right', attackKeysP1);
+		this.fighter.cursors = this.input.keyboard.addKeys({
             up: Phaser.Input.Keyboard.KeyCodes.W,
             down: Phaser.Input.Keyboard.KeyCodes.S,
             left: Phaser.Input.Keyboard.KeyCodes.A,
             right: Phaser.Input.Keyboard.KeyCodes.D
         });
+		this.physics.add.collider(this.fighter, floor);
+
+		const attackKeysP2 = ['keydown-NUMPAD_SEVEN', 'keydown-NUMPAD_NINE'];
+        this.fighter2 = new MetalFighter(this, 1000, 300, 'left', attackKeysP2);
+		this.fighter2.cursors = this.input.keyboard.addKeys({
+            up: Phaser.Input.Keyboard.KeyCodes.NUMPAD_EIGHT,
+            down: Phaser.Input.Keyboard.KeyCodes.NUMPAD_FIVE,
+            left: Phaser.Input.Keyboard.KeyCodes.NUMPAD_FOUR,
+            right: Phaser.Input.Keyboard.KeyCodes.NUMPAD_SIX
+        });
+
 		this.physics.add.collider(this.fighter2, floor);
 		this.physics.add.collider(this.fighter, this.fighter2);
 
@@ -96,17 +98,5 @@ export default class Fight extends Phaser.Scene {
 				this.numPads++;
 			}
 		});
-		//make it so when someone presses P it will toggle the debug mode
-		this.keyboard.debug.on('down', () => {
-			if (!this.physics.world.drawDebug)
-				this.physics.world.drawDebug = true;
-			else{
-				this.physics.world.drawDebug = false;
-				this.physics.world.debugGraphic.clear();
-			}
-			this.fighter.setDebug(!this.fighter.debug);
-			this.fighter2.setDebug(!this.fighter2.debug);
-		});
     }
-	
 }

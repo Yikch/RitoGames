@@ -122,21 +122,24 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		else if (this.cursors.up.isDown || (this.gamepad != null && this.gamepad.A)) {
 			this.body.setVelocityY(this.stats.jumpSpeed);
 			newState = this.STATES.jump;
-		} else if (this.cursors.left.isDown || (this.gamepad != null && this.gamepad.rightStick.x < 0)) {
+		} 
+		else if (this.cursors.left.isDown || (this.gamepad != null && this.gamepad.rightStick.x < 0)) {
 			this.body.setVelocityX(-this.stats.speed);
 			newState = this.STATES.run;
-		}else if (this.cursors.right.isDown) {
+		}
+		else if (this.cursors.right.isDown) {
 			this.body.setVelocityX(this.stats.speed);
 			newState = this.STATES.run;
-		} else if (this.cursors.down.isDown) {
+		} 
+		else if (this.cursors.down.isDown) {
 			this.body.setVelocityX(0);
 			newState = this.STATES.defend;
-		} else {
+		} 
+		else {
 			this.body.setVelocityX(0);
 			newState = this.STATES.idle;
 		}
 		this.updateAnimation(newState, this.state);
-		//console.log(this.x, this.y, this.state)
 	}
 
 	manageLightAttack(){
