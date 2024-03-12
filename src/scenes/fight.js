@@ -4,12 +4,14 @@ import leaf from '../../assets/sprites/leaf/leaf_fighter.png';
 import metal from '../../assets/sprites/metal/metal_fighter.png';
 
 import metalJSON from '../../assets/sprites/metal/metal_fighter.json';
+import leafJSON from '../../assets/sprites/leaf/leaf_fighter.json';
 
 import forest_back from '../../assets/background/forest_back.png';
 import forest_mid from '../../assets/background/forest_mid.png';
 import forest_front from '../../assets/background/forest_front.png';
 import forest_lights from '../../assets/background/forest_lights.png';
 import MetalFighter from '../fighters/metalFighter.js';
+import LeafFighter from '../fighters/leafFighter.js';
 
 
 /**
@@ -36,8 +38,9 @@ export default class Fight extends Phaser.Scene {
 		this.load.image('forest_mid', forest_mid);
 		this.load.image('forest_front', forest_front);
 		this.load.image('forest_lights', forest_lights);
-		this.load.spritesheet('leaf', leaf, { frameWidth: 288, frameHeight: 128 });
+
 		this.load.atlas('metal', metal, metalJSON);
+		this.load.atlas('leaf', leaf, leafJSON);
     }
 
     /**
@@ -65,7 +68,7 @@ export default class Fight extends Phaser.Scene {
 		this.fighter = new MetalFighter(this, 300, 300, 'right');
 		this.physics.add.collider(this.fighter, floor);
 
-        this.fighter2 = new MetalFighter(this, 1000, 300, 'left');
+        this.fighter2 = new LeafFighter(this, 1000, 300, 'left');
 		this.fighter2.cursors = this.input.keyboard.addKeys({
             up: Phaser.Input.Keyboard.KeyCodes.W,
             down: Phaser.Input.Keyboard.KeyCodes.S,
