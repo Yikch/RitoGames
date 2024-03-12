@@ -54,24 +54,16 @@ export default class Fight extends Phaser.Scene {
      * Creación de los elementos de la escena principal de juego
      */
     create() {
-
 		const {width, height } = this.scale;
 		
 		this.iniStage(width, height);
 		this.iniDebug();
 		this.iniFighter1();
 		this.iniFighter2();
-		
 
-		this.input.gamepad.once('connected', (pad) => {
-			if(this.numPads === 0){
-				this.fighter.initPad(pad);
-				this.numPads++;
-			}
-			else if(this.numPads){
-				this.fighter2.initPad(pad);
-				this.numPads++;
-			}
+		this.input.gamepad.once('connected', () => {
+			this.fighter.initPad(this.input.gamepad.pad1);
+			this.fighter2.initPad(this.input.gamepad.pad2);
 		});
 
     }
