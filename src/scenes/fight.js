@@ -2,9 +2,15 @@ import Phaser from 'phaser'
 
 import leaf from '../../assets/sprites/leaf/leaf_fighter.png';
 import metal from '../../assets/sprites/metal/metal_fighter.png';
+import leafProjectiles from '../../assets/sprites/leaf/projectiles.png';
+import metalProjectiles from '../../assets/sprites/metal/projectile_and_trap.png'
+
 
 import metalJSON from '../../assets/sprites/metal/metal_fighter.json';
 import leafJSON from '../../assets/sprites/leaf/leaf_fighter.json';
+import leafProjectilesJSON from '../../assets/sprites/leaf/projectiles.json';
+import metalProjectilesJSON from '../../assets/sprites/metal/projectile_and_trap.json'
+
 
 import forest_back from '../../assets/background/forest_back.png';
 import forest_mid from '../../assets/background/forest_mid.png';
@@ -41,6 +47,8 @@ export default class Fight extends Phaser.Scene {
 
 		this.load.atlas('metal', metal, metalJSON);
 		this.load.atlas('leaf', leaf, leafJSON);
+		this.load.atlas('leafProjectiles', leafProjectiles, leafProjectilesJSON);
+		this.load.atlas('metalProjectiles', metalProjectiles, metalProjectilesJSON);
     }
 
     /**
