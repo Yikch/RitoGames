@@ -12,7 +12,7 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 	 * @param {number} x Coordenada X
 	 * @param {number} y Coordenada Y
 	 */
-	constructor(scene, x, y, sprite, facing) {
+	constructor(scene, x, y, sprite, facing, attackKeys) {
 		super(scene, x, y, sprite);
 
 		this.debug = false;
@@ -33,6 +33,8 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 
 		this.scene.input.keyboard.on('keydown-M', this.resumeAnimation, this);
 		this.scene.input.keyboard.on('keydown-N', this.nextFrame, this);
+		this.scene.input.keyboard.on(attackKeys[0], this.manageLightAttack, this);
+		this.scene.input.keyboard.on(attackKeys[1], this.manageHardAttack, this);
 
 		this.scene.add.existing(this);
 		this.scene.physics.add.existing(this, false);
@@ -47,6 +49,8 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		//Estadisticas de los personajes
 		this.stats = this.iniStats()
 		this.state = this.STATES.idle;
+
+		this.scale = window.screen.width / 350;
 	}
 
 	initPad(gamepad){
@@ -128,11 +132,11 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 			this.body.setVelocityX(-this.stats.speed);
 			newState = this.STATES.run;
 		}
-		else if (this.cursors.right.isDown) {
+		else if (this.cursors.right.isDown || (this.gamepad != null && this.gamepad.rightStick.x > 0)) {
 			this.body.setVelocityX(this.stats.speed);
 			newState = this.STATES.run;
 		} 
-		else if (this.cursors.down.isDown) {
+		else if (this.cursors.down.isDown || (this.gamepad != null && this.gamepad.B)) {
 			this.body.setVelocityX(0);
 			newState = this.STATES.defend;
 		} 

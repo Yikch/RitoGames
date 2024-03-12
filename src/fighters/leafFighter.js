@@ -14,7 +14,7 @@ export default class LeafFighter extends Fighter {
 		super(scene, x, y, SPRITE, facing);
 
 		this.id = SPRITE + "_";
-		this.setScale(3);
+		this.setScale(5);
 		this.body.setSize(30, 50);
 		this.body.setOffset(this.width/2 - 15, this.height - 50);
 
