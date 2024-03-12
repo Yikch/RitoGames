@@ -36,9 +36,6 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		this.scene.input.keyboard.on(attackKeys[0], this.manageLightAttack, this);
 		this.scene.input.keyboard.on(attackKeys[1], this.manageHardAttack, this);
 
-		this.scene.input.keyboard.on('keydown-Z', this.manageLightAttack, this);
-		this.scene.input.keyboard.on('keydown-X', this.manageHardAttack, this);
-
 		this.scene.add.existing(this);
 		this.scene.physics.add.existing(this, false);
 		this.body.setCollideWorldBounds();
