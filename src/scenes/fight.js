@@ -60,6 +60,7 @@ export default class Fight extends Phaser.Scene {
 		this.fighter = new MetalFighter(this, 300, 300, 'right');
 		this.physics.add.collider(this.fighter, floor);
 		console.log(this.fighter.originX, this.fighter.originY);
+		this.fighter.golpeado = false;
 
         this.fighter2 = new MetalFighter(this, 1000, 300, 'left');
 		this.physics.add.collider(this.fighter2, floor);
@@ -71,6 +72,11 @@ export default class Fight extends Phaser.Scene {
 
 	update ()
     {
+
+		if(this.time.now >= this.fighter.tiempoInmune){
+			this.fighter.golpeado = false;
+		}
+
         this.hpbar.clear();
 
 		this.hpbar.displayWidth = this.hpbar.cantidad;
@@ -85,7 +91,14 @@ export default class Fight extends Phaser.Scene {
 	loseHP()
 	{
 		if (this.hpbar.cantidad > 0){
-			this.hpbar.cantidad = this.hpbar.cantidad - 10;
+			if(this.fighter.golpeado === false){
+				this.hpbar.cantidad = (this.hpbar.cantidad - 30) >= 0 ? this.hpbar.cantidad - 30 : 0;
+				this.fighter.golpeado = true;
+				// tiempo inmune del fighter de ser golpeado
+				// Dependera del tiempo de la animacion de ser atacado
+				this.fighter.tiempoInmune = this.time.now + 1000;
+			}
+
 		}
 	}
 }
