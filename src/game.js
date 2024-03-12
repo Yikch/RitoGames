@@ -8,10 +8,13 @@ import Phaser from 'phaser'
 let config = {
     type: Phaser.AUTO,
     width: 1800,
-    height: 1080,
+    height: 1000,
     scale: {
         //mode: Phaser.Scale.FIT,  
         autoCenter: Phaser.Scale.CENTER_BOTH
+    },
+    input: {
+        gamepad: true
     },
     pixelArt: true,
 	//transparent: true,
