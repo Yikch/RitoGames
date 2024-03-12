@@ -13,12 +13,22 @@ export default class LeafFighter extends Fighter {
 	constructor(scene, x, y, facing) {
 		super(scene, x, y, SPRITE, facing);
 
+		this.hb = null;
 		this.id = SPRITE + "_";
 		this.setScale(5);
 		this.body.setSize(30, 50);
 		this.body.setOffset(this.width/2 - 15, this.height - 50);
 
 		this.anims.play({key :this.id + this.state, repeat: -1});
+	
+		this.on('animationcomplete', function (animation, frame) {
+			if (animation.key === this.id + this.STATES.light | animation.key === this.id + this.STATES.hard){
+				this.blocked = false;
+				if(this.hb !== null)
+					this.hb.destroy();
+				this.updateAnimation(this.STATES.idle, this.state);
+			}
+		}, this);
 	}
 
 
@@ -27,6 +37,40 @@ export default class LeafFighter extends Fighter {
 			health: 100,
 			speed: 200,
 			jumpSpeed: -600,
+		}
+	}
+
+	manageLightAttack() {
+		if (!super.manageLightAttack()) return false;
+		if (this.body.onFloor()){
+			this.hb = this.scene.physics.add.staticBody(
+						this.x + (this.facing == 'left' ? -250 : 0), 
+						this.y + this.height + 25, 250, 80
+			);
+			this.scene.add.existing(this.hb);
+			this.scene.physics.add.existing(this.hb, true);
+		}
+	}
+
+	//Esto está mal en todos los lights, no debería hacer esto si no puede hacerlo
+	manageHardAttack() {
+		if (!super.manageHardAttack()) return;
+		if (this.body.onFloor()){
+			let arrow;
+			(arrow = this.scene.add
+				.sprite(this.x + (this.facing == 'left' ? -100 : 100), 
+				this.y + this.height + 25, 
+				'leafProjectiles', 'arrow')
+				.setScale(5).setVisible(false));
+			arrow.flipX = this.facing === 'left'
+			this.scene.tweens.add({
+				targets: arrow,
+				x: (this.facing == 'left' ? 0 : this.scene.width),
+				ease: 'linear',
+				duration: 1000,
+				delay: 800,
+				onStart: () => arrow.setVisible(true)
+			});
 		}
 	}
 
@@ -73,7 +117,6 @@ export default class LeafFighter extends Fighter {
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: '2_atk_', start: 0, end: 8}),
 			frameRate: 10
 		});
-
 		this.scene.anims.create({
 			key: SPRITE + "_" + "hit",
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'take_hit_', start: 0, end: 8}),
@@ -84,6 +127,6 @@ export default class LeafFighter extends Fighter {
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'death_', start: 0, end: 8}),
 			frameRate: 10
 		});
-
 	}
+
 }

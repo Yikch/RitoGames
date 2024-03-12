@@ -36,6 +36,9 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		this.scene.input.keyboard.on(attackKeys[0], this.manageLightAttack, this);
 		this.scene.input.keyboard.on(attackKeys[1], this.manageHardAttack, this);
 
+		this.scene.input.keyboard.on('keydown-Z', this.manageLightAttack, this);
+		this.scene.input.keyboard.on('keydown-X', this.manageHardAttack, this);
+
 		this.scene.add.existing(this);
 		this.scene.physics.add.existing(this, false);
 		this.body.setCollideWorldBounds();
@@ -57,13 +60,9 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		this.gamepad = gamepad;
 	}
 
-	iniAnimations(){
-		throw new Error('createAnimations() must be implemented');
-	}
+	iniAnimations(){throw new Error('createAnimations() must be implemented');}
 
-	iniStats(){
-		throw new Error('createStats() must be implemented');
-	}
+	iniStats(){throw new Error('createStats() must be implemented');}
 
 	setDebug(debug){
 		this.debug = debug;
@@ -148,18 +147,28 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	manageLightAttack(){
+		if(this.debug)
+			console.log("Light from Fighter" + this.id);
 		if (this.body.onFloor() && !this.blocked){
+			this.body.setVelocityX(0);
 			this.state = this.STATES.light;
 			this.blocked = true
 			this.playAnimation(this.id + this.STATES.light);
+			return true;
 		}
+		return false;
 	}
 
 	manageHardAttack(){
+		if(this.debug)
+			console.log("Hard from Fighter" + this.id);
 		if (this.body.onFloor() && !this.blocked){
+			this.body.setVelocityX(0);
 			this.state = this.STATES.hard;
 			this.blocked = true
 			this.playAnimation(this.id + this.STATES.hard);
+			return true;
 		}
+		return false;
 	}
 }

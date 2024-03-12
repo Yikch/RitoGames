@@ -24,7 +24,8 @@ export default class MetalFighter extends Fighter {
 		this.on('animationcomplete', function (animation, frame) {
 			if (animation.key === this.id + this.STATES.light || animation.key === this.id + this.STATES.hard){
 				this.blocked = false;
-				this.hb.destroy();
+				if(this.hb !== null)
+					this.hb.destroy()
 				this.updateAnimation(this.STATES.idle, this.state);
 			}
 		}, this);
@@ -33,13 +34,13 @@ export default class MetalFighter extends Fighter {
 	iniStats() {
 		return {
 			health: 100,
-			speed: 200,
-			jumpSpeed: -600,
+			speed: 300,
+			jumpSpeed: -800,
 		}
 	}
 
 	manageLightAttack() {
-		super.manageLightAttack();
+		if (!super.manageLightAttack()) return false;
 		if (this.body.onFloor()){
 			this.hb = this.scene.physics.add.staticBody(
 						this.x + (this.facing == 'left' ? -250 : 0), 
@@ -51,7 +52,7 @@ export default class MetalFighter extends Fighter {
 	}
 
 	manageHardAttack() {
-		super.manageHardAttack();
+		if (!super.manageHardAttack()) return false;
 		if (this.body.onFloor()){
 			this.hb = this.scene.physics.add.staticBody(
 						this.x + (this.facing == 'left' ? -300 : 100), 
