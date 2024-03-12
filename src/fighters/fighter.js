@@ -31,18 +31,8 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		this.cursors = this.scene.input.keyboard.createCursorKeys();
 		this.gamepad = null;
 
-		this.scene.input.keyboard.on('keydown-Z', this.manageLightAttack, this);
-		this.scene.input.keyboard.on('keydown-X', this.manageHardAttack, this);
-
 		this.scene.input.keyboard.on('keydown-M', this.resumeAnimation, this);
 		this.scene.input.keyboard.on('keydown-N', this.nextFrame, this);
-
-		this.on('animationcomplete', function (animation, frame) {
-			if (animation.key === this.id + this.STATES.light || animation.key === this.id + this.STATES.hard){
-				this.blocked = false;
-				this.updateAnimation(this.STATES.idle, this.state);
-			}
-		}, this);
 
 		this.scene.add.existing(this);
 		this.scene.physics.add.existing(this, false);
