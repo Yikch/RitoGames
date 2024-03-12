@@ -5,7 +5,6 @@ import Phaser from 'phaser'
  * También almacena la puntuación o número de estrellas que ha recogido hasta el momento.
  */
 export default class Fighter extends Phaser.Physics.Arcade.Sprite {
-
 	/**
 	 * Constructor del jugador
 	 * @param {Phaser.Scene} scene Escena a la que pertenece el jugador
@@ -14,6 +13,9 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 	 */
 	constructor(scene, x, y, sprite, facing, attackKeys) {
 		super(scene, x, y, sprite);
+
+		this.XIndex = 2;
+		this.YIndex = 3;
 
 		this.debug = false;
 		this.blocked = false;
@@ -55,6 +57,14 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 
 	initPad(gamepad){
 		this.gamepad = gamepad;
+		this.gamepad.on('down', () => {
+			if (this.gamepad.X) {
+				this.manageLightAttack();
+			}
+			else if (this.gamepad.Y) {
+				this.manageHardAttack();
+			}
+		}, this);
 	}
 
 	iniAnimations(){throw new Error('createAnimations() must be implemented');}
