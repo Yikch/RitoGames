@@ -10,19 +10,19 @@ export default class MetalFighter extends Fighter {
 	 * @param {number} y Coordenada Y
 	 * @param {string} facing Dirección a la que mira el jugador
 	 */
-	constructor(scene, x, y, facing) {
+	constructor(scene, x, y, facing, attackKeys) {
 		super(scene, x, y, SPRITE, facing);
 
 		this.hb = null;
 		this.id = SPRITE + "_";
-		this.setScale(5);
+		this.setScale(3);
 		this.body.setSize(30, 50);
 		this.body.setOffset(this.width/2 - 15, this.height - 50);
 
 		this.anims.play({key :this.id + this.state, repeat: -1});
 
-		this.scene.input.keyboard.on('keydown-Z', this.manageLightAttack, this);
-		this.scene.input.keyboard.on('keydown-X', this.manageHardAttack, this);
+		this.scene.input.keyboard.on(attackKeys[0], this.manageLightAttack, this);
+		this.scene.input.keyboard.on(attackKeys[1], this.manageHardAttack, this);
 
 		this.on('animationcomplete', function (animation, frame) {
 			if (animation.key === this.id + this.STATES.light || animation.key === this.id + this.STATES.hard){
