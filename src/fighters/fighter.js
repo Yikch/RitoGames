@@ -140,22 +140,28 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	manageLightAttack(){
-		console.log("Light from Fighter" + this.id);
+		if(this.debug)
+			console.log("Light from Fighter" + this.id);
 		if (this.body.onFloor() && !this.blocked){
 			this.body.setVelocityX(0);
 			this.state = this.STATES.light;
 			this.blocked = true
 			this.playAnimation(this.id + this.STATES.light);
+			return true;
 		}
+		return false;
 	}
 
 	manageHardAttack(){
-		console.log("Hard from Fighter" + this.id);
+		if(this.debug)
+			console.log("Hard from Fighter" + this.id);
 		if (this.body.onFloor() && !this.blocked){
 			this.body.setVelocityX(0);
 			this.state = this.STATES.hard;
 			this.blocked = true
 			this.playAnimation(this.id + this.STATES.hard);
+			return true;
 		}
+		return false;
 	}
 }
