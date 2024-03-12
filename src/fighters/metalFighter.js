@@ -49,6 +49,7 @@ export default class MetalFighter extends Fighter {
 			);
 			this.scene.add.existing(this.hb);
 			this.scene.physics.add.existing(this.hb, true);
+			this.scene.physics.add.overlap(this.hb, this.scene.fighter2, this.scene.loseHP_p2, null, this.scene);
 		}
 	}
 
@@ -109,12 +110,12 @@ export default class MetalFighter extends Fighter {
 		});
 		this.scene.anims.create({
 			key: SPRITE + "_hit",
-			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'take_hit_', start: 0, end: 8}),
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'take_hit_', start: 0, end: 5}),
 			frameRate: 10
 		});
 		this.scene.anims.create({
 			key: SPRITE + "_death" ,
-			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'death_', start: 0, end: 8}),
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'death_', start: 0, end: 11}),
 			frameRate: 10
 		});
 	}

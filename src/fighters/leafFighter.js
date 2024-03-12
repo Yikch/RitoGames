@@ -51,6 +51,7 @@ export default class LeafFighter extends Fighter {
 			);
 			this.scene.add.existing(this.hb);
 			this.scene.physics.add.existing(this.hb, true);
+			this.scene.physics.add.overlap(this.hb, this.scene.fighter, this.scene.loseHP_p1, null, this.scene);
 		}
 	}
 

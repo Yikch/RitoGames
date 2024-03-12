@@ -74,17 +74,11 @@ export default class Fight extends Phaser.Scene {
 			}
 		});
 
-		this.fighter = new MetalFighter(this, 300, 300, 'right');
-		this.physics.add.collider(this.fighter, floor);
-		console.log(this.fighter.originX, this.fighter.originY);
-		this.fighter.golpeado = false;
+		this.hpbar_p1 = this.add.graphics();
+		this.hpbar_p1.cantidad = 500;
 
-        this.fighter2 = new MetalFighter(this, 1000, 300, 'left');
-		this.physics.add.collider(this.fighter2, floor);
-		this.physics.add.overlap(this.fighter, this.fighter2, this.loseHP, null, this)
-
-		this.hpbar = this.add.graphics();
-		this.hpbar.cantidad = 500;
+		this.hpbar_p2 = this.add.graphics();
+		this.hpbar_p2.cantidad = 500;
     }
 
 	update ()
@@ -94,26 +88,55 @@ export default class Fight extends Phaser.Scene {
 			this.fighter.golpeado = false;
 		}
 
-        this.hpbar.clear();
+		if(this.time.now >= this.fighter2.tiempoInmune){
+			this.fighter2.golpeado = false;
+		}
 
-		this.hpbar.displayWidth = this.hpbar.cantidad;
+        this.hpbar_p1.clear();
 
-        this.hpbar.fillStyle(0x2d2d2d);
-        this.hpbar.fillRect(64, 64, 500, 48);
+		this.hpbar_p1.displayWidth = this.hpbar_p1.cantidad;
 
-        this.hpbar.fillStyle(0xff0000); // color red
-        this.hpbar.fillRect(64, 64, this.hpbar.displayWidth, 48);
+        this.hpbar_p1.fillStyle(0x2d2d2d);
+        this.hpbar_p1.fillRect(64, 64, 500, 48);
+
+        this.hpbar_p1.fillStyle(0xff0000); // color red
+        this.hpbar_p1.fillRect(64, 64, this.hpbar_p1.displayWidth, 48);
+
+		this.hpbar_p2.clear();
+
+		this.hpbar_p2.displayWidth = this.hpbar_p2.cantidad;
+
+        this.hpbar_p2.fillStyle(0x2d2d2d);
+        this.hpbar_p2.fillRect(1250, 64, 500, 48);
+
+        this.hpbar_p2.fillStyle(0xff0000); // color red
+        this.hpbar_p2.fillRect(1250, 64, this.hpbar_p2.displayWidth, 48);
     }
 
-	loseHP()
+	//this.physics.add.overlap(this.fighter, this.fighter2, this.loseHP, null, this)
+	loseHP_p1()
 	{
-		if (this.hpbar.cantidad > 0){
+		if (this.hpbar_p1.cantidad > 0){
 			if(this.fighter.golpeado === false){
-				this.hpbar.cantidad = (this.hpbar.cantidad - 30) >= 0 ? this.hpbar.cantidad - 30 : 0;
+				this.hpbar_p1.cantidad = (this.hpbar_p1.cantidad - 40) >= 0 ? this.hpbar_p1.cantidad - 40 : 0;
 				this.fighter.golpeado = true;
 				// tiempo inmune del fighter de ser golpeado
 				// Dependera del tiempo de la animacion de ser atacado
 				this.fighter.tiempoInmune = this.time.now + 1000;
+			}
+
+		}
+    }
+
+	loseHP_p2()
+	{
+		if (this.hpbar_p2.cantidad > 0){
+			if(this.fighter2.golpeado === false){
+				this.hpbar_p2.cantidad = (this.hpbar_p2.cantidad - 40) >= 0 ? this.hpbar_p2.cantidad - 40 : 0;
+				this.fighter2.golpeado = true;
+				// tiempo inmune del fighter de ser golpeado
+				// Dependera del tiempo de la animacion de ser atacado
+				this.fighter2.tiempoInmune = this.time.now + 1000;
 			}
 
 		}
@@ -142,6 +165,7 @@ export default class Fight extends Phaser.Scene {
 			right: Phaser.Input.Keyboard.KeyCodes.D
 		});
 		this.physics.add.collider(this.fighter, this.floor);
+		this.fighter.golpeado = false;
 	}
 
 	iniFighter2(){
@@ -151,6 +175,7 @@ export default class Fight extends Phaser.Scene {
 
 		this.physics.add.collider(this.fighter2, this.floor);
 		this.physics.add.collider(this.fighter, this.fighter2);
+		this.fighter2.golpeado = false;
 	}
 
 	iniDebug(){
