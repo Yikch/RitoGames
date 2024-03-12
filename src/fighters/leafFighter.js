@@ -24,8 +24,10 @@ export default class LeafFighter extends Fighter {
 		this.on('animationcomplete', function (animation, frame) {
 			if (animation.key === this.id + this.STATES.light | animation.key === this.id + this.STATES.hard){
 				this.blocked = false;
-				if(this.hb !== null)
+				if(this.hb !== null){
 					this.hb.destroy();
+					this.hb = null;
+				}
 				this.updateAnimation(this.STATES.idle, this.state);
 			}
 		}, this);
@@ -56,24 +58,35 @@ export default class LeafFighter extends Fighter {
 	manageHardAttack() {
 		if (!super.manageHardAttack()) return;
 		if (this.body.onFloor()){
-			let arrow;
-			(arrow = this.scene.add
-				.sprite(this.x + (this.facing == 'left' ? -100 : 100), 
-				this.y + this.height + 25, 
-				'leafProjectiles', 'arrow')
-				.setScale(5).setVisible(false));
-
-			arrow.flipX = this.facing === 'left'
+			let arrow = this.createArrow();
 			this.scene.tweens.add({
 				targets: arrow,
-				x: (this.facing == 'left' ? 0 : this.scene.width),
+				x: (this.facing == 'left' ? -100 : this.scene.width),
 				ease: 'linear',
 				duration: 1000,
-				delay: 800,
-				onStart: () => {arrow.setVisible(true); this.scene.physics.add.existing(arrow, false);
-								arrow.body.setSize(20,5).setAllowGravity(false);}
+				delay: 750,
+				onStart: () => {
+					arrow.body.enable = true;
+					arrow.setActive(true).setVisible(true);
+				}
 			});
 		}
+	}
+
+	createArrow(){
+		let arrow;
+		(arrow = this.scene.add
+			.sprite(this.x + (this.facing == 'left' ? -100 : 100), 
+			this.y + this.height + 25, 
+			'leafProjectiles', 'arrow')
+			.setScale(5).setVisible(false).setActive(false)
+		);
+		arrow.flipX = this.facing === 'left'
+		
+		this.scene.physics.add.existing(arrow, false);
+		arrow.body.setSize(20,5).setAllowGravity(false);
+		arrow.body.enable = false;
+		return arrow;
 	}
 
 	/**

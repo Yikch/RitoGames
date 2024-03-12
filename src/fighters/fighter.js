@@ -16,6 +16,7 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		super(scene, x, y, sprite);
 
 		this.debug = false;
+		this.step = false;
 		this.blocked = false;
 		this.facing = facing;
 		this.id = "";
@@ -67,21 +68,24 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 			this.anims.restart();
 		}
 	}
+	setStep(step){
+		this.step = step;
+	}
 
 	nextFrame(){
-		if(this.debug){
+		if(this.debug && this.step){
 			this.anims.nextFrame();
 		}
 	}
 
 	resumeAnimation(){
-		if (this.debug){
+		if (this.debug && this.step){
 			this.anims.complete();
 		}
 	}
 
 	playAnimation(animation, infinite = false){
-		if (this.debug){
+		if (this.debug && this.step){
 			this.anims.startAnimation(animation, {start:0, repeat: infinite ? -1 : 1}).stop();
 			this.nextFrame();
 		}
