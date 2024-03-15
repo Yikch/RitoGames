@@ -1,3 +1,4 @@
+import EditorScene from './scenes/editor.js';
 import Fight from './scenes/fight.js'
 import Phaser from 'phaser'
 
@@ -18,7 +19,7 @@ let config = {
     },
     pixelArt: true,
 	//transparent: true,
-    scene: [Fight],
+    scene: [EditorScene],
     physics: {
         default: 'arcade',
         arcade: {

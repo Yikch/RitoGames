@@ -1,7 +1,7 @@
 import os
 
 # Ruta de la carpeta principal
-ruta_principal = "/home/souls/Yikerv-Studios/assets/sprites/ground/png"
+ruta_principal = "./sprites/metal/projectile_and_trap"
 
 # Recorre todas las subcarpetas
 # Recorre todas las subcarpetas
@@ -33,4 +33,4 @@ for subdir, dirs, files in os.walk(ruta_principal):
 			nuevo_path = os.path.join(subdir_path, nuevo_nombre)
 			# Renombra el archivo
 			os.rename(antiguo_path, nuevo_path)
-		print(f"Renombrado:{folder}")
+		#print(f"Renombrado:{folder}")
