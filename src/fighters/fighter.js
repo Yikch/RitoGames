@@ -22,6 +22,7 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		this.blocked = false;
 		this.facing = facing;
 		this.id = "";
+
 		this.STATES = {
 			idle: 'idle',
 			run: 'run',
@@ -31,6 +32,7 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 			light: 'light',
 			hard: 'hard'
 		}
+
 		this.cursors = this.scene.input.keyboard.createCursorKeys();
 		this.gamepad = null;
 
@@ -157,28 +159,29 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	manageLightAttack(){
+		if (!(this.body.onFloor() && !this.blocked))	return false;
+
 		if(this.debug)
 			console.log("Light from Fighter" + this.id);
-		if (this.body.onFloor() && !this.blocked){
-			this.body.setVelocityX(0);
-			this.state = this.STATES.light;
-			this.blocked = true
-			this.playAnimation(this.id + this.STATES.light);
-			return true;
-		}
-		return false;
+		this.body.setVelocityX(0);
+		this.state = this.STATES.light;
+		this.blocked = true
+		this.playAnimation(this.id + this.STATES.light + "_start");
+		this.anims.chain(this.id + this.STATES.light + "_active");
+		this.anims.chain(this.id + this.STATES.light + "_recovery");
 	}
 
 	manageHardAttack(){
+		if (!(this.body.onFloor() && !this.blocked)) return false;
+
 		if(this.debug)
 			console.log("Hard from Fighter" + this.id);
-		if (this.body.onFloor() && !this.blocked){
-			this.body.setVelocityX(0);
-			this.state = this.STATES.hard;
-			this.blocked = true
-			this.playAnimation(this.id + this.STATES.hard);
-			return true;
-		}
-		return false;
+		this.body.setVelocityX(0);
+		this.state = this.STATES.hard;
+		this.blocked = true
+		this.playAnimation(this.id + this.STATES.hard + "_start");
+		this.anims.chain(this.id + this.STATES.hard + "_active");
+		this.anims.chain(this.id + this.STATES.hard + "_recovery");
+
 	}
 }

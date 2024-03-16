@@ -15,21 +15,12 @@ export default class MetalFighter extends Fighter {
 
 		this.hb = null;
 		this.id = SPRITE + "_";
+
 		this.setScale(5);
 		this.body.setSize(30, 50);
 		this.body.setOffset(this.width/2 - 15, this.height - 50);
 
 		this.anims.play({key :this.id + this.state, repeat: -1});
-
-		this.on('animationcomplete', function (animation, frame) {
-			if (animation.key === this.id + this.STATES.light || animation.key === this.id + this.STATES.hard){
-				this.blocked = false;
-				if(this.hb !== null){
-					this.hb = this.hb.destroy()
-				}
-				this.updateAnimation(this.STATES.idle, this.state);
-			}
-		}, this);
 	}
 
 	iniStats() {
@@ -40,34 +31,12 @@ export default class MetalFighter extends Fighter {
 		}
 	}
 
-	manageLightAttack() {
-		if (!super.manageLightAttack()) return false;
-		if (this.body.onFloor()){
-			this.hb = this.scene.physics.add.staticBody(
-						this.x + (this.facing == 'left' ? -250 : 0), 
-						this.y + this.height + 25, 250, 80
-			);
-			this.scene.add.existing(this.hb);
-			this.scene.physics.add.existing(this.hb, true);
-		}
-	}
-
-	manageHardAttack() {
-		if (!super.manageHardAttack()) return false;
-		if (this.body.onFloor()){
-			this.hb = this.scene.physics.add.staticBody(
-						this.x + (this.facing == 'left' ? -300 : 100), 
-						this.y + this.height - 50, 200, 130
-			);
-			this.scene.add.existing(this.hb);
-			this.scene.physics.add.existing(this.hb, true);
-		}
-	}
-
 	/**
 	 * Creación de las animaciones del jugador
 	 */
 	iniAnimations() {
+		this.load_light_atack();
+		this.load_hard_atack();
 		this.scene.anims.create({
 			key: SPRITE + "_" + this.STATES.idle,
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'idle_', start: 0, end:7}),
@@ -98,24 +67,93 @@ export default class MetalFighter extends Fighter {
 			frameRate: 10
 		});
 		this.scene.anims.create({
-			key: SPRITE + "_" + this.STATES.light,
-			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: '1_atk_', start: 0, end: 5}),
-			frameRate: 10
-		});
-		this.scene.anims.create({
-			key: SPRITE + "_" + this.STATES.hard,
-			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'air_atk_', start: 0, end: 7}),
-			frameRate: 10
-		});
-		this.scene.anims.create({
 			key: SPRITE + "_hit",
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'take_hit_', start: 0, end: 8}),
 			frameRate: 10
 		});
 		this.scene.anims.create({
-			key: SPRITE + "_death" ,
+			key: SPRITE + "_death",
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'death_', start: 0, end: 8}),
 			frameRate: 10
 		});
 	}
+
+	load_light_atack(){
+		this.scene.anims.create({
+			key: SPRITE + "_" + this.STATES.light + "_start",
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: '1_atk_', start: 0, end: 0}),
+			frameRate: 99999
+		});
+		this.scene.anims.create({
+			key: SPRITE + "_" + this.STATES.light + "_active",
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: '1_atk_', start: 0, end: 2}),
+			frameRate: 10
+		});
+		this.scene.anims.create({
+			key: SPRITE + "_" + this.STATES.light + "_recovery",
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: '1_atk_', start: 2, end: 5}),
+			frameRate: 50
+		});
+		this.on('animationstart', function (animation, frame) {
+			if (animation.key === this.id + this.STATES.light + "_active"){
+				this.hb = this.scene.physics.add.staticBody(
+					this.x + (this.facing == 'left' ? -250 : 0), 
+					this.y + this.height + 25, 250, 80
+				);
+				this.scene.add.existing(this.hb);
+				this.scene.physics.add.existing(this.hb, true);
+			}
+		}, this);
+		this.on('animationcomplete', function (animation, frame) {
+			if (animation.key === this.id + this.STATES.light + "_active"){
+				if(this.hb !== null){
+					this.hb = this.hb.destroy()
+				}
+			}
+			else if (animation.key === this.id + this.STATES.light + "_recovery"){
+				this.blocked = false;
+				this.updateAnimation(this.STATES.idle, this.state);
+			}
+		}, this);
+	}
+
+	load_hard_atack(){
+		this.scene.anims.create({
+			key: SPRITE + "_" + this.STATES.hard + "_start",
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'air_atk_', start: 0, end: 1}),
+			frameRate: 20
+		});
+		this.scene.anims.create({
+			key: SPRITE + "_" + this.STATES.hard + "_active",
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'air_atk_', start: 2, end: 5}),
+			frameRate: 10
+		});
+		this.scene.anims.create({
+			key: SPRITE + "_" + this.STATES.hard + "_recovery",
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'air_atk_', start: 6, end: 7}),
+			frameRate: 10
+		});
+		this.on('animationstart', function (animation, frame) {
+			if (animation.key === this.id + this.STATES.hard + '_active'){
+				this.hb = this.scene.physics.add.staticBody(
+					this.x + (this.facing == 'left' ? -300 : 100), 
+					this.y + this.height - 50, 200, 130
+				);
+				this.scene.add.existing(this.hb);
+				this.scene.physics.add.existing(this.hb, true);
+			}
+		}, this);
+		this.on('animationcomplete', function (animation, frame) {
+			if (animation.key === this.id + this.STATES.hard + '_active'){
+				if(this.hb !== null){
+					this.hb = this.hb.destroy()
+				}
+			}
+			else if (animation.key === this.id + this.STATES.hard + '_recovery'){
+				this.blocked = false;
+				this.updateAnimation(this.STATES.idle, this.state);
+			}
+		}, this);
+	}
+
 }
