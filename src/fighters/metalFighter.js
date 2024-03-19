@@ -67,10 +67,15 @@ export default class MetalFighter extends Fighter {
 			frameRate: 10
 		});
 		this.scene.anims.create({
-			key: SPRITE + "_hit",
+			key: SPRITE + "_" + this.STATES.takeHit,
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'take_hit_', start: 0, end: 8}),
 			frameRate: 10
 		});
+		this.on('animationcomplete', function (animation, frame) {
+			if (animation.key === this.id + this.STATES.takeHit){
+				this.golpeado = false;
+			}
+		}, this);
 		this.scene.anims.create({
 			key: SPRITE + "_death",
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'death_', start: 0, end: 8}),

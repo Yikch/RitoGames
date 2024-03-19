@@ -20,6 +20,7 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		this.debug = false;
 		this.step = false;
 		this.blocked = false;
+		this.golpeado = false;
 		this.facing = facing;
 		this.id = "";
 
@@ -29,6 +30,7 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 			jump: 'j_up',
 			fall: 'j_down',
 			defend: 'defend',
+			takeHit: 'take_hit',
 			light: 'light',
 			hard: 'hard'
 		}
@@ -129,7 +131,7 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 	preUpdate(t, dt) {
 		super.preUpdate(t, dt);
 		let newState;
-		if(this.state === this.STATES.light || this.state === this.STATES.hard){
+		if(this.state === this.STATES.light || this.state === this.STATES.hard || this.state === this.STATES.takeHit){
 			return;
 		}
 		if (this.state === this.STATES.jump || this.state === this.STATES.fall) {
@@ -183,5 +185,13 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		this.anims.chain(this.id + this.STATES.hard + "_active");
 		this.anims.chain(this.id + this.STATES.hard + "_recovery");
 
+	}
+
+	manageTakeHit(){
+		if(this.debug)
+			console.log("Take Hit from Fighter" + this.id);
+		this.body.setVelocityX(0);
+		this.state = this.STATES.takeHit;
+		this.playAnimation(this.id + this.STATES.takeHit);
 	}
 }

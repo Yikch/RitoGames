@@ -76,14 +76,6 @@ export default class Fight extends Phaser.Scene {
 	update ()
     {
 
-		if(this.time.now >= this.fighter.tiempoInmune){
-			this.fighter.golpeado = false;
-		}
-
-		if(this.time.now >= this.fighter2.tiempoInmune){
-			this.fighter2.golpeado = false;
-		}
-
         this.hpbar_p1.clear();
 
 		this.hpbar_p1.displayWidth = this.hpbar_p1.cantidad;
@@ -112,11 +104,10 @@ export default class Fight extends Phaser.Scene {
 			if(this.fighter.golpeado === false){
 				this.hpbar_p1.cantidad = (this.hpbar_p1.cantidad - 40) >= 0 ? this.hpbar_p1.cantidad - 40 : 0;
 				this.fighter.golpeado = true;
+				this.fighter.manageTakeHit();
 				// tiempo inmune del fighter de ser golpeado
 				// Dependera del tiempo de la animacion de ser atacado
-				this.fighter.tiempoInmune = this.time.now + 1000;
 			}
-
 		}
     }
 
@@ -126,9 +117,9 @@ export default class Fight extends Phaser.Scene {
 			if(this.fighter2.golpeado === false){
 				this.hpbar_p2.cantidad = (this.hpbar_p2.cantidad - 40) >= 0 ? this.hpbar_p2.cantidad - 40 : 0;
 				this.fighter2.golpeado = true;
+				this.fighter2.manageTakeHit();
 				// tiempo inmune del fighter de ser golpeado
 				// Dependera del tiempo de la animacion de ser atacado
-				this.fighter2.tiempoInmune = this.time.now + 1000;
 			}
 
 		}
@@ -157,7 +148,6 @@ export default class Fight extends Phaser.Scene {
 			right: Phaser.Input.Keyboard.KeyCodes.D
 		});
 		this.physics.add.collider(this.fighter, this.floor);
-		this.fighter.golpeado = false;
 	}
 
 	iniFighter2(){
@@ -167,7 +157,6 @@ export default class Fight extends Phaser.Scene {
 
 		this.physics.add.collider(this.fighter2, this.floor);
 		this.physics.add.collider(this.fighter, this.fighter2);
-		this.fighter2.golpeado = false;
 	}
 
 	iniDebug(){
