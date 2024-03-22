@@ -139,7 +139,7 @@ export default class Fight extends Phaser.Scene {
 	}
 
 	iniFighter1(){
-		const attackKeysP1 = ['keydown-Q', 'keydown-E'];
+		const attackKeysP1 = ['keydown-Q', 'keydown-E', 'keydown-R'];
 		this.fighter = new MetalFighter(this, 300, 300, 1, attackKeysP1);
 		this.fighter.cursors = this.input.keyboard.addKeys({
 			up: Phaser.Input.Keyboard.KeyCodes.W,
@@ -184,10 +184,10 @@ export default class Fight extends Phaser.Scene {
 
 	addColision(gameobject, fighter){
 		if (fighter === this.fighter){
-			this.physics.add.collider(gameobject, this.fighter2, this.fighter2.manageTakeHit, null, this.fighter2);
+			this.physics.add.overlap(gameobject, this.fighter2, this.fighter2.manageTakeHit, null, this.fighter2);
 		}
 		else{
-			this.physics.add.collider(gameobject, this.fighter, this.fighter.manageTakeHit, null, this.fighter);
+			this.physics.add.overlap(gameobject, this.fighter, this.fighter.manageTakeHit, null, this.fighter);
 		}
 	}
 }

@@ -37,6 +37,7 @@ export default class MetalFighter extends Fighter {
 	iniAnimations() {
 		this.load_light_atack();
 		this.load_hard_atack();
+		this.load_combo1();
 		this.load_animation_events();
 		this.scene.anims.create({
 			key: SPRITE + "_" + this.STATES.idle,
@@ -131,6 +132,36 @@ export default class MetalFighter extends Fighter {
 					this.x + (this.facing === 'left' ? -300 : 200), 
 					this.y + this.height, 
 					200, 130
+				);
+				this.scene.physics.add.existing(this.hb, true);
+				this.hb.body.debugBodyColor = 0x00ff00;
+				this.scene.addColision(this.hb, this);
+			}
+		});
+	}
+
+	load_combo1(){
+		this.scene.anims.create({
+			key: SPRITE + "_" + this.STATES.combo1 + "_start",
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'sp_atk_', start: 0, end: 2}),
+			frameRate: 10
+		});
+		this.scene.anims.create({
+			key: SPRITE + "_" + this.STATES.combo1 + "_active",
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'sp_atk_', start: 3, end: 8}),
+			frameRate: 20
+		});
+		this.scene.anims.create({
+			key: SPRITE + "_" + this.STATES.combo1 + "_recovery",
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'sp_atk_', start: 9, end: 10}),
+			frameRate: 10
+		});
+		this.on('animationstart', (animation, frame) => {
+			if (animation.key === this.id + this.STATES.combo1 + '_active'){
+				this.hb = this.scene.add.zone(
+					this.x + (this.facing === 'left' ? -165 : 65), 
+					this.y + this.height + 42, 
+					945, 300
 				);
 				this.scene.physics.add.existing(this.hb, true);
 				this.hb.body.debugBodyColor = 0x00ff00;
