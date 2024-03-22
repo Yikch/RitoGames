@@ -206,7 +206,7 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 
 	}
 
-	manageTakeHit(){
+	manageTakeHit(pushing = 0){
 		if(this.golpeado) return false;
 		if(this.debug)
 			console.log("Take Hit from Fighter" + this.id);
@@ -215,13 +215,19 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 
 		this.anims.chain();
 		this.anims.stop();
-		this.body.setVelocityX(0);
+		if(pushing === 0){
+			this.body.setVelocityX(0);
+		}
+		else{
+			this.body.setVelocityX(this.facing === 'left' ? pushing : -pushing);
+		}
 		this.state = this.STATES.takeHit;
 		this.playAnimation(this.id + this.STATES.takeHit);
 		this.on('animationcomplete', (animation, frame) => {
 			if (animation.key === this.id + this.STATES.takeHit){
 				this.golpeado = false;
 				this.blocked = false;
+				this.body.setVelocityX(0);
 				this.updateAnimation(this.STATES.idle, this.state);
 			}
 		});

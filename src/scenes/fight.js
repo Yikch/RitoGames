@@ -182,12 +182,12 @@ export default class Fight extends Phaser.Scene {
 		});
 	}
 
-	addColision(gameobject, fighter){
+	addColision(gameobject, fighter, pushing = 0){
 		if (fighter === this.fighter){
-			this.physics.add.overlap(gameobject, this.fighter2, this.fighter2.manageTakeHit, null, this.fighter2);
+			this.physics.add.overlap(gameobject, this.fighter2, () => this.fighter2.manageTakeHit(pushing), null, this.fighter2);
 		}
 		else{
-			this.physics.add.overlap(gameobject, this.fighter, this.fighter.manageTakeHit, null, this.fighter);
+			this.physics.add.overlap(gameobject, this.fighter, () => this.fighter.manageTakeHit(pushing), null, this.fighter);
 		}
 	}
 }

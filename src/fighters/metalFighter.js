@@ -165,7 +165,7 @@ export default class MetalFighter extends Fighter {
 				);
 				this.scene.physics.add.existing(this.hb, true);
 				this.hb.body.debugBodyColor = 0x00ff00;
-				this.scene.addColision(this.hb, this);
+				this.scene.addColision(this.hb, this, 300);
 			}
 		});
 	}
