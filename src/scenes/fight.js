@@ -66,6 +66,67 @@ export default class Fight extends Phaser.Scene {
 			this.fighter2.initPad(this.input.gamepad.pad2);
 		});
 
+		this.hpbar_p1 = this.add.graphics();
+		this.hpbar_p1.cantidad = 500;
+
+		this.hpbar_p2 = this.add.graphics();
+		this.hpbar_p2.cantidad = 500;
+    }
+
+	update ()
+    {
+
+        this.hpbar_p1.clear();
+
+		this.hpbar_p1.displayWidth = this.hpbar_p1.cantidad;
+
+        this.hpbar_p1.fillStyle(0x2d2d2d);
+        this.hpbar_p1.fillRect(64, 64, 500, 48);
+
+        this.hpbar_p1.fillStyle(0xff0000); // color red
+        this.hpbar_p1.fillRect(64, 64, this.hpbar_p1.displayWidth, 48);
+
+		this.hpbar_p2.clear();
+
+		this.hpbar_p2.displayWidth = this.hpbar_p2.cantidad;
+
+        this.hpbar_p2.fillStyle(0x2d2d2d);
+        this.hpbar_p2.fillRect(1250, 64, 500, 48);
+
+        this.hpbar_p2.fillStyle(0xff0000); // color red
+        this.hpbar_p2.fillRect(1250, 64, this.hpbar_p2.displayWidth, 48);
+    }
+
+	addOverlap(player, hb){
+		if(player === this.fighter)
+			this.physics.add.overlap(hb, this.fighter2.body, this.loseHP, null, this);
+	}
+	//this.physics.add.overlap(this.fighter, this.fighter2, this.loseHP, null, this)
+	loseHP_p1()
+	{
+		if (this.hpbar_p1.cantidad > 0){
+			if(!this.fighter.golpeado){
+				this.hpbar_p1.cantidad = (this.hpbar_p1.cantidad - 40) >= 0 ? this.hpbar_p1.cantidad - 40 : 0;
+				this.fighter.golpeado = true;
+				this.fighter.manageTakeHit();
+				// tiempo inmune del fighter de ser golpeado
+				// Dependera del tiempo de la animacion de ser atacado
+			}
+		}
+    }
+
+	loseHP_p2()
+	{
+		if (this.hpbar_p2.cantidad > 0){
+			if(this.fighter2.golpeado === false){
+				this.hpbar_p2.cantidad = (this.hpbar_p2.cantidad - 40) >= 0 ? this.hpbar_p2.cantidad - 40 : 0;
+				this.fighter2.golpeado = true;
+				this.fighter2.manageTakeHit();
+				// tiempo inmune del fighter de ser golpeado
+				// Dependera del tiempo de la animacion de ser atacado
+			}
+
+		}
     }
 
 	iniStage(width, height){

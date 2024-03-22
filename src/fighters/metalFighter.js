@@ -67,7 +67,7 @@ export default class MetalFighter extends Fighter {
 			frameRate: 10
 		});
 		this.scene.anims.create({
-			key: SPRITE + "_hit",
+			key: SPRITE + "_" + this.STATES.takeHit,
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'take_hit_', start: 0, end: 8}),
 			frameRate: 10
 		});
@@ -96,12 +96,13 @@ export default class MetalFighter extends Fighter {
 		});
 		this.on('animationstart', function (animation, frame) {
 			if (animation.key === this.id + this.STATES.light + "_active"){
-				this.hb = this.scene.physics.add.staticBody(
+				this.hb = this.scene.physics.add.staticBody( //Poner un zone
 					this.x + (this.facing == 'left' ? -250 : 0), 
 					this.y + this.height + 25, 250, 80
 				);
 				this.scene.add.existing(this.hb);
 				this.scene.physics.add.existing(this.hb, true);
+				this.scene.addOverlap(this.player, this.hb);
 			}
 		}, this);
 		this.on('animationcomplete', function (animation, frame) {
@@ -133,16 +134,16 @@ export default class MetalFighter extends Fighter {
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'air_atk_', start: 6, end: 7}),
 			frameRate: 10
 		});
-		this.on('animationstart', function (animation, frame) {
+		this.on('animationstart', (animation, frame) => {
 			if (animation.key === this.id + this.STATES.hard + '_active'){
 				this.hb = this.scene.physics.add.staticBody(
-					this.x + (this.facing == 'left' ? -300 : 100), 
+					this.x + (this.facing === 'left' ? -300 : 100), 
 					this.y + this.height - 50, 200, 130
 				);
 				this.scene.add.existing(this.hb);
 				this.scene.physics.add.existing(this.hb, true);
 			}
-		}, this);
+		});
 		this.on('animationcomplete', function (animation, frame) {
 			if (animation.key === this.id + this.STATES.hard + '_active'){
 				if(this.hb !== null){

@@ -52,6 +52,7 @@ export default class LeafFighter extends Fighter {
 			);
 			this.scene.add.existing(this.hb);
 			this.scene.physics.add.existing(this.hb, true);
+			this.scene.addOverlap(this.player, this.hb);
 		}
 	}
 
@@ -75,13 +76,11 @@ export default class LeafFighter extends Fighter {
 	}
 
 	createArrow(){
-		let arrow;
-		(arrow = this.scene.add
+		let arrow = this.scene.add
 			.sprite(this.x + (this.facing == 'left' ? -100 : 100), 
 			this.y + this.height + 25, 
 			'leafProjectiles', 'arrow')
-			.setScale(5).setVisible(false).setActive(false)
-		);
+			.setScale(5).setVisible(false).setActive(false);
 		arrow.flipX = this.facing === 'left'
 		
 		this.scene.physics.add.existing(arrow, false);
@@ -131,6 +130,11 @@ export default class LeafFighter extends Fighter {
 			frameRate: 10
 		});
 		this.scene.anims.create({
+			key: SPRITE + "_" + this.STATES.defend + "_end",
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'defend_', start: 18, end: 18}),
+			frameRate: 10
+		});
+		this.scene.anims.create({
 			key: SPRITE + "_death",
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'death_', start: 0, end: 17}),
 			frameRate: 10
@@ -149,44 +153,15 @@ export default class LeafFighter extends Fighter {
 			frameRate: 10
 		});
 		this.scene.anims.create({
-			key: SPRITE + "_" + this.STATES.light + "_recovery",
-			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: '1_atk_', start: 8, end: 9}),
-			frameRate: 50
-		});
-		this.on('animationstart', function (animation, frame) {
-			if (animation.key === this.id + this.STATES.light + "_active"){
-				this.hb = this.scene.physics.add.staticBody(
-					this.x + (this.facing == 'left' ? -250 : 0), 
-					this.y + this.height + 25, 250, 80
-				);
-				this.scene.add.existing(this.hb);
-				this.scene.physics.add.existing(this.hb, true);
-			}
-		}, this);
-		this.on('animationcomplete', function (animation, frame) {
-			if (animation.key === this.id + this.STATES.light + "_active"){
-				if(this.hb !== null){
-					this.hb = this.hb.destroy()
-				}
-			}
-			else if (animation.key === this.id + this.STATES.light + "_recovery"){
-				this.blocked = false;
-				this.updateAnimation(this.STATES.idle, this.state);
-			}
-		}, this);
-	}
-
-	load_hard_atack(){
-		this.scene.anims.create({
-			key: SPRITE + "_" + this.STATES.hard + "_start",
-			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: '2_atk_', start: 0, end: 8}),
-			frameRate: 20
-		});
-		this.scene.anims.create({
-			key: SPRITE + "_" + this.STATES.hard + "_active",
-			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: '2_atk_', start: 9, end: 9}),
+			key: SPRITE + "_" + this.STATES.takeHit,
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'take_hit_', start: 0, end: 8}),
 			frameRate: 10
 		});
+		this.on('animationcomplete', function (animation, frame) {
+			if (animation.key === this.id + this.STATES.takeHit){
+				this.golpeado = false;
+			}
+		}, this);
 		this.scene.anims.create({
 			key: SPRITE + "_" + this.STATES.hard + "_recovery",
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: '2_atk_', start: 10, end: 12}),

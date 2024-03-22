@@ -11,7 +11,7 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 	 * @param {number} x Coordenada X
 	 * @param {number} y Coordenada Y
 	 */
-	constructor(scene, x, y, sprite, facing, attackKeys) {
+	constructor(scene, x, y, sprite, player, attackKeys) {
 		super(scene, x, y, sprite);
 
 		this.XIndex = 2;
@@ -19,8 +19,10 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 
 		this.debug = false;
 		this.step = false;
-		this.blocked = false;
-		this.facing = facing;
+		this.blocked = false; //Wether the fighter can do inputs or not
+		this.golpeado = false; //Wether the fighter is being hit or not
+		this.facing = player == 1 ? 'right' : 'left';
+		this.player = player - 1; //Will be a bool value
 		this.id = "";
 
 		this.STATES = {
@@ -29,6 +31,7 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 			jump: 'j_up',
 			fall: 'j_down',
 			defend: 'defend',
+			takeHit: 'take_hit',
 			light: 'light',
 			hard: 'hard'
 		}
@@ -129,7 +132,7 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 	preUpdate(t, dt) {
 		super.preUpdate(t, dt);
 		let newState;
-		if(this.state === this.STATES.light || this.state === this.STATES.hard){
+		if(this.state === this.STATES.light || this.state === this.STATES.hard || this.state === this.STATES.takeHit){
 			return;
 		}
 		if (this.state === this.STATES.jump || this.state === this.STATES.fall) {
@@ -183,5 +186,13 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		this.anims.chain(this.id + this.STATES.hard + "_active");
 		this.anims.chain(this.id + this.STATES.hard + "_recovery");
 
+	}
+
+	manageTakeHit(){
+		if(this.debug)
+			console.log("Take Hit from Fighter" + this.id);
+		this.body.setVelocityX(0);
+		this.state = this.STATES.takeHit;
+		this.playAnimation(this.id + this.STATES.takeHit);
 	}
 }
