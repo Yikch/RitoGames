@@ -51,7 +51,7 @@ export default class LeafFighter extends Fighter {
 			);
 			this.scene.add.existing(this.hb);
 			this.scene.physics.add.existing(this.hb, true);
-			this.scene.physics.add.overlap(this.hb, this.scene.fighter, this.scene.loseHP_p1, null, this.scene);
+			this.scene.addOverlap(this.player, this.hb);
 		}
 	}
 
@@ -75,13 +75,11 @@ export default class LeafFighter extends Fighter {
 	}
 
 	createArrow(){
-		let arrow;
-		(arrow = this.scene.add
+		let arrow = this.scene.add
 			.sprite(this.x + (this.facing == 'left' ? -100 : 100), 
 			this.y + this.height + 25, 
 			'leafProjectiles', 'arrow')
-			.setScale(5).setVisible(false).setActive(false)
-		);
+			.setScale(5).setVisible(false).setActive(false);
 		arrow.flipX = this.facing === 'left'
 		
 		this.scene.physics.add.existing(arrow, false);
@@ -122,6 +120,11 @@ export default class LeafFighter extends Fighter {
 			key: SPRITE + "_" + this.STATES.defend,
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'defend_', start: 0, end: 18}),
 			frameRate: 15
+		});
+		this.scene.anims.create({
+			key: SPRITE + "_" + this.STATES.defend + "_end",
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'defend_', start: 18, end: 18}),
+			frameRate: 10
 		});
 		this.scene.anims.create({
 			key: SPRITE + "_" + this.STATES.light,

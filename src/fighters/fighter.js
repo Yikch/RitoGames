@@ -11,7 +11,7 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 	 * @param {number} x Coordenada X
 	 * @param {number} y Coordenada Y
 	 */
-	constructor(scene, x, y, sprite, facing, attackKeys) {
+	constructor(scene, x, y, sprite, player, attackKeys) {
 		super(scene, x, y, sprite);
 
 		this.XIndex = 2;
@@ -19,9 +19,10 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 
 		this.debug = false;
 		this.step = false;
-		this.blocked = false;
-		this.golpeado = false;
-		this.facing = facing;
+		this.blocked = false; //Wether the fighter can do inputs or not
+		this.golpeado = false; //Wether the fighter is being hit or not
+		this.facing = player == 1 ? 'right' : 'left';
+		this.player = player - 1; //Will be a bool value
 		this.id = "";
 
 		this.STATES = {

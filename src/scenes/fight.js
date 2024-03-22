@@ -97,11 +97,15 @@ export default class Fight extends Phaser.Scene {
         this.hpbar_p2.fillRect(1250, 64, this.hpbar_p2.displayWidth, 48);
     }
 
+	addOverlap(player, hb){
+		if(player === this.fighter)
+			this.physics.add.overlap(hb, this.fighter2.body, this.loseHP, null, this);
+	}
 	//this.physics.add.overlap(this.fighter, this.fighter2, this.loseHP, null, this)
 	loseHP_p1()
 	{
 		if (this.hpbar_p1.cantidad > 0){
-			if(this.fighter.golpeado === false){
+			if(!this.fighter.golpeado){
 				this.hpbar_p1.cantidad = (this.hpbar_p1.cantidad - 40) >= 0 ? this.hpbar_p1.cantidad - 40 : 0;
 				this.fighter.golpeado = true;
 				this.fighter.manageTakeHit();
