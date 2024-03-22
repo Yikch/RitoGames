@@ -89,7 +89,11 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 
 	nextFrame(){
 		if(this.debug && this.step){
+			//let frame = this.anims.currentFrame;
 			this.anims.nextFrame();
+			//if(frame.isLast && this.anims.currentAnim !== null){
+			//	this.playAnimation(this.anims.currentAnim);
+			//}
 		}
 	}
 
@@ -99,13 +103,13 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		}
 	}
 
-	playAnimation(animation, infinite = false){
+	playAnimation(animation){
 		if (this.debug && this.step){
-			this.anims.startAnimation(animation, {start:0, repeat: infinite ? -1 : 1}).stop();
+			this.anims.startAnimation(animation, {start:0}).stop();
 			this.nextFrame();
 		}
 		else
-			this.anims.play(animation, infinite ? -1 : 1);
+			this.anims.play(animation);
 	}
 
 	updateAnimation(newState, oldState) {
@@ -132,10 +136,10 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 	preUpdate(t, dt) {
 		super.preUpdate(t, dt);
 		let newState;
-		if(this.state === this.STATES.light || this.state === this.STATES.hard || this.state === this.STATES.takeHit){
+		if(this.state === this.STATES.light || this.state === this.STATES.hard){
 			return;
 		}
-		if (this.state === this.STATES.jump || this.state === this.STATES.fall) {
+		if (this.state === this.STATES.jump || this.state === this.STATES.fall || this.state === this.STATES.takeHit) {
 			newState = this.state;
 		} 
 		else if (this.cursors.up.isDown || (this.gamepad != null && this.gamepad.A)) {
@@ -170,8 +174,8 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		this.state = this.STATES.light;
 		this.blocked = true
 		this.playAnimation(this.id + this.STATES.light + "_start");
-		this.anims.chain(this.id + this.STATES.light + "_active");
-		this.anims.chain(this.id + this.STATES.light + "_recovery");
+		this.anims.chain(this.id + this.STATES.light + "_active")
+				.chain(this.id + this.STATES.light + "_recovery");
 	}
 
 	manageHardAttack(){
@@ -183,22 +187,27 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		this.state = this.STATES.hard;
 		this.blocked = true
 		this.playAnimation(this.id + this.STATES.hard + "_start");
-		this.anims.chain(this.id + this.STATES.hard + "_active");
-		this.anims.chain(this.id + this.STATES.hard + "_recovery");
-
+		this.anims.chain(this.id + this.STATES.hard + "_active").chain(this.id + this.STATES.hard + "_recovery");
 	}
 
 	manageTakeHit(){
+		if(this.golpeado) return false;
 		if(this.debug)
 			console.log("Take Hit from Fighter" + this.id);
+		this.golpeado = true;
+		this.blocked = true;
+
+		this.anims.chain();
+		this.anims.stop();
 		this.body.setVelocityX(0);
 		this.state = this.STATES.takeHit;
 		this.playAnimation(this.id + this.STATES.takeHit);
-		this.on('animationcomplete', function (animation, frame) {
+		this.on('animationcomplete', (animation, frame) => {
 			if (animation.key === this.id + this.STATES.takeHit){
 				this.golpeado = false;
+				this.blocked = false;
 				this.updateAnimation(this.STATES.idle, this.state);
 			}
-		}, this);
+		});
 	}
 }

@@ -81,6 +81,7 @@ export default class LeafFighter extends Fighter {
 	iniAnimations() {
 		this.load_light_atack();
 		this.load_hard_atack();
+		this.load_animation_events();
 		this.scene.anims.create({
 			key: SPRITE + "_" + this.STATES.idle,
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'idle_', start: 0, end:10}),
@@ -113,7 +114,7 @@ export default class LeafFighter extends Fighter {
 		this.scene.anims.create({
 			key: SPRITE + "_" + this.STATES.takeHit,
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'take_hit_', start: 0, end: 5}),
-			frameRate: 10
+			frameRate: 12
 		});
 		this.scene.anims.create({
 			key: SPRITE + "_" + this.STATES.defend + "_end",
@@ -131,7 +132,7 @@ export default class LeafFighter extends Fighter {
 		this.scene.anims.create({
 			key: SPRITE + "_" + this.STATES.light + "_start",
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: '1_atk_', start: 0, end: 3}),
-			frameRate: 99999
+			frameRate: 40
 		});
 		this.scene.anims.create({
 			key: SPRITE + "_" + this.STATES.light + "_active",
@@ -155,16 +156,7 @@ export default class LeafFighter extends Fighter {
 				this.scene.addColision(this.hb, this);
 			}
 		});
-		this.on('animationcomplete', function (animation, frame) {
-			if (animation.key === this.id + this.STATES.light + '_active'){
-				this.hb.destroy();
-			}
-			else if (animation.key === this.id + this.STATES.light + '_recovery'){
-				this.blocked = false;
-				this.updateAnimation(this.STATES.idle, this.state);
-			}
-		}, this);
-	}
+		}
 	
 	load_hard_atack(){
 		this.scene.anims.create({
@@ -196,12 +188,24 @@ export default class LeafFighter extends Fighter {
 				arrow.move();
 			}
 		});
-		this.on('animationcomplete', function (animation, frame) {
-			if (animation.key === this.id + this.STATES.hard + '_recovery'){
+	}
+
+	load_animation_events(){
+		this.on('animationstopped', (animation, frame) => {
+			if(this.hb !== null)
+				this.hb.destroy();
+		})
+		this.on('animationcomplete', (animation, frame) => {
+			let animStrings = animation.key.split("_");
+			if (animStrings.includes("recovery")){
 				this.blocked = false;
 				this.updateAnimation(this.STATES.idle, this.state);
 			}
-		}, this);
+			else if (animStrings.includes('active')){
+				if(this.hb !== null)
+					this.hb.destroy();
+			}
+		});
 	}
 
 }

@@ -37,6 +37,7 @@ export default class MetalFighter extends Fighter {
 	iniAnimations() {
 		this.load_light_atack();
 		this.load_hard_atack();
+		this.load_animation_events();
 		this.scene.anims.create({
 			key: SPRITE + "_" + this.STATES.idle,
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'idle_', start: 0, end:7}),
@@ -96,24 +97,14 @@ export default class MetalFighter extends Fighter {
 		});
 		this.on('animationstart', function (animation, frame) {
 			if (animation.key === this.id + this.STATES.light + "_active"){
-				this.hb = this.scene.physics.add.staticBody( //Poner un zone
-					this.x + (this.facing == 'left' ? -250 : 0), 
-					this.y + this.height + 25, 250, 80
+				this.hb = this.scene.add.zone(
+					this.x + (this.facing == 'left' ? -250 : 100), 
+					this.y + this.height + 70, 
+					250, 80
 				);
-				this.scene.add.existing(this.hb);
 				this.scene.physics.add.existing(this.hb, true);
+				this.hb.body.debugBodyColor = 0x00ff00;
 				this.scene.addColision(this.hb, this);
-			}
-		}, this);
-		this.on('animationcomplete', function (animation, frame) {
-			if (animation.key === this.id + this.STATES.light + "_active"){
-				if(this.hb !== null){
-					this.hb = this.hb.destroy()
-				}
-			}
-			else if (animation.key === this.id + this.STATES.light + "_recovery"){
-				this.blocked = false;
-				this.updateAnimation(this.STATES.idle, this.state);
 			}
 		}, this);
 	}
@@ -136,26 +127,34 @@ export default class MetalFighter extends Fighter {
 		});
 		this.on('animationstart', (animation, frame) => {
 			if (animation.key === this.id + this.STATES.hard + '_active'){
-				this.hb = this.scene.physics.add.staticBody(
-					this.x + (this.facing === 'left' ? -300 : 100), 
-					this.y + this.height - 50, 200, 130
+				this.hb = this.scene.add.zone(
+					this.x + (this.facing === 'left' ? -300 : 200), 
+					this.y + this.height, 
+					200, 130
 				);
-				this.scene.add.existing(this.hb);
 				this.scene.physics.add.existing(this.hb, true);
+				this.hb.body.debugBodyColor = 0x00ff00;
 				this.scene.addColision(this.hb, this);
 			}
 		});
-		this.on('animationcomplete', function (animation, frame) {
-			if (animation.key === this.id + this.STATES.hard + '_active'){
-				if(this.hb !== null){
-					this.hb = this.hb.destroy()
-				}
-			}
-			else if (animation.key === this.id + this.STATES.hard + '_recovery'){
+	}
+
+	load_animation_events(){
+		this.on('animationstopped', (animation, frame) => {
+			if(this.hb !== null)
+				this.hb.destroy();
+		})
+		this.on('animationcomplete', (animation, frame) => {
+			let animStrings = animation.key.split("_");
+			if (animStrings.includes("recovery")){
 				this.blocked = false;
 				this.updateAnimation(this.STATES.idle, this.state);
 			}
-		}, this);
+			else if (animStrings.includes('active')){
+				if(this.hb !== null)
+					this.hb.destroy();
+			}
+		});
 	}
 
 }
