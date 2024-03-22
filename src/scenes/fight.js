@@ -124,4 +124,13 @@ export default class Fight extends Phaser.Scene {
 			this.fighter2.setStep(!this.fighter2.step);
 		});
 	}
+
+	addColision(go, fighter){
+		if (fighter === this.fighter){
+			this.physics.add.collider(go, this.fighter, this.fighter.manageCollision, null, this.fighter);
+		}
+		else{
+			this.physics.add.collider(go, this.fighter2, this.fighter2.manageCollision, null, this.fighter2);
+		}
+	}
 }

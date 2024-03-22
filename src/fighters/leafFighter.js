@@ -1,3 +1,4 @@
+import SimpleProjectile from '../projectiles/simpleProjectile.js';
 import Fighter from './fighter.js';
 
 //This class encapsulates the metal fighter that extends the normal fighter
@@ -93,9 +94,11 @@ export default class LeafFighter extends Fighter {
 	 * Creación de las animaciones del jugador
 	 */
 	iniAnimations() {
+		this.load_light_atack();
+		this.load_hard_atack();
 		this.scene.anims.create({
 			key: SPRITE + "_" + this.STATES.idle,
-			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'idle_', start: 0, end:10}),
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'idle_', start: 0, end:11}),
 			frameRate: 10,
 			repeat: -1
 		});
@@ -120,28 +123,94 @@ export default class LeafFighter extends Fighter {
 		this.scene.anims.create({
 			key: SPRITE + "_" + this.STATES.defend,
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'defend_', start: 0, end: 18}),
-			frameRate: 15
+			frameRate: 10
 		});
 		this.scene.anims.create({
-			key: SPRITE + "_" + this.STATES.light,
-			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: '1_atk_', start: 0, end: 8}),
-			frameRate: 15
+			key: SPRITE + "_hit",
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'take_hit_', start: 0, end: 5}),
+			frameRate: 10
 		});
 		this.scene.anims.create({
-			key: SPRITE + "_" + this.STATES.hard,
+			key: SPRITE + "_death",
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'death_', start: 0, end: 17}),
+			frameRate: 10
+		});
+	}
+
+	load_light_atack(){
+		this.scene.anims.create({
+			key: SPRITE + "_" + this.STATES.light + "_start",
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: '1_atk_', start: 0, end: 3}),
+			frameRate: 99999
+		});
+		this.scene.anims.create({
+			key: SPRITE + "_" + this.STATES.light + "_active",
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: '1_atk_', start: 3, end: 7}),
+			frameRate: 10
+		});
+		this.scene.anims.create({
+			key: SPRITE + "_" + this.STATES.light + "_recovery",
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: '1_atk_', start: 8, end: 9}),
+			frameRate: 50
+		});
+		this.on('animationstart', function (animation, frame) {
+			if (animation.key === this.id + this.STATES.light + "_active"){
+				this.hb = this.scene.physics.add.staticBody(
+					this.x + (this.facing == 'left' ? -250 : 0), 
+					this.y + this.height + 25, 250, 80
+				);
+				this.scene.add.existing(this.hb);
+				this.scene.physics.add.existing(this.hb, true);
+			}
+		}, this);
+		this.on('animationcomplete', function (animation, frame) {
+			if (animation.key === this.id + this.STATES.light + "_active"){
+				if(this.hb !== null){
+					this.hb = this.hb.destroy()
+				}
+			}
+			else if (animation.key === this.id + this.STATES.light + "_recovery"){
+				this.blocked = false;
+				this.updateAnimation(this.STATES.idle, this.state);
+			}
+		}, this);
+	}
+
+	load_hard_atack(){
+		this.scene.anims.create({
+			key: SPRITE + "_" + this.STATES.hard + "_start",
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: '2_atk_', start: 0, end: 8}),
+			frameRate: 20
+		});
+		this.scene.anims.create({
+			key: SPRITE + "_" + this.STATES.hard + "_active",
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: '2_atk_', start: 9, end: 9}),
 			frameRate: 10
 		});
 		this.scene.anims.create({
-			key: SPRITE + "_" + "hit",
-			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'take_hit_', start: 0, end: 8}),
+			key: SPRITE + "_" + this.STATES.hard + "_recovery",
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: '2_atk_', start: 10, end: 12}),
 			frameRate: 10
 		});
-		this.scene.anims.create({
-			key: SPRITE + "_death" ,
-			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'death_', start: 0, end: 8}),
-			frameRate: 10
-		});
+		this.on('animationstart', function (animation, frame) {
+			if (animation.key === this.id + this.STATES.hard + '_active'){
+				let arrow = new SimpleProjectile(
+								this.scene, 
+								this.x + (this.facing == 'left' ? -100 : 100), 
+								this.y + this.height + 25, 
+								'leafProjectiles', 'arrow', 
+								200, this.facing, 10
+							);
+				this.scene.addColision(arrow, this);
+				arrow.move();
+			}
+		}, this);
+		this.on('animationcomplete', function (animation, frame) {
+			if (animation.key === this.id + this.STATES.hard + '_recovery'){
+				this.blocked = false;
+				this.updateAnimation(this.STATES.idle, this.state);
+			}
+		}, this);
 	}
 
 }
