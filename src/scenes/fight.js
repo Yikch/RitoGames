@@ -97,10 +97,6 @@ export default class Fight extends Phaser.Scene {
         this.hpbar_p2.fillRect(1250, 64, this.hpbar_p2.displayWidth, 48);
     }
 
-	addOverlap(player, hb){
-		if(player === this.fighter)
-			this.physics.add.overlap(hb, this.fighter2.body, this.loseHP, null, this);
-	}
 	//this.physics.add.overlap(this.fighter, this.fighter2, this.loseHP, null, this)
 	loseHP_p1()
 	{
@@ -144,7 +140,7 @@ export default class Fight extends Phaser.Scene {
 
 	iniFighter1(){
 		const attackKeysP1 = ['keydown-Q', 'keydown-E'];
-		this.fighter = new MetalFighter(this, 300, 300, 'right', attackKeysP1);
+		this.fighter = new MetalFighter(this, 300, 300, 1, attackKeysP1);
 		this.fighter.cursors = this.input.keyboard.addKeys({
 			up: Phaser.Input.Keyboard.KeyCodes.W,
 			down: Phaser.Input.Keyboard.KeyCodes.S,
@@ -156,7 +152,7 @@ export default class Fight extends Phaser.Scene {
 
 	iniFighter2(){
 		const attackKeysP2 = ['keydown-Z', 'keydown-X'];
-		this.fighter2 = new LeafFighter(this, 1000, 300, 'left', attackKeysP2);
+		this.fighter2 = new LeafFighter(this, 1000, 300, 2, attackKeysP2);
 		this.fighter2.cursors = this.input.keyboard.createCursorKeys();
 
 		this.physics.add.collider(this.fighter2, this.floor);
@@ -186,12 +182,12 @@ export default class Fight extends Phaser.Scene {
 		});
 	}
 
-	addColision(go, fighter){
+	addColision(gameobject, fighter){
 		if (fighter === this.fighter){
-			this.physics.add.collider(go, this.fighter, this.fighter.manageCollision, null, this.fighter);
+			this.physics.add.collider(gameobject, this.fighter2, this.fighter2.manageTakeHit, null, this.fighter2);
 		}
 		else{
-			this.physics.add.collider(go, this.fighter2, this.fighter2.manageCollision, null, this.fighter2);
+			this.physics.add.collider(gameobject, this.fighter, this.fighter.manageTakeHit, null, this.fighter);
 		}
 	}
 }

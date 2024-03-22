@@ -21,8 +21,8 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		this.step = false;
 		this.blocked = false; //Wether the fighter can do inputs or not
 		this.golpeado = false; //Wether the fighter is being hit or not
-		this.facing = player == 1 ? 'right' : 'left';
 		this.player = player - 1; //Will be a bool value
+		this.facing = player == 1 ? 'right' : 'left';
 		this.id = "";
 
 		this.STATES = {
@@ -49,7 +49,7 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		this.body.setCollideWorldBounds();
 
 		// Queremos que el jugador no se salga de los límites del mundo
-		this.flipX = facing == 'left';
+		this.flipX = this.facing == 'left';
 
 		// Animaciones del jugador
 		this.iniAnimations();
@@ -194,5 +194,11 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		this.body.setVelocityX(0);
 		this.state = this.STATES.takeHit;
 		this.playAnimation(this.id + this.STATES.takeHit);
+		this.on('animationcomplete', function (animation, frame) {
+			if (animation.key === this.id + this.STATES.takeHit){
+				this.golpeado = false;
+				this.updateAnimation(this.STATES.idle, this.state);
+			}
+		}, this);
 	}
 }

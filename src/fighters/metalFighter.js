@@ -10,8 +10,8 @@ export default class MetalFighter extends Fighter {
 	 * @param {number} y Coordenada Y
 	 * @param {string} facing Dirección a la que mira el jugador
 	 */
-	constructor(scene, x, y, facing, attackKeys) {
-		super(scene, x, y, SPRITE, facing, attackKeys);
+	constructor(scene, x, y, player, attackKeys) {
+		super(scene, x, y, SPRITE, player, attackKeys);
 
 		this.hb = null;
 		this.id = SPRITE + "_";
@@ -68,7 +68,7 @@ export default class MetalFighter extends Fighter {
 		});
 		this.scene.anims.create({
 			key: SPRITE + "_" + this.STATES.takeHit,
-			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'take_hit_', start: 0, end: 8}),
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'take_hit_', start: 0, end: 5}),
 			frameRate: 10
 		});
 		this.scene.anims.create({
@@ -102,7 +102,7 @@ export default class MetalFighter extends Fighter {
 				);
 				this.scene.add.existing(this.hb);
 				this.scene.physics.add.existing(this.hb, true);
-				this.scene.addOverlap(this.player, this.hb);
+				this.scene.addColision(this.hb, this);
 			}
 		}, this);
 		this.on('animationcomplete', function (animation, frame) {
@@ -142,6 +142,7 @@ export default class MetalFighter extends Fighter {
 				);
 				this.scene.add.existing(this.hb);
 				this.scene.physics.add.existing(this.hb, true);
+				this.scene.addColision(this.hb, this);
 			}
 		});
 		this.on('animationcomplete', function (animation, frame) {
