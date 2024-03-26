@@ -124,7 +124,7 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 				this.stats.health -= 25;
 				this.scene.updateHP(this);
 				if(this.stats.health <= 0){
-					this.scene.gameOver(this.player);
+					this.scene.gameOver(this);
 					this.anims.chain(this.id + "death");
 				}
 			}
