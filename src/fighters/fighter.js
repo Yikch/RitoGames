@@ -34,7 +34,8 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 			takeHit: 'take_hit',
 			light: 'light',
 			hard: 'hard',
-			combo1: 'combo1'
+			combo1: 'combo1',
+			projectile: 'projectile'
 		}
 
 		this.cursors = this.scene.input.keyboard.createCursorKeys();
@@ -44,7 +45,9 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		this.scene.input.keyboard.on('keydown-N', this.nextFrame, this);
 		this.scene.input.keyboard.on(attackKeys[0], this.manageLightAttack, this);
 		this.scene.input.keyboard.on(attackKeys[1], this.manageHardAttack, this);
-		this.scene.input.keyboard.on(attackKeys[2], this.manageCombo1, this);
+		if(attackKeys[2] !== null)
+			this.scene.input.keyboard.on(attackKeys[2], this.manageProjectileAttack, this);
+		this.scene.input.keyboard.on(attackKeys[3], this.manageCombo1, this);
 
 		this.scene.add.existing(this);
 		this.scene.physics.add.existing(this, false);
@@ -138,7 +141,7 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 	preUpdate(t, dt) {
 		super.preUpdate(t, dt);
 		let newState;
-		if(this.state === this.STATES.light || this.state === this.STATES.hard || this.state === this.STATES.combo1){
+		if(this.state === this.STATES.light || this.state === this.STATES.hard || this.state === this.STATES.projectile || this.state === this.STATES.combo1){
 			return;
 		}
 		if (this.state === this.STATES.jump || this.state === this.STATES.fall || this.state === this.STATES.takeHit) {
@@ -174,7 +177,7 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 			console.log("Light from Fighter" + this.id);
 		this.body.setVelocityX(0);
 		this.state = this.STATES.light;
-		this.blocked = true
+		this.blocked = true;
 		this.playAnimation(this.id + this.STATES.light + "_start");
 		this.anims.chain(this.id + this.STATES.light + "_active")
 				.chain(this.id + this.STATES.light + "_recovery");
@@ -187,9 +190,23 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 			console.log("Hard from Fighter" + this.id);
 		this.body.setVelocityX(0);
 		this.state = this.STATES.hard;
-		this.blocked = true
+		this.blocked = true;
 		this.playAnimation(this.id + this.STATES.hard + "_start");
 		this.anims.chain(this.id + this.STATES.hard + "_active").chain(this.id + this.STATES.hard + "_recovery");
+	}
+
+	manageProjectileAttack(){
+		if (!(this.body.onFloor() && !this.blocked)) return false;
+
+		if(this.debug)
+			console.log("Projectile from Fighter" + this.id);
+		this.body.setVelocityX(0);
+		this.state = this.STATES.projectile;
+		this.blocked = true;
+		this.playAnimation(this.id + this.STATES.projectile + "_start");
+		this.anims.chain(this.id + this.STATES.projectile + "_active")
+				.chain(this.id + this.STATES.projectile + "_recovery");
+
 	}
 
 	manageCombo1(){
@@ -199,7 +216,7 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 			console.log("Combo1 from Fighter" + this.id);
 		this.body.setVelocityX(0);
 		this.state = this.STATES.combo1;
-		this.blocked = true
+		this.blocked = true;
 		this.playAnimation(this.id + this.STATES.combo1 + "_start");
 		this.anims.chain(this.id + this.STATES.combo1 + "_active")
 			.chain(this.id + this.STATES.combo1 + "_recovery");
