@@ -32,38 +32,6 @@ export default class LeafFighter extends Fighter {
 		}
 	}
 
-	manageLightAttack() {
-		if (!super.manageLightAttack()) return false;
-		if (this.body.onFloor()){
-			this.hb = this.scene.physics.add.staticBody(
-						this.x + (this.facing == 'left' ? -250 : 0), 
-						this.y + this.height + 25, 250, 80
-			);
-			this.scene.add.existing(this.hb);
-			this.scene.physics.add.existing(this.hb, true);
-			this.scene.addOverlap(this.player, this.hb);
-		}
-	}
-
-	manageHardAttack() {
-		if (!super.manageHardAttack()) return;
-		if (this.body.onFloor()){
-			let arrow = this.createArrow();
-			this.scene.addOverlap(this.player, arrow);
-			this.scene.tweens.add({
-				targets: arrow,
-				x: (this.facing == 'left' ? -100 : this.scene.width),
-				ease: 'linear',
-				duration: 1000,
-				delay: 750,
-				onStart: () => {
-					arrow.body.enable = true;
-					arrow.setActive(true).setVisible(true);
-				}
-			});
-		}
-	}
-
 	/**
 	 * Creación de las animaciones del jugador
 	 */
