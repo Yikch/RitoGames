@@ -85,22 +85,22 @@ export default class LeafFighter extends Fighter {
 
 	load_light_atack(){
 		this.scene.anims.create({
-			key: SPRITE + "_" + this.STATES.light + "_start",
+			key: SPRITE + "_light_start",
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: '1_atk_', start: 0, end: 3}),
 			frameRate: 40
 		});
 		this.scene.anims.create({
-			key: SPRITE + "_" + this.STATES.light + "_active",
+			key: SPRITE + "_light_active",
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: '1_atk_', start: 3, end: 7}),
 			frameRate: 10
 		});
 		this.scene.anims.create({
-			key: SPRITE + "_" + this.STATES.light + "_recovery",
+			key: SPRITE + "_light_recovery",
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: '1_atk_', start: 8, end: 8}),
 			frameRate: 10
 		});
 		this.on('animationstart', (animation, frame) => {
-			if (animation.key === this.id + this.STATES.light + '_active'){
+			if (animation.key === this.id + 'light_active'){
 				this.hb = this.scene.add.zone(
 					this.x + (this.facing == 'left' ? -300 : 0), 
 					this.y + this.height + 25, 
@@ -115,22 +115,22 @@ export default class LeafFighter extends Fighter {
 	
 	load_hard_atack(){
 		this.scene.anims.create({
-			key: SPRITE + "_" + this.STATES.hard + "_start",
+			key: SPRITE + "_hard_start",
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: '2_atk_', start: 0, end: 7}),
 			frameRate: 10
 		});
 		this.scene.anims.create({
-			key: SPRITE + "_" + this.STATES.hard + "_active",
+			key: SPRITE + "_hard_active",
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: '2_atk_', start: 8, end: 9}),
 			frameRate: 10
 		});
 		this.scene.anims.create({
-			key: SPRITE + "_" + this.STATES.hard + "_recovery",
+			key: SPRITE + "_hard_recovery",
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: '2_atk_', start: 10, end: 13}),
 			frameRate: 10
 		});
 		this.on('animationstart', (animation, frame) => {
-			if (animation.key === this.id + this.STATES.hard + '_active'){
+			if (animation.key === this.id + 'hard_active'){
 				let arrow = new SimpleProjectile(
 								this.scene, 
 								this.x + (this.facing == 'left' ? -100 : 100), 
