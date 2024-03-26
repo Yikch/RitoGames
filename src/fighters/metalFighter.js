@@ -25,7 +25,7 @@ export default class MetalFighter extends Fighter {
 
 	iniStats() {
 		return {
-			health: 100,
+			health: 500,
 			speed: 300,
 			jumpSpeed: -800,
 		}
@@ -65,6 +65,11 @@ export default class MetalFighter extends Fighter {
 		this.scene.anims.create({
 			key: SPRITE + "_" + this.STATES.defend,
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'defend_', start: 0, end: 11}),
+			frameRate: 10
+		});
+		this.scene.anims.create({
+			key: SPRITE + "_" + this.STATES.defend + "_end",
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'defend_', start: 11, end: 11}),
 			frameRate: 10
 		});
 		this.scene.anims.create({
@@ -135,24 +140,6 @@ export default class MetalFighter extends Fighter {
 				this.scene.physics.add.existing(this.hb, true);
 				this.hb.body.debugBodyColor = 0x00ff00;
 				this.scene.addColision(this.hb, this);
-			}
-		});
-	}
-
-	load_animation_events(){
-		this.on('animationstopped', (animation, frame) => {
-			if(this.hb !== null)
-				this.hb.destroy();
-		})
-		this.on('animationcomplete', (animation, frame) => {
-			let animStrings = animation.key.split("_");
-			if (animStrings.includes("recovery")){
-				this.blocked = false;
-				this.updateAnimation(this.STATES.idle, this.state);
-			}
-			else if (animStrings.includes('active')){
-				if(this.hb !== null)
-					this.hb.destroy();
 			}
 		});
 	}
