@@ -249,8 +249,10 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 
 	load_animation_events(){
 		this.on('animationstop', (animation, frame) => {
-			if(this.hb !== null)
+			if(this.hb !== null){
+				this.scene.destroyHB(this.hb);
 				this.hb.destroy();
+			}
 		})
 		this.on('animationcomplete', (animation, frame) => {
 			let animStrings = animation.key.split("_");
