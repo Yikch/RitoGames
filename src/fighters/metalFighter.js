@@ -86,22 +86,22 @@ export default class MetalFighter extends Fighter {
 
 	load_light_atack(){
 		this.scene.anims.create({
-			key: SPRITE + "_" + this.STATES.light + "_start",
+			key: SPRITE + "_" + "light_start",
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: '1_atk_', start: 0, end: 0}),
 			frameRate: 99999
 		});
 		this.scene.anims.create({
-			key: SPRITE + "_" + this.STATES.light + "_active",
+			key: SPRITE + "_" + "light_active",
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: '1_atk_', start: 0, end: 2}),
 			frameRate: 10
 		});
 		this.scene.anims.create({
-			key: SPRITE + "_" + this.STATES.light + "_recovery",
+			key: SPRITE + "_" + "light_recovery",
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: '1_atk_', start: 2, end: 5}),
 			frameRate: 50
 		});
 		this.on('animationstart', function (animation, frame) {
-			if (animation.key === this.id + this.STATES.light + "_active"){
+			if (animation.key === this.id + "light_active"){
 				this.hb = this.scene.add.zone(
 					this.x + (this.facing == 'left' ? -250 : 100), 
 					this.y + this.height + 70, 
@@ -116,22 +116,22 @@ export default class MetalFighter extends Fighter {
 
 	load_hard_atack(){
 		this.scene.anims.create({
-			key: SPRITE + "_" + this.STATES.hard + "_start",
+			key: SPRITE + "_hard_start",
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'air_atk_', start: 0, end: 1}),
 			frameRate: 20
 		});
 		this.scene.anims.create({
-			key: SPRITE + "_" + this.STATES.hard + "_active",
+			key: SPRITE + "_hard_active",
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'air_atk_', start: 2, end: 5}),
 			frameRate: 10
 		});
 		this.scene.anims.create({
-			key: SPRITE + "_" + this.STATES.hard + "_recovery",
+			key: SPRITE + "_hard_recovery",
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'air_atk_', start: 6, end: 7}),
 			frameRate: 10
 		});
 		this.on('animationstart', (animation, frame) => {
-			if (animation.key === this.id + this.STATES.hard + '_active'){
+			if (animation.key === this.id + "hard_active"){
 				this.hb = this.scene.add.zone(
 					this.x + (this.facing === 'left' ? -300 : 200), 
 					this.y + this.height, 

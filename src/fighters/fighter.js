@@ -34,8 +34,7 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 			defend: 'defend',
 			recovering: 'defend_end',
 			takeHit: 'take_hit',
-			light: 'light',
-			hard: 'hard'
+			atacking: 'atacking',
 		}
 
 		this.cursors = this.scene.input.keyboard.createCursorKeys();
@@ -169,10 +168,10 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		if(this.debug)
 			console.log("Light from Fighter" + this.id);
 		this.body.setVelocityX(0);
-		this.state = this.STATES.light;
-		this.anims.startAnimation(this.id + this.STATES.light + "_start");
-		this.anims.chain(this.id + this.STATES.light + "_active")
-				.chain(this.id + this.STATES.light + "_recovery");
+		this.state = this.STATES.atacking;
+		this.anims.startAnimation(this.id + "light_start");
+		this.anims.chain(this.id + "light_active")
+				.chain(this.id + "light_recovery");
 	}
 
 	manageHardAttack(){
@@ -181,9 +180,9 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		if(this.debug)
 			console.log("Hard from Fighter" + this.id);
 		this.body.setVelocityX(0);
-		this.state = this.STATES.hard;
-		this.anims.startAnimation(this.id + this.STATES.hard + "_start");
-		this.anims.chain(this.id + this.STATES.hard + "_active").chain(this.id + this.STATES.hard + "_recovery");
+		this.state = this.STATES.atacking;
+		this.anims.startAnimation(this.id + "hard_start");
+		this.anims.chain(this.id + "hard_active").chain(this.id + "hard_recovery");
 	}
 
 	load_animation_events(){
@@ -217,7 +216,7 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 	block(){ this.end = true;}
 	can_atack(){return !this.end && (this.state === this.STATES.idle || this.state === this.STATES.run);}
 	can_move(){return !this.end && (this.state === this.STATES.idle || this.state === this.STATES.run);}
-	is_atacking(){return this.state === this.STATES.light || this.state === this.STATES.hard;}
+	is_atacking(){return this.state === this.STATES.atacking;}
 	is_hit(){return this.state === this.STATES.takeHit;}
 	is_defending(){return this.state === this.STATES.defend;}
 	is_recovering(){return this.state === this.STATES.recovering;}
