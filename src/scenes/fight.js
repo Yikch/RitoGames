@@ -67,15 +67,14 @@ export default class Fight extends Phaser.Scene {
 		});
 
 		this.hpbar_p1 = this.add.graphics();
-		this.hpbar_p1.cantidad = 500;
+		this.hpbar_p1.cantidad = this.fighter.stats.health;
 
 		this.hpbar_p2 = this.add.graphics();
-		this.hpbar_p2.cantidad = 500;
+		this.hpbar_p2.cantidad = this.fighter2.stats.health;
     }
 
 	update ()
     {
-
         this.hpbar_p1.clear();
 
 		this.hpbar_p1.displayWidth = this.hpbar_p1.cantidad;
@@ -97,33 +96,23 @@ export default class Fight extends Phaser.Scene {
         this.hpbar_p2.fillRect(1250, 64, this.hpbar_p2.displayWidth, 48);
     }
 
-	//this.physics.add.overlap(this.fighter, this.fighter2, this.loseHP, null, this)
-	loseHP_p1()
-	{
-		if (this.hpbar_p1.cantidad > 0){
-			if(!this.fighter.golpeado){
-				this.hpbar_p1.cantidad = (this.hpbar_p1.cantidad - 40) >= 0 ? this.hpbar_p1.cantidad - 40 : 0;
-				this.fighter.golpeado = true;
-				this.fighter.manageTakeHit();
-				// tiempo inmune del fighter de ser golpeado
-				// Dependera del tiempo de la animacion de ser atacado
-			}
-		}
-    }
+	gameOver(player){
+		this.add.text(400, 300, 'Game Over', { fontSize: '64px', fill: '#fff' });
+		
+		if(player === this.fighter)
+			this.add.text(400, 400, 'Player 2 wins', { fontSize: '64px', fill: '#fff' });
+		else
+			this.add.text(400, 400, 'Player 1 wins', { fontSize: '64px', fill: '#fff' });
+		this.fighter.block();
+		this.fighter2.block();
+	}
 
-	loseHP_p2()
-	{
-		if (this.hpbar_p2.cantidad > 0){
-			if(this.fighter2.golpeado === false){
-				this.hpbar_p2.cantidad = (this.hpbar_p2.cantidad - 40) >= 0 ? this.hpbar_p2.cantidad - 40 : 0;
-				this.fighter2.golpeado = true;
-				this.fighter2.manageTakeHit();
-				// tiempo inmune del fighter de ser golpeado
-				// Dependera del tiempo de la animacion de ser atacado
-			}
-
-		}
-    }
+	updateHP(fighter){
+		if (fighter === this.fighter)
+			this.hpbar_p1.cantidad = this.fighter.stats.health;
+		else
+			this.hpbar_p2.cantidad = this.fighter2.stats.health;
+	}
 
 	iniStage(width, height){
 		this.add.image(0,0, 'forest_back').setDisplaySize(width,height).setOrigin(0,0);
@@ -163,7 +152,6 @@ export default class Fight extends Phaser.Scene {
 		//make it so when someone presses P it will toggle the debug mode
 		this.keyboard = this.input.keyboard.addKeys({
 			debug: Phaser.Input.Keyboard.KeyCodes.P,
-			step: Phaser.Input.Keyboard.KeyCodes.O, 
 		});
 		this.physics.world.drawDebug = false;
 		this.keyboard.debug.on('down', () => {
@@ -176,18 +164,17 @@ export default class Fight extends Phaser.Scene {
 			this.fighter.setDebug(!this.fighter.debug);
 			this.fighter2.setDebug(!this.fighter2.debug);
 		});
-		this.keyboard.step.on('down', () => {
-			this.fighter.setStep(!this.fighter.step);
-			this.fighter2.setStep(!this.fighter2.step);
-		});
 	}
 
-	addColision(gameobject, fighter, pushing = 0){
-		if (fighter === this.fighter){
-			this.physics.add.overlap(gameobject, this.fighter2, () => this.fighter2.manageTakeHit(pushing), null, this.fighter2);
-		}
-		else{
-			this.physics.add.overlap(gameobject, this.fighter, () => this.fighter.manageTakeHit(pushing), null, this.fighter);
-		}
+	destroyHB(gameobject){
+		this.fighter2.enemyHB = this.fighter2.enemyHB.filter((hb) => hb !== gameobject);
+		this.fighter.enemyHB = this.fighter.enemyHB.filter((hb) => hb !== gameobject);
+	}
+
+	addColision(gameobject, fighter){
+		if (fighter === this.fighter)
+			this.fighter2.enemyHB.push(gameobject);
+		else
+			this.fighter.enemyHB.push(gameobject);
 	}
 }

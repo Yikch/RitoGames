@@ -26,7 +26,7 @@ export default class MetalFighter extends Fighter {
 
 	iniStats() {
 		return {
-			health: 100,
+			health: 500,
 			speed: 300,
 			jumpSpeed: -800,
 		}
@@ -68,6 +68,11 @@ export default class MetalFighter extends Fighter {
 		this.scene.anims.create({
 			key: SPRITE + "_" + this.STATES.defend,
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'defend_', start: 0, end: 11}),
+			frameRate: 10
+		});
+		this.scene.anims.create({
+			key: SPRITE + "_" + this.STATES.defend + "_end",
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'defend_', start: 11, end: 11}),
 			frameRate: 10
 		});
 		this.scene.anims.create({

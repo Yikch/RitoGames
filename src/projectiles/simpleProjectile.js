@@ -34,6 +34,7 @@ export default class SimpleProjectile extends Phaser.GameObjects.Sprite {
 			duration: 1000 - this.speed * 10,
 			ease: 'Linear',
 			onComplete: () => {
+				this.scene.destroyHB(this);
 				this.destroy();
 			}
 		});
