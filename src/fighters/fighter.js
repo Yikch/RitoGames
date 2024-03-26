@@ -122,7 +122,7 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 					console.log("Take Hit from Fighter" + this.id);
 				this.state = this.STATES.takeHit;
 				this.stats.health -= 25;
-				this.scene.updateHP(this.player);
+				this.scene.updateHP(this);
 				if(this.stats.health <= 0){
 					this.scene.gameOver(this.player);
 					this.anims.chain(this.id + "death");
@@ -214,6 +214,8 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 
 	}
 
+	// FUNCION EN DESUSO, hay que decidir si usarlo (actualmente se usa el StartAnimation de preupdate para animar el takeHit)
+	// punshing representa la velocidad de push causado por un combo o ataque que pueda generar un push, por defecto es 0
 	manageTakeHit(pushing = 0){
 		if(this.golpeado) return false;
 		if(this.debug)
