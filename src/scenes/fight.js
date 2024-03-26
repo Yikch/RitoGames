@@ -3,13 +3,13 @@ import Phaser from 'phaser';
 import leaf from '../../assets/sprites/leaf/leaf_fighter.png';
 import metal from '../../assets/sprites/metal/metal_fighter.png';
 import leafProjectiles from '../../assets/sprites/leaf/projectiles.png';
-import metalProjectiles from '../../assets/sprites/metal/projectile_and_trap.png'
+import metalProjectiles from '../../assets/sprites/metal/projectile.png'
 
 
 import metalJSON from '../../assets/sprites/metal/metal_fighter.json';
 import leafJSON from '../../assets/sprites/leaf/leaf_fighter.json';
 import leafProjectilesJSON from '../../assets/sprites/leaf/projectiles.json';
-import metalProjectilesJSON from '../../assets/sprites/metal/projectile_and_trap.json'
+import metalProjectilesJSON from '../../assets/sprites/metal/projectile.json'
 
 
 import forest_back from '../../assets/background/forest_back.png';
@@ -18,6 +18,7 @@ import forest_front from '../../assets/background/forest_front.png';
 import forest_lights from '../../assets/background/forest_lights.png';
 import MetalFighter from '../fighters/metalFighter.js';
 import LeafFighter from '../fighters/leafFighter.js'
+
 
 /**
  * Escena principal del juego. La escena se compone de una serie de plataformas 
@@ -48,7 +49,9 @@ export default class Fight extends Phaser.Scene {
 		this.load.atlas('leaf', leaf, leafJSON);
 		this.load.atlas('leafProjectiles', leafProjectiles, leafProjectilesJSON);
 		this.load.atlas('metalProjectiles', metalProjectiles, metalProjectilesJSON);
-    }
+    
+	    this.load.script('webfont', 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js');
+	}
 
     /**
      * Creación de los elementos de la escena principal de juego
@@ -56,26 +59,42 @@ export default class Fight extends Phaser.Scene {
     create() {
 		const {width, height } = this.scale;
 		
+		this.roundTime = 120;
 		this.iniStage(width, height);
 		this.iniDebug();
 		this.iniFighter1();
 		this.iniFighter2();
+		this.iniGUI();
 
-		this.input.gamepad.once('connected', () => {
-			this.fighter.initPad(this.input.gamepad.pad1);
-			this.fighter2.initPad(this.input.gamepad.pad2);
-		});
+		// this.input.gamepad.once('connected', () => {
+        //     this.fighter.initPad(this.input.gamepad.pad1);
+        //     this.fighter2.initPad(this.input.gamepad.pad2);
+        // });
 
-		this.hpbar_p1 = this.add.graphics();
-		this.hpbar_p1.cantidad = this.fighter.stats.health;
-
-		this.hpbar_p2 = this.add.graphics();
-		this.hpbar_p2.cantidad = this.fighter2.stats.health;
+		this.input.gamepad.once('connected', (pad) => {
+            if(this.numPads === 0){
+                this.fighter.initPad(pad);
+                this.numPads++;
+            }
+            else if(this.numPads){
+                this.fighter2.initPad(pad);
+                this.numPads++;
+            }
+        });
     }
 
-	update ()
+	update (t, dt)
     {
-        this.hpbar_p1.clear();
+		super.update(t, dt);
+		if(this.fighter.x > this.fighter2.x){
+			this.fighter.setOrientation('left');
+			this.fighter2.setOrientation('right');
+		}
+		else{
+			this.fighter.setOrientation('right');
+			this.fighter2.setOrientation('left');
+		}
+		this.hpbar_p1.clear();
 
 		this.hpbar_p1.displayWidth = this.hpbar_p1.cantidad;
 
@@ -97,12 +116,12 @@ export default class Fight extends Phaser.Scene {
     }
 
 	gameOver(player){
-		this.add.text(400, 300, 'Game Over', { fontSize: '64px', fill: '#fff' });
+		this.add.text(400, 300, 'Game Over', { fontSize: '64px', fill: '#ff0000' });
 		
-		if(player === this.fighter)
-			this.add.text(400, 400, 'Player 2 wins', { fontSize: '64px', fill: '#fff' });
+		if(this.fighter.stats.health > this.fighter2.stats.health)
+			this.add.text(400, 400, 'Player 1 wins', { fontSize: '64px', fill: '#ff0000' });
 		else
-			this.add.text(400, 400, 'Player 1 wins', { fontSize: '64px', fill: '#fff' });
+			this.add.text(400, 400, 'Player 2 wins', { fontSize: '64px', fill: '#ff0000' });
 		this.fighter.block();
 		this.fighter2.block();
 	}
@@ -127,6 +146,40 @@ export default class Fight extends Phaser.Scene {
 		this.floor.renderFlags = 0;
 	}
 
+	iniGUI(){
+		//Creates text in the top middle of the screen that is a countdown
+		let self = this; // Para usarlo en active
+		WebFont.load({
+			google: {
+				families: [ 'Pixelify Sans' ]
+			},
+			active: function () // se llama a esta función cuando está cargada
+			{
+				self.timer = self.add.text(800, 56, self.roundTime.toString(),
+								{ fontFamily: 'Pixelify Sans',fontSize: 80, color: '#ff0000' })
+			}
+		});
+		this.time.addEvent({ delay: 1000, 
+			callback: () => {
+				this.timer.setText((parseInt(this.timer.text) - 1).toString());
+			}, 
+			callbackScope: this, loop: true 
+		});
+		this.time.addEvent({ delay: 1000 * this.roundTime, 
+			callback: () => {
+				this.time.removeAllEvents();
+				this.gameOver();
+			}, 
+			callbackScope: this, loop: false
+		});
+
+		this.hpbar_p1 = this.add.graphics();
+		this.hpbar_p1.cantidad = this.fighter.stats.health;
+
+		this.hpbar_p2 = this.add.graphics();
+		this.hpbar_p2.cantidad = this.fighter2.stats.health;
+	}
+
 	iniFighter1(){
 		const attackKeysP1 = ['keydown-Q', 'keydown-E'];
 		this.fighter = new MetalFighter(this, 300, 300, 1, attackKeysP1);
@@ -140,7 +193,7 @@ export default class Fight extends Phaser.Scene {
 	}
 
 	iniFighter2(){
-		const attackKeysP2 = ['keydown-Z', 'keydown-X'];
+		const attackKeysP2 = ['keydown-Z', 'keydown-X', 'keydown-C', 'keydown-V', 'keydown-B'];
 		this.fighter2 = new LeafFighter(this, 1000, 300, 2, attackKeysP2);
 		this.fighter2.cursors = this.input.keyboard.createCursorKeys();
 
@@ -169,6 +222,7 @@ export default class Fight extends Phaser.Scene {
 	destroyHB(gameobject){
 		this.fighter2.enemyHB = this.fighter2.enemyHB.filter((hb) => hb !== gameobject);
 		this.fighter.enemyHB = this.fighter.enemyHB.filter((hb) => hb !== gameobject);
+		gameobject.destroy();
 	}
 
 	addColision(gameobject, fighter){

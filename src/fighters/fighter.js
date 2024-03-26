@@ -16,6 +16,7 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 
 		this.XIndex = 2;
 		this.YIndex = 3;
+		this.hb = [];
 		this.enemyHB = [];
 		this.end = false;
 
@@ -40,8 +41,12 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		this.cursors = this.scene.input.keyboard.createCursorKeys();
 		this.gamepad = null;
 
-		this.scene.input.keyboard.on(attackKeys[0], this.manageLightAttack, this);
-		this.scene.input.keyboard.on(attackKeys[1], this.manageHardAttack, this);
+		this.scene.input.keyboard.on(attackKeys[0], () => this.manageAtack('light'), this);
+		this.scene.input.keyboard.on(attackKeys[1], () => this.manageAtack('hard'), this);
+		this.scene.input.keyboard.on(attackKeys[2], () => this.manageAtack('combo1'), this);
+		this.scene.input.keyboard.on(attackKeys[3],  () => this.manageAtack('combo2'), this);
+		this.scene.input.keyboard.on(attackKeys[4],  () => this.manageAtack('combo3'), this);
+
 
 		this.scene.add.existing(this);
 		this.scene.physics.add.existing(this, false);
@@ -144,7 +149,7 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 
 	check_movement(){
 		if (!this.can_move()) return;
-		if (this.cursors.up.isDown || (this.gamepad != null && this.gamepad.A)) {
+		if ((this.cursors.up.isDown || (this.gamepad != null && this.gamepad.A)) && this.body.onFloor()) {
 			this.body.setVelocityY(this.stats.jumpSpeed);
 			this.state = this.STATES.jump;
 		} 
@@ -162,33 +167,20 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		}
 	}
 
-	manageLightAttack(){
-		if (!this.can_atack())	return false;
-
-		if(this.debug)
-			console.log("Light from Fighter" + this.id);
-		this.body.setVelocityX(0);
-		this.state = this.STATES.atacking;
-		this.anims.startAnimation(this.id + "light_start");
-		this.anims.chain(this.id + "light_active")
-				.chain(this.id + "light_recovery");
-	}
-
-	manageHardAttack(){
+	manageAtack(id){
 		if (!this.can_atack()) return false;
-
 		if(this.debug)
-			console.log("Hard from Fighter" + this.id);
+			console.log("Atack from Fighter" + this.id);
 		this.body.setVelocityX(0);
 		this.state = this.STATES.atacking;
-		this.anims.startAnimation(this.id + "hard_start");
-		this.anims.chain(this.id + "hard_active").chain(this.id + "hard_recovery");
+		this.anims.startAnimation(this.id + id + "_start");
+		this.anims.chain(this.id + id + "_active").chain(this.id + id + "_recovery");
 	}
 
 	load_animation_events(){
 		this.on('animationstop', (animation, frame) => {
 			if(this.hb !== null)
-				this.hb.destroy();
+				this.scene.destroyHB(this.hb);
 		})
 		this.on('animationcomplete', (animation, frame) => {
 			let animStrings = animation.key.split("_");
@@ -199,7 +191,6 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 			else if (animStrings.includes('active')){
 				if(this.hb !== null){
 					this.scene.destroyHB(this.hb);
-					this.hb.destroy();
 				}
 			}
 		});
@@ -211,6 +202,11 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 			result = result || this.scene.physics.overlap(this, hb);
 		});
 		return result;
+	}
+
+	setOrientation(orientation){
+		this.facing = orientation;
+		this.flipX = this.facing === 'left';
 	}
 
 	block(){ this.end = true;}
