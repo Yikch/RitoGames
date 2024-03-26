@@ -1,0 +1,335 @@
+{
+	"textures": [
+		{
+			"image": "projectile.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 148,
+				"h": 31
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "trap_detonate/trap_detonate_3.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 80,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 4,
+						"y": 10,
+						"w": 73,
+						"h": 22
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 73,
+						"h": 22
+					}
+				},
+				{
+					"filename": "projectile_throw/projectile_throw.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 80,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 32,
+						"y": 15,
+						"w": 17,
+						"h": 4
+					},
+					"frame": {
+						"x": 1,
+						"y": 25,
+						"w": 17,
+						"h": 4
+					}
+				},
+				{
+					"filename": "projectile_land/projectile_land_3.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 80,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 36,
+						"y": 14,
+						"w": 13,
+						"h": 5
+					},
+					"frame": {
+						"x": 20,
+						"y": 25,
+						"w": 13,
+						"h": 5
+					}
+				},
+				{
+					"filename": "projectile_land/projectile_land_4.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 80,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 36,
+						"y": 15,
+						"w": 13,
+						"h": 5
+					},
+					"frame": {
+						"x": 35,
+						"y": 25,
+						"w": 13,
+						"h": 5
+					}
+				},
+				{
+					"filename": "projectile_land/projectile_land_5.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 80,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 36,
+						"y": 15,
+						"w": 13,
+						"h": 4
+					},
+					"frame": {
+						"x": 50,
+						"y": 25,
+						"w": 13,
+						"h": 4
+					}
+				},
+				{
+					"filename": "trap_detonate/trap_detonate_5.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 80,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 3,
+						"h": 3
+					},
+					"frame": {
+						"x": 65,
+						"y": 25,
+						"w": 3,
+						"h": 3
+					}
+				},
+				{
+					"filename": "trap_detonate/trap_detonate_4.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 80,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 14,
+						"y": 24,
+						"w": 52,
+						"h": 8
+					},
+					"frame": {
+						"x": 76,
+						"y": 1,
+						"w": 52,
+						"h": 8
+					}
+				},
+				{
+					"filename": "trap_detonate/trap_detonate_2.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 80,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 19,
+						"y": 23,
+						"w": 43,
+						"h": 9
+					},
+					"frame": {
+						"x": 76,
+						"y": 11,
+						"w": 43,
+						"h": 9
+					}
+				},
+				{
+					"filename": "projectile_land/projectile_land_1.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 80,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 36,
+						"y": 11,
+						"w": 13,
+						"h": 8
+					},
+					"frame": {
+						"x": 76,
+						"y": 22,
+						"w": 13,
+						"h": 8
+					}
+				},
+				{
+					"filename": "projectile_land/projectile_land_2.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 80,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 36,
+						"y": 15,
+						"w": 13,
+						"h": 7
+					},
+					"frame": {
+						"x": 91,
+						"y": 22,
+						"w": 13,
+						"h": 7
+					}
+				},
+				{
+					"filename": "trap_throw/trap_throw.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 80,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 33,
+						"y": 12,
+						"w": 12,
+						"h": 11
+					},
+					"frame": {
+						"x": 121,
+						"y": 11,
+						"w": 12,
+						"h": 11
+					}
+				},
+				{
+					"filename": "trap_land/trap_land_1.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 80,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 38,
+						"y": 20,
+						"w": 6,
+						"h": 12
+					},
+					"frame": {
+						"x": 135,
+						"y": 1,
+						"w": 6,
+						"h": 12
+					}
+				},
+				{
+					"filename": "trap_land/trap_land_2.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 80,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 36,
+						"y": 20,
+						"w": 6,
+						"h": 12
+					},
+					"frame": {
+						"x": 135,
+						"y": 15,
+						"w": 6,
+						"h": 12
+					}
+				},
+				{
+					"filename": "trap_detonate/trap_detonate_1.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 80,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 38,
+						"y": 20,
+						"w": 4,
+						"h": 12
+					},
+					"frame": {
+						"x": 143,
+						"y": 1,
+						"w": 4,
+						"h": 12
+					}
+				},
+				{
+					"filename": "trap_land/trap_land_3.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 80,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 38,
+						"y": 20,
+						"w": 4,
+						"h": 12
+					},
+					"frame": {
+						"x": 143,
+						"y": 1,
+						"w": 4,
+						"h": 12
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:7e903ce162fadf18d0640acbddd6d840:9d3a5af6e25c1f16b820b82c911b99ad:da285cc143f726eb6004a48f2931db98$"
+	}
+}
