@@ -10,7 +10,7 @@
 			"scale": 1,
 			"frames": [
 				{
-					"filename": "trap_detonate/trap_detonate_3.png",
+					"filename": "trap_detonate_3",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -31,7 +31,7 @@
 					}
 				},
 				{
-					"filename": "projectile_throw/projectile_throw.png",
+					"filename": "projectile_throw",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -52,7 +52,7 @@
 					}
 				},
 				{
-					"filename": "projectile_land/projectile_land_3.png",
+					"filename": "projectile_land_3",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -73,7 +73,7 @@
 					}
 				},
 				{
-					"filename": "projectile_land/projectile_land_4.png",
+					"filename": "projectile_land_4",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -94,7 +94,7 @@
 					}
 				},
 				{
-					"filename": "projectile_land/projectile_land_5.png",
+					"filename": "projectile_land_5",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -115,7 +115,7 @@
 					}
 				},
 				{
-					"filename": "trap_detonate/trap_detonate_5.png",
+					"filename": "trap_detonate_5",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -136,7 +136,7 @@
 					}
 				},
 				{
-					"filename": "trap_detonate/trap_detonate_4.png",
+					"filename": "trap_detonate_4",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -157,7 +157,7 @@
 					}
 				},
 				{
-					"filename": "trap_detonate/trap_detonate_2.png",
+					"filename": "trap_detonate_2",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -178,7 +178,7 @@
 					}
 				},
 				{
-					"filename": "projectile_land/projectile_land_1.png",
+					"filename": "projectile_land_1",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -199,7 +199,7 @@
 					}
 				},
 				{
-					"filename": "projectile_land/projectile_land_2.png",
+					"filename": "projectile_land_2",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -220,7 +220,7 @@
 					}
 				},
 				{
-					"filename": "trap_throw/trap_throw.png",
+					"filename": "trap_throw",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -241,7 +241,7 @@
 					}
 				},
 				{
-					"filename": "trap_land/trap_land_1.png",
+					"filename": "trap_land_1",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -262,7 +262,7 @@
 					}
 				},
 				{
-					"filename": "trap_land/trap_land_2.png",
+					"filename": "trap_land_2",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -283,7 +283,7 @@
 					}
 				},
 				{
-					"filename": "trap_detonate/trap_detonate_1.png",
+					"filename": "trap_detonate_1",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -304,7 +304,7 @@
 					}
 				},
 				{
-					"filename": "trap_land/trap_land_3.png",
+					"filename": "trap_land_3",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -330,6 +330,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:7e903ce162fadf18d0640acbddd6d840:9d3a5af6e25c1f16b820b82c911b99ad:da285cc143f726eb6004a48f2931db98$"
+		"smartupdate": "$TexturePacker:SmartUpdate:8142ce561f38d4793c5bb89d9537db6d:9d3a5af6e25c1f16b820b82c911b99ad:da285cc143f726eb6004a48f2931db98$"
 	}
 }
