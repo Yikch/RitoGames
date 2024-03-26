@@ -3,13 +3,13 @@ import Phaser from 'phaser';
 import leaf from '../../assets/sprites/leaf/leaf_fighter.png';
 import metal from '../../assets/sprites/metal/metal_fighter.png';
 import leafProjectiles from '../../assets/sprites/leaf/projectiles.png';
-import metalProjectiles from '../../assets/sprites/metal/projectile_and_trap.png'
+import metalProjectiles from '../../assets/sprites/metal/projectile.png'
 
 
 import metalJSON from '../../assets/sprites/metal/metal_fighter.json';
 import leafJSON from '../../assets/sprites/leaf/leaf_fighter.json';
 import leafProjectilesJSON from '../../assets/sprites/leaf/projectiles.json';
-import metalProjectilesJSON from '../../assets/sprites/metal/projectile_and_trap.json'
+import metalProjectilesJSON from '../../assets/sprites/metal/projectile.json'
 
 
 import forest_back from '../../assets/background/forest_back.png';

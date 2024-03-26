@@ -189,30 +189,28 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	manageProjectileAttack(){
-		if (!(this.body.onFloor() && !this.blocked)) return false;
+		if (!this.can_atack()) return false;
 
 		if(this.debug)
 			console.log("Projectile from Fighter" + this.id);
 		this.body.setVelocityX(0);
-		this.state = this.STATES.projectile;
-		this.blocked = true;
-		this.playAnimation(this.id + this.STATES.projectile + "_start");
-		this.anims.chain(this.id + this.STATES.projectile + "_active")
-				.chain(this.id + this.STATES.projectile + "_recovery");
+		this.state = this.STATES.atacking;
+		this.anims.startAnimation(this.id + "projectile_start");
+		this.anims.chain(this.id + "projectile_active")
+				.chain(this.id + "projectile_recovery");
 
 	}
 
 	manageCombo1(){
-		if (!(this.body.onFloor() && !this.blocked)) return false;
+		if (!this.can_atack()) return false;
 
 		if(this.debug)
 			console.log("Combo1 from Fighter" + this.id);
 		this.body.setVelocityX(0);
-		this.state = this.STATES.combo1;
-		this.blocked = true;
-		this.playAnimation(this.id + this.STATES.combo1 + "_start");
-		this.anims.chain(this.id + this.STATES.combo1 + "_active")
-			.chain(this.id + this.STATES.combo1 + "_recovery");
+		this.state = this.STATES.atacking;
+		this.anims.startAnimation(this.id + "combo1_start");
+		this.anims.chain(this.id + "combo1_active")
+			.chain(this.id + "combo1_recovery");
 
 	}
 

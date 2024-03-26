@@ -40,7 +40,6 @@ export default class MetalFighter extends Fighter {
 		this.load_hard_atack();
 		this.load_projectile_atack();
 		this.load_combo1();
-		this.load_animation_events();
 		this.scene.anims.create({
 			key: SPRITE + "_" + this.STATES.idle,
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'idle_', start: 0, end:7}),
@@ -149,22 +148,22 @@ export default class MetalFighter extends Fighter {
 
 	load_projectile_atack(){
 		this.scene.anims.create({
-			key: SPRITE + "_" + this.STATES.projectile + "_start",
+			key: SPRITE + "_projectile_start",
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'projectile_cast_', start: 0, end: 2}),
 			frameRate: 10
 		});
 		this.scene.anims.create({
-			key: SPRITE + "_" + this.STATES.projectile + "_active",
+			key: SPRITE + "_projectile_active",
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'projectile_cast_', start: 3, end: 4}),
 			frameRate: 20
 		});
 		this.scene.anims.create({
-			key: SPRITE + "_" + this.STATES.projectile + "_recovery",
+			key: SPRITE + "_projectile_recovery",
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'projectile_cast_', start: 5, end: 6}),
 			frameRate: 10
 		});
 		this.on('animationstart', (animation, frame) => {
-			if (animation.key === this.id + this.STATES.projectile + '_active'){
+			if (animation.key === this.id + 'projectile_active'){
 				let knife = new SimpleProjectile(
 								this.scene, 
 								this.x + (this.facing == 'left' ? -100 : 100), 
@@ -181,22 +180,22 @@ export default class MetalFighter extends Fighter {
 
 	load_combo1(){
 		this.scene.anims.create({
-			key: SPRITE + "_" + this.STATES.combo1 + "_start",
+			key: SPRITE + "_combo1_start",
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'sp_atk_', start: 0, end: 2}),
 			frameRate: 10
 		});
 		this.scene.anims.create({
-			key: SPRITE + "_" + this.STATES.combo1 + "_active",
+			key: SPRITE + "_combo1_active",
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'sp_atk_', start: 3, end: 8}),
 			frameRate: 20
 		});
 		this.scene.anims.create({
-			key: SPRITE + "_" + this.STATES.combo1 + "_recovery",
+			key: SPRITE + "_combo1_recovery",
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'sp_atk_', start: 9, end: 10}),
 			frameRate: 10
 		});
 		this.on('animationstart', (animation, frame) => {
-			if (animation.key === this.id + this.STATES.combo1 + '_active'){
+			if (animation.key === this.id + 'combo1_active'){
 				this.hb = this.scene.add.zone(
 					this.x + (this.facing === 'left' ? -165 : 65), 
 					this.y + this.height + 42, 
@@ -205,24 +204,6 @@ export default class MetalFighter extends Fighter {
 				this.scene.physics.add.existing(this.hb, true);
 				this.hb.body.debugBodyColor = 0x00ff00;
 				this.scene.addColision(this.hb, this, 300);
-			}
-		});
-	}
-
-	load_animation_events(){
-		this.on('animationstopped', (animation, frame) => {
-			if(this.hb !== null)
-				this.hb.destroy();
-		})
-		this.on('animationcomplete', (animation, frame) => {
-			let animStrings = animation.key.split("_");
-			if (animStrings.includes("recovery")){
-				this.blocked = false;
-				this.updateAnimation(this.STATES.idle, this.state);
-			}
-			else if (animStrings.includes('active')){
-				if(this.hb !== null)
-					this.hb.destroy();
 			}
 		});
 	}
