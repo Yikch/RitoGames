@@ -62,8 +62,8 @@ export default class Fight extends Phaser.Scene {
 		this.iniFighter2();
 
 		this.input.gamepad.once('connected', () => {
-			this.fighter.initPad(this.input.gamepad.pad1);
-			this.fighter2.initPad(this.input.gamepad.pad2);
+			if(this.input.gamepad.pad1 != null) this.fighter.initPad(this.input.gamepad.pad1);
+			if(this.input.gamepad.pad2 != null) this.fighter2.initPad(this.input.gamepad.pad2);
 		});
 
 		this.hpbar_p1 = this.add.graphics();
