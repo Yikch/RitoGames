@@ -124,9 +124,9 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 					console.log("Take Hit from Fighter" + this.id);
 				this.state = this.STATES.takeHit;
 				this.stats.health -= 25;
-				this.scene.updateHP(this.player);
+				this.scene.updateHP(this);
 				if(this.stats.health <= 0){
-					this.scene.gameOver(this.player);
+					this.scene.gameOver(this);
 					this.anims.chain(this.id + "death");
 				}
 			}
@@ -177,10 +177,67 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		this.anims.chain(this.id + id + "_active").chain(this.id + id + "_recovery");
 	}
 
+	manageProjectileAttack(){
+		if (!this.can_atack()) return false;
+
+		if(this.debug)
+			console.log("Projectile from Fighter" + this.id);
+		this.body.setVelocityX(0);
+		this.state = this.STATES.atacking;
+		this.anims.startAnimation(this.id + "projectile_start");
+		this.anims.chain(this.id + "projectile_active")
+				.chain(this.id + "projectile_recovery");
+	}
+
+	manageCombo1(){
+		if (!this.can_atack()) return false;
+		if(this.debug)
+			console.log("Combo1 from Fighter" + this.id);
+		this.body.setVelocityX(0);
+		this.state = this.STATES.atacking;
+		this.anims.startAnimation(this.id + "combo1_start");
+		this.anims.chain(this.id + "combo1_active")
+			.chain(this.id + "combo1_recovery");
+
+	}
+
+	// FUNCION EN DESUSO, hay que decidir si usarlo (actualmente se usa el StartAnimation de preupdate para animar el takeHit)
+	// punshing representa la velocidad de push causado por un combo o ataque que pueda generar un push, por defecto es 0
+	manageTakeHit(pushing = 0){
+		if(this.golpeado) return false;
+		if(this.debug)
+			console.log("Take Hit from Fighter" + this.id);
+		this.golpeado = true;
+		this.blocked = true;
+
+		this.anims.chain();
+		this.anims.stop();
+		if(pushing === 0){
+			this.body.setVelocityX(0);
+		}
+		else{
+			this.body.setVelocityX(this.facing === 'left' ? pushing : -pushing);
+		}
+		this.state = this.STATES.takeHit;
+		this.playAnimation(this.id + this.STATES.takeHit);
+		this.on('animationcomplete', (animation, frame) => {
+			if (animation.key === this.id + this.STATES.takeHit){
+				this.golpeado = false;
+				this.blocked = false;
+				this.body.setVelocityX(0);
+				this.updateAnimation(this.STATES.idle, this.state);
+			}
+		});
+	}
+
 	load_animation_events(){
 		this.on('animationstop', (animation, frame) => {
 			if(this.hb !== null)
 				this.scene.destroyHB(this.hb);
+			if(this.hb !== null){
+				this.scene.destroyHB(this.hb);
+				this.hb.destroy();
+			}
 		})
 		this.on('animationcomplete', (animation, frame) => {
 			let animStrings = animation.key.split("_");

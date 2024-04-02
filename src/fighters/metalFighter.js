@@ -1,3 +1,4 @@
+import SimpleProjectile from '../projectiles/simpleProjectile.js';
 import Fighter from './fighter.js';
 
 //This class encapsulates the metal fighter that extends the normal fighter
@@ -37,7 +38,8 @@ export default class MetalFighter extends Fighter {
 	iniAnimations() {
 		this.load_light_atack();
 		this.load_hard_atack();
-		this.load_animation_events();
+		this.load_projectile_atack();
+		this.load_combo1();
 		this.scene.anims.create({
 			key: SPRITE + "_" + this.STATES.idle,
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'idle_', start: 0, end:7}),
@@ -140,6 +142,68 @@ export default class MetalFighter extends Fighter {
 				this.scene.physics.add.existing(this.hb, true);
 				this.hb.body.debugBodyColor = 0x00ff00;
 				this.scene.addColision(this.hb, this);
+			}
+		});
+	}
+
+	load_projectile_atack(){
+		this.scene.anims.create({
+			key: SPRITE + "_projectile_start",
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'projectile_cast_', start: 0, end: 2}),
+			frameRate: 10
+		});
+		this.scene.anims.create({
+			key: SPRITE + "_projectile_active",
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'projectile_cast_', start: 3, end: 4}),
+			frameRate: 20
+		});
+		this.scene.anims.create({
+			key: SPRITE + "_projectile_recovery",
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'projectile_cast_', start: 5, end: 6}),
+			frameRate: 10
+		});
+		this.on('animationstart', (animation, frame) => {
+			if (animation.key === this.id + 'projectile_active'){
+				let knife = new SimpleProjectile(
+								this.scene, 
+								this.x + (this.facing == 'left' ? -100 : 100), 
+								this.y + this.height + 25, 
+								'metal', 'projectile_throw',
+								35, 8,
+								30, this.facing, 5
+							);
+				this.scene.addColision(knife, this);
+				knife.move();
+			}
+		});
+	}
+
+	load_combo1(){
+		this.scene.anims.create({
+			key: SPRITE + "_combo1_start",
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'sp_atk_', start: 0, end: 2}),
+			frameRate: 10
+		});
+		this.scene.anims.create({
+			key: SPRITE + "_combo1_active",
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'sp_atk_', start: 3, end: 8}),
+			frameRate: 20
+		});
+		this.scene.anims.create({
+			key: SPRITE + "_combo1_recovery",
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'sp_atk_', start: 9, end: 10}),
+			frameRate: 10
+		});
+		this.on('animationstart', (animation, frame) => {
+			if (animation.key === this.id + 'combo1_active'){
+				this.hb = this.scene.add.zone(
+					this.x + (this.facing === 'left' ? -165 : 65), 
+					this.y + this.height + 42, 
+					945, 300
+				);
+				this.scene.physics.add.existing(this.hb, true);
+				this.hb.body.debugBodyColor = 0x00ff00;
+				this.scene.addColision(this.hb, this, 300);
 			}
 		});
 	}

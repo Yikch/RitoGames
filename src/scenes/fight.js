@@ -66,21 +66,10 @@ export default class Fight extends Phaser.Scene {
 		this.iniFighter2();
 		this.iniGUI();
 
-		// this.input.gamepad.once('connected', () => {
-        //     this.fighter.initPad(this.input.gamepad.pad1);
-        //     this.fighter2.initPad(this.input.gamepad.pad2);
-        // });
-
-		this.input.gamepad.once('connected', (pad) => {
-            if(this.numPads === 0){
-                this.fighter.initPad(pad);
-                this.numPads++;
-            }
-            else if(this.numPads){
-                this.fighter2.initPad(pad);
-                this.numPads++;
-            }
-        });
+		this.input.gamepad.once('connected', () => {
+			if(this.input.gamepad.pad1 != null) this.fighter.initPad(this.input.gamepad.pad1);
+			if(this.input.gamepad.pad2 != null) this.fighter2.initPad(this.input.gamepad.pad2);
+		});
     }
 
 	update (t, dt)
@@ -181,7 +170,7 @@ export default class Fight extends Phaser.Scene {
 	}
 
 	iniFighter1(){
-		const attackKeysP1 = ['keydown-Q', 'keydown-E'];
+		const attackKeysP1 = ['keydown-Q', 'keydown-E', 'keydown-F', 'keydown-R'];
 		this.fighter = new MetalFighter(this, 300, 300, 1, attackKeysP1);
 		this.fighter.cursors = this.input.keyboard.addKeys({
 			up: Phaser.Input.Keyboard.KeyCodes.W,

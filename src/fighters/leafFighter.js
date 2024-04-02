@@ -69,10 +69,12 @@ export default class LeafFighter extends Fighter {
 		this.scene.anims.create({
 			key: SPRITE + "_" + this.STATES.defend,
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'defend_', start: 0, end: 12}),
+			frameRate: 10,
 		});
 		this.scene.anims.create({
 			key: SPRITE + "_" + this.STATES.defend + "_end",
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'defend_', start: 7}),
+			frameRate: 10,
 		});
 		this.scene.anims.create({
 			key: SPRITE + "_" + this.STATES.takeHit,
