@@ -170,7 +170,7 @@ export default class Fight extends Phaser.Scene {
 	}
 
 	iniFighter1(){
-		const attackKeysP1 = ['keydown-Q', 'keydown-E', 'keydown-F', 'keydown-R'];
+		const attackKeysP1 = ['Q', 'E', 'F', 'R'];
 		this.fighter = new MetalFighter(this, 300, 300, 1, attackKeysP1);
 		this.fighter.cursors = this.input.keyboard.addKeys({
 			up: Phaser.Input.Keyboard.KeyCodes.W,
@@ -182,7 +182,7 @@ export default class Fight extends Phaser.Scene {
 	}
 
 	iniFighter2(){
-		const attackKeysP2 = ['keydown-Z', 'keydown-X', 'keydown-C', 'keydown-V', 'keydown-B'];
+		const attackKeysP2 = ['Z', 'X', 'C', 'V', 'B'];
 		this.fighter2 = new LeafFighter(this, 1000, 300, 2, attackKeysP2);
 		this.fighter2.cursors = this.input.keyboard.createCursorKeys();
 
@@ -197,8 +197,10 @@ export default class Fight extends Phaser.Scene {
 		});
 		this.physics.world.drawDebug = false;
 		this.keyboard.debug.on('down', () => {
-			if (!this.physics.world.drawDebug)
+			if (!this.physics.world.drawDebug){
 				this.physics.world.drawDebug = true;
+				this.timer.text = '9999';
+			}
 			else{
 				this.physics.world.drawDebug = false;
 				this.physics.world.debugGraphic.clear();

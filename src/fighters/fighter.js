@@ -1,4 +1,5 @@
 import Phaser from 'phaser'
+import comboManager from '../combos/comboManager';
 
 /**
  * Clase que representa el jugador del juego. El jugador se mueve por el mundo usando los cursores.
@@ -11,7 +12,7 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 	 * @param {number} x Coordenada X
 	 * @param {number} y Coordenada Y
 	 */
-	constructor(scene, x, y, sprite, player, attackKeys) {
+	constructor(scene, x, y, sprite, player, atackKeys) {
 		super(scene, x, y, sprite);
 
 		this.XIndex = 2;
@@ -20,6 +21,7 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		this.enemyHB = [];
 		this.end = false;
 
+		this.keys = atackKeys;
 		this.debug = false;
 		this.step = false;
 		this.golpeado = false; //Wether the fighter is being hit or not
@@ -38,15 +40,22 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 			atacking: 'atacking',
 		}
 
+		this.DIRECTIONS = {
+			forward: 'forward',
+			forward_up: 'forward_up',
+			forward_down: 'forward_down',
+			backward: 'backward',
+			backward_up: 'backward_up',
+			backward_down: 'backward_down',
+			up: 'up',
+			down: 'down'
+		}
+
 		this.cursors = this.scene.input.keyboard.createCursorKeys();
 		this.gamepad = null;
 
-		this.scene.input.keyboard.on(attackKeys[0], () => this.manageAtack('light'), this);
-		this.scene.input.keyboard.on(attackKeys[1], () => this.manageAtack('hard'), this);
-		this.scene.input.keyboard.on(attackKeys[2], () => this.manageAtack('combo1'), this);
-		this.scene.input.keyboard.on(attackKeys[3],  () => this.manageAtack('combo2'), this);
-		this.scene.input.keyboard.on(attackKeys[4],  () => this.manageAtack('combo3'), this);
-
+		this.comboManager = new comboManager(this.getCombos());
+		this.iniAtacks(atackKeys);
 
 		this.scene.add.existing(this);
 		this.scene.physics.add.existing(this, false);
@@ -79,8 +88,23 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		}, this);
 	}
 
+	iniAtacks(atackKeys){
+		const keys = atackKeys.map((key) => { return "keydown-" + key});
+		this.scene.input.keyboard.on(keys[0], () => this.manageAtack('light'), this);
+		this.scene.input.keyboard.on(keys[1], () => this.manageAtack('hard'), this);
+	}
+
 	iniAnimations(){throw new Error('createAnimations() must be implemented');}
 	iniStats(){throw new Error('createStats() must be implemented');}
+
+	getCombos(){
+		return [
+			{id: 'combo1', keys:[this.DIRECTIONS.down, this.DIRECTIONS.forward_down, this.DIRECTIONS.forward, 'light']},
+			{ id: 'combo2', keys : [this.DIRECTIONS.down, this.DIRECTIONS.forward_down, this.DIRECTIONS.forward, 'hard']},
+			{ id: 'combo3', keys : [this.DIRECTIONS.down, this.DIRECTIONS.backward_down, this.DIRECTIONS.backward, 'light']}
+			//,{ id: 'combo4', keys : [this.DIRECTIONS.down, this.DIRECTIONS.backward_down, this.DIRECTIONS.backward, 'hard']},
+		]
+	}
 
 	setDebug(debug){
 		this.debug = debug;
@@ -101,7 +125,7 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		let oldState = this.state;
 		this.check_collisions();
 		this.update_air();
-		this.check_movement();
+		this.check_movement(t);
 		if (oldState !== this.state){
 			this.anims.startAnimation(this.id + this.state);
 		}
@@ -147,8 +171,10 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		}
 	}
 
-	check_movement(){
+	check_movement(t){
 		if (!this.can_move()) return;
+		const dir = this.getDirection();
+		this.comboManager.addMovementInput(dir, t);
 		if ((this.cursors.up.isDown || (this.gamepad != null && this.gamepad.A)) && this.body.onFloor()) {
 			this.body.setVelocityY(this.stats.jumpSpeed);
 			this.state = this.STATES.jump;
@@ -168,9 +194,11 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	manageAtack(id){
-		if (!this.can_atack()) return false;
 		if(this.debug)
 			console.log("Atack from Fighter" + this.id);
+		if (!this.can_atack()) return false;
+		const combo = this.comboManager.checkSpecialMove(id, this.scene.time.now);
+		id = combo ? combo : id;
 		this.body.setVelocityX(0);
 		this.state = this.STATES.atacking;
 		this.anims.startAnimation(this.id + id + "_start");
@@ -179,7 +207,6 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 
 	manageProjectileAttack(){
 		if (!this.can_atack()) return false;
-
 		if(this.debug)
 			console.log("Projectile from Fighter" + this.id);
 		this.body.setVelocityX(0);
@@ -231,13 +258,14 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	load_animation_events(){
+		this.scene.input.keyboard.on('keycombomatch', () => {
+			if(this.debug)
+				console.log("Combo from Fighter" + this.id);
+			this.manageAtack('combo1');
+		});
 		this.on('animationstop', (animation, frame) => {
 			if(this.hb !== null)
 				this.scene.destroyHB(this.hb);
-			if(this.hb !== null){
-				this.scene.destroyHB(this.hb);
-				this.hb.destroy();
-			}
 		})
 		this.on('animationcomplete', (animation, frame) => {
 			let animStrings = animation.key.split("_");
@@ -275,6 +303,8 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 	is_recovering(){return this.state === this.STATES.recovering;}
 	going_left(){return (this.cursors.left.isDown || (this.gamepad != null && this.gamepad.rightStick.x < 0))}
 	going_right(){return (this.cursors.right.isDown || (this.gamepad != null && this.gamepad.rightStick.x > 0))}
+	going_up(){return (this.cursors.up.isDown || (this.gamepad != null && this.gamepad.rightStick.y < 0))}
+	going_down(){return (this.cursors.down.isDown || (this.gamepad != null && this.gamepad.rightStick.y > 0))}
 	going_forward(){
 		return (this.facing === 'right') && this.going_right() ||
 				(this.facing === 'left') && this.going_left();
@@ -282,5 +312,21 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 	going_backwards(){
 		return (this.facing === 'left') && this.going_right() ||
 				(this.facing === 'right') && this.going_left();
+	}
+
+	getDirection(){
+		const forward = this.going_forward();
+		const backward = this.going_backwards();
+		const up = this.going_up();
+		const down = this.going_down();
+		if (forward && up) return this.DIRECTIONS.forward_up;
+		if (forward && down) return this.DIRECTIONS.forward_down;
+		if (backward && up) return this.DIRECTIONS.backward_up;
+		if (backward && down) return this.DIRECTIONS.backward_down;
+		if (forward) return this.DIRECTIONS.forward;
+		if (backward) return this.DIRECTIONS.backward;
+		if (up) return this.DIRECTIONS.up;
+		if (down) return this.DIRECTIONS.down;
+		return undefined;
 	}
 }
