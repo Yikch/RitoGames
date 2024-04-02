@@ -20,6 +20,8 @@ import MetalFighter from '../fighters/metalFighter.js';
 import LeafFighter from '../fighters/leafFighter.js'
 
 
+const P1Coords = {x: 400, y: 300};
+const P2Coords = {x: 1300, y: 300};
 /**
  * Escena principal del juego. La escena se compone de una serie de plataformas 
  * sobre las que se sitúan las bases en las podrán aparecer las estrellas. 
@@ -33,9 +35,13 @@ export default class Fight extends Phaser.Scene {
      * Constructor de la escena
      */
 
-    constructor() {
-        super({ key: 'fight' });
+	constructor(numberRounds = 3, playerVictories = [0, 0]) {
+		super({ key: 'fight' });
 		this.numPads = 0;
+
+		this.round = 1;
+		this.numberRounds = numberRounds;
+		this.playerVictories = playerVictories
     }
 
     preload() {
@@ -70,10 +76,22 @@ export default class Fight extends Phaser.Scene {
 			if(this.input.gamepad.pad1 != null) this.fighter.initPad(this.input.gamepad.pad1);
 			if(this.input.gamepad.pad2 != null) this.fighter2.initPad(this.input.gamepad.pad2);
 		});
-    }
+
+		// this.events.once('roundStart', () => {
+		// 	this.roundStart();
+		// }, this);
+		// this.scene.launch('countdown');
+		this.roundStart();
+	}
+
+	roundStart(){
+		this.startTimer();
+		this.fighter.unblock();
+		this.fighter2.unblock();
+	}
 
 	update (t, dt)
-    {
+	{
 		super.update(t, dt);
 		if(this.fighter.x > this.fighter2.x){
 			this.fighter.setOrientation('left');
@@ -104,7 +122,46 @@ export default class Fight extends Phaser.Scene {
         this.hpbar_p2.fillRect(1250, 64, this.hpbar_p2.displayWidth, 48);
     }
 
+	startTimer(){
+		let self = this; // Para usarlo en active
+		WebFont.load({
+			google: {
+				families: [ 'Pixelify Sans' ]
+			},
+			active: function () // se llama a esta función cuando está cargada
+			{
+				self.timer = self.add.text(800, 56, self.roundTime.toString(),
+								{ fontFamily: 'Pixelify Sans',fontSize: 80, color: '#ff0000' })
+			}
+		});
+		this.time.addEvent({ delay: 1000, 
+			callback: () => {
+				this.timer.setText((parseInt(this.timer.text) - 1).toString());
+			}, 
+			callbackScope: this, loop: true 
+		});
+		this.time.addEvent({ delay: 1000 * this.roundTime, 
+			callback: () => {
+				this.time.removeAllEvents();
+				this.gameOver();
+			}, 
+			callbackScope: this, loop: false
+		});
+	}
+
 	gameOver(player){
+		const pl = player === this.fighter ? 0 : 1;
+		this.playerVictories[pl]++;
+		this.round++;
+
+		if (this.round > this.numberRounds)
+			this.endGame();
+		else{
+			this.scene.restart({numberRounds: this.numberRounds, playerVictories: this.playerVictories});
+		}
+	}
+
+	endGame(){
 		this.add.text(400, 300, 'Game Over', { fontSize: '64px', fill: '#ff0000' });
 		
 		if(this.fighter.stats.health > this.fighter2.stats.health)
@@ -136,42 +193,26 @@ export default class Fight extends Phaser.Scene {
 	}
 
 	iniGUI(){
-		//Creates text in the top middle of the screen that is a countdown
-		let self = this; // Para usarlo en active
-		WebFont.load({
-			google: {
-				families: [ 'Pixelify Sans' ]
-			},
-			active: function () // se llama a esta función cuando está cargada
-			{
-				self.timer = self.add.text(800, 56, self.roundTime.toString(),
-								{ fontFamily: 'Pixelify Sans',fontSize: 80, color: '#ff0000' })
-			}
-		});
-		this.time.addEvent({ delay: 1000, 
-			callback: () => {
-				this.timer.setText((parseInt(this.timer.text) - 1).toString());
-			}, 
-			callbackScope: this, loop: true 
-		});
-		this.time.addEvent({ delay: 1000 * this.roundTime, 
-			callback: () => {
-				this.time.removeAllEvents();
-				this.gameOver();
-			}, 
-			callbackScope: this, loop: false
-		});
 
 		this.hpbar_p1 = this.add.graphics();
 		this.hpbar_p1.cantidad = this.fighter.stats.health;
 
 		this.hpbar_p2 = this.add.graphics();
 		this.hpbar_p2.cantidad = this.fighter2.stats.health;
+
+		for (let i = 0; i < this.numberRounds; i++){
+			i < this.playerVictories[0] 
+				? this.add.circle(400 + i * 50, 130, 10, 0x00ff00) : this.add.circle(400 + i * 50, 130, 10, 0xff0000);
+			i < this.playerVictories[1] 
+				? this.add.circle(1300 + i * 50, 130, 10, 0x00ff00) : this.add.circle(1300 + i * 50, 130, 10, 0xff0000);
+		}
+		this.updateHP(this.fighter);
+		this.updateHP(this.fighter2);
 	}
 
 	iniFighter1(){
 		const attackKeysP1 = ['Q', 'E', 'F', 'R'];
-		this.fighter = new MetalFighter(this, 300, 300, 1, attackKeysP1);
+		this.fighter = new MetalFighter(this, P1Coords.x, P1Coords.y, 1, attackKeysP1);
 		this.fighter.cursors = this.input.keyboard.addKeys({
 			up: Phaser.Input.Keyboard.KeyCodes.W,
 			down: Phaser.Input.Keyboard.KeyCodes.S,
@@ -179,15 +220,17 @@ export default class Fight extends Phaser.Scene {
 			right: Phaser.Input.Keyboard.KeyCodes.D
 		});
 		this.physics.add.collider(this.fighter, this.floor);
+		this.fighter.block();
 	}
 
 	iniFighter2(){
 		const attackKeysP2 = ['Z', 'X', 'C', 'V', 'B'];
-		this.fighter2 = new LeafFighter(this, 1000, 300, 2, attackKeysP2);
+		this.fighter2 = new LeafFighter(this, P2Coords.x, P2Coords.y, 2, attackKeysP2);
 		this.fighter2.cursors = this.input.keyboard.createCursorKeys();
 
 		this.physics.add.collider(this.fighter2, this.floor);
 		this.physics.add.collider(this.fighter, this.fighter2);
+		this.fighter2.block();
 	}
 
 	iniDebug(){

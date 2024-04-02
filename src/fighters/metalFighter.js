@@ -27,6 +27,7 @@ export default class MetalFighter extends Fighter {
 	iniStats() {
 		return {
 			health: 500,
+			maxHealth: 500,
 			speed: 300,
 			jumpSpeed: -800,
 		}

@@ -27,6 +27,7 @@ export default class LeafFighter extends Fighter {
 	iniStats() {
 		return {
 			health: 500,
+			maxHealth: 500,
 			speed: 200,
 			jumpSpeed: -600,
 		}

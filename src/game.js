@@ -1,4 +1,5 @@
 import Fight from './scenes/fight.js'
+import Countdown from './scenes/countdown.js'
 import Phaser from 'phaser'
 
 /**
@@ -18,7 +19,7 @@ let config = {
     },
     pixelArt: true,
 	//transparent: true,
-    scene: [Fight],
+    scene: [Fight, Countdown],
     physics: {
         default: 'arcade',
         arcade: {

@@ -80,10 +80,10 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		this.gamepad = gamepad;
 		this.gamepad.on('down', () => {
 			if (this.gamepad.X) {
-				this.manageLightAttack();
+				this.manageAtack('light');
 			}
 			else if (this.gamepad.Y) {
-				this.manageHardAttack();
+				this.manageAtack('hard');
 			}
 		}, this);
 	}
@@ -295,16 +295,17 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 	}
 
 	block(){ this.end = true;}
+	unblock(){ this.end = false;}
 	can_atack(){return !this.end && (this.state === this.STATES.idle || this.state === this.STATES.run);}
 	can_move(){return !this.end && (this.state === this.STATES.idle || this.state === this.STATES.run);}
 	is_atacking(){return this.state === this.STATES.atacking;}
 	is_hit(){return this.state === this.STATES.takeHit;}
 	is_defending(){return this.state === this.STATES.defend;}
 	is_recovering(){return this.state === this.STATES.recovering;}
-	going_left(){return (this.cursors.left.isDown || (this.gamepad != null && this.gamepad.rightStick.x < 0))}
-	going_right(){return (this.cursors.right.isDown || (this.gamepad != null && this.gamepad.rightStick.x > 0))}
-	going_up(){return (this.cursors.up.isDown || (this.gamepad != null && this.gamepad.rightStick.y < 0))}
-	going_down(){return (this.cursors.down.isDown || (this.gamepad != null && this.gamepad.rightStick.y > 0))}
+	going_left(){return (this.cursors.left.isDown || (this.gamepad != null && this.gamepad.leftStick.x < 0))}
+	going_right(){return (this.cursors.right.isDown || (this.gamepad != null && this.gamepad.leftStick.x > 0))}
+	going_up(){return (this.cursors.up.isDown || (this.gamepad != null && this.gamepad.leftStick.y < 0))}
+	going_down(){return (this.cursors.down.isDown || (this.gamepad != null && this.gamepad.leftStick.y > 0))}
 	going_forward(){
 		return (this.facing === 'right') && this.going_right() ||
 				(this.facing === 'left') && this.going_left();
