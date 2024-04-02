@@ -45,6 +45,7 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		if(attackKeys[2] !== null)
 			this.scene.input.keyboard.on(attackKeys[2], this.manageProjectileAttack, this);
 		this.scene.input.keyboard.on(attackKeys[3], this.manageCombo1, this);
+		this.scene.input.keyboard.on(attackKeys[4], this.manageCombo2, this);
 
 		this.scene.add.existing(this);
 		this.scene.physics.add.existing(this, false);
@@ -211,6 +212,19 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		this.anims.startAnimation(this.id + "combo1_start");
 		this.anims.chain(this.id + "combo1_active")
 			.chain(this.id + "combo1_recovery");
+
+	}
+
+	manageCombo2(){
+		if (!this.can_atack()) return false;
+
+		if(this.debug)
+			console.log("Combo2 from Fighter" + this.id);
+		
+		this.state = this.STATES.atacking;
+		this.anims.startAnimation(this.id + "combo2_start");
+		this.anims.chain(this.id + "combo2_active")
+			.chain(this.id + "combo2_recovery");
 
 	}
 

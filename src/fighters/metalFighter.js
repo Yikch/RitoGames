@@ -1,4 +1,5 @@
 import SimpleProjectile from '../projectiles/simpleProjectile.js';
+import Trap from '../projectiles/trap.js';
 import Fighter from './fighter.js';
 
 //This class encapsulates the metal fighter that extends the normal fighter
@@ -40,6 +41,7 @@ export default class MetalFighter extends Fighter {
 		this.load_hard_atack();
 		this.load_projectile_atack();
 		this.load_combo1();
+		this.load_combo2();
 		this.scene.anims.create({
 			key: SPRITE + "_" + this.STATES.idle,
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'idle_', start: 0, end:7}),
@@ -204,6 +206,44 @@ export default class MetalFighter extends Fighter {
 				this.scene.physics.add.existing(this.hb, true);
 				this.hb.body.debugBodyColor = 0x00ff00;
 				this.scene.addColision(this.hb, this, 300);
+			}
+		});
+	}
+
+	load_combo2(){
+		this.scene.anims.create({
+			key: SPRITE + "_combo2_start",
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'trap_cast_', start: 0, end: 4}),
+			frameRate: 10
+		});
+		this.scene.anims.create({
+			key: SPRITE + "_combo2_active",
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'trap_cast_', start: 5, end: 6}),
+			frameRate: 20
+		});
+		this.scene.anims.create({
+			key: SPRITE + "_combo2_recovery",
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'trap_cast_', start: 7, end: 9}),
+			frameRate: 10
+		});
+		this.on('animationstart', (animation, frame) => {
+			if (animation.key === this.id + 'combo2_start'){
+				if (this.facing === 'right'){
+					this.body.setVelocityX(-240);
+				}
+				else{
+					this.body.setVelocityX(240);
+				}
+				this.body.setVelocityY(-300);
+			}
+			if (animation.key === this.id + 'combo2_active'){
+				// let trap = new Trap( this.scene, 
+				// 					this.x + (this.facing == 'left' ? -100 : 100), 
+				// 					this.y - this.height, 
+				// 					'metalProjectiles', 'trap_land_', 'trap_detonate_', 
+				// 					35, 8, 5
+				// 				);
+				// trap.detonate();
 			}
 		});
 	}

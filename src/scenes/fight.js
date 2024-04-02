@@ -128,7 +128,7 @@ export default class Fight extends Phaser.Scene {
 	}
 
 	iniFighter1(){
-		const attackKeysP1 = ['keydown-Q', 'keydown-E', 'keydown-F', 'keydown-R'];
+		const attackKeysP1 = ['keydown-Q', 'keydown-E', 'keydown-F', 'keydown-R', 'keydown-G'];
 		this.fighter = new MetalFighter(this, 300, 300, 1, attackKeysP1);
 		this.fighter.cursors = this.input.keyboard.addKeys({
 			up: Phaser.Input.Keyboard.KeyCodes.W,
