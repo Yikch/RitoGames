@@ -229,21 +229,21 @@ export default class MetalFighter extends Fighter {
 		this.on('animationstart', (animation, frame) => {
 			if (animation.key === this.id + 'combo2_start'){
 				if (this.facing === 'right'){
-					this.body.setVelocityX(-240);
+					this.body.setVelocityX(-380);
 				}
 				else{
-					this.body.setVelocityX(240);
+					this.body.setVelocityX(380);
 				}
-				this.body.setVelocityY(-300);
+				this.body.setVelocityY(-400);
 			}
 			if (animation.key === this.id + 'combo2_active'){
-				// let trap = new Trap( this.scene, 
-				// 					this.x + (this.facing == 'left' ? -100 : 100), 
-				// 					this.y - this.height, 
-				// 					'metalProjectiles', 'trap_land_', 'trap_detonate_', 
-				// 					35, 8, 5
-				// 				);
-				// trap.detonate();
+				let trap = new Trap( this.scene, 
+									this.x + (this.facing == 'left' ? -140 : 140), 
+									this.y + this.height + 120, this, 
+									'metalProjectiles', 'trap_land_', 'trap_detonate_', 
+									15, 15, 10
+								);
+				trap.detonate();
 			}
 		});
 	}
