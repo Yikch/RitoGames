@@ -54,13 +54,8 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		this.cursors = this.scene.input.keyboard.createCursorKeys();
 		this.gamepad = null;
 
-		this.scene.input.keyboard.on(attackKeys[0], this.manageLightAttack, this);
-		this.scene.input.keyboard.on(attackKeys[1], this.manageHardAttack, this);
-		if(attackKeys[2] !== null)
-			this.scene.input.keyboard.on(attackKeys[2], this.manageProjectileAttack, this);
-		this.scene.input.keyboard.on(attackKeys[3], this.manageCombo1, this);
-		this.scene.input.keyboard.on(attackKeys[4], this.manageCombo2, this);
 		
+
 		this.comboManager = new comboManager(this.getCombos());
 		this.iniAtacks(atackKeys);
 
@@ -99,6 +94,10 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		const keys = atackKeys.map((key) => { return "keydown-" + key});
 		this.scene.input.keyboard.on(keys[0], () => this.manageAtack('light'), this);
 		this.scene.input.keyboard.on(keys[1], () => this.manageAtack('hard'), this);
+		if(keys[2] !== null)
+			this.scene.input.keyboard.on(keys[2], this.manageProjectileAttack, this);
+		this.scene.input.keyboard.on(keys[3], this.manageCombo1, this);
+		this.scene.input.keyboard.on(keys[4], this.manageCombo2, this);
 	}
 
 	iniAnimations(){throw new Error('createAnimations() must be implemented');}
