@@ -27,6 +27,7 @@ export default class LeafFighter extends Fighter {
 	iniStats() {
 		return {
 			health: 500,
+			maxHealth: 500,
 			speed: 200,
 			jumpSpeed: -600,
 		}
@@ -38,6 +39,9 @@ export default class LeafFighter extends Fighter {
 	iniAnimations() {
 		this.load_light_atack();
 		this.load_hard_atack();
+		this.load_combo1();
+		this.load_combo2();
+		this.load_combo3();
 		this.load_animation_events();
 		this.scene.anims.create({
 			key: SPRITE + "_" + this.STATES.idle,
@@ -93,7 +97,7 @@ export default class LeafFighter extends Fighter {
 		});
 		this.scene.anims.create({
 			key: SPRITE + "_light_active",
-			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: '1_atk_', start: 3, end: 7}),
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: '1_atk_', start: 4, end: 7}),
 			frameRate: 10
 		});
 		this.scene.anims.create({
@@ -143,6 +147,95 @@ export default class LeafFighter extends Fighter {
 							);
 				this.scene.addColision(arrow, this);
 				arrow.move();
+			}
+		});
+	}
+
+	load_combo1(){
+		this.scene.anims.create({
+			key: SPRITE + "_combo1_start",
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: '3_atk_', start: 0, end: 6}),
+			frameRate: 10
+		});
+		this.scene.anims.create({
+			key: SPRITE + "_combo1_active",
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: '3_atk_', start: 7, end: 9}),
+			frameRate: 10
+		});
+		this.scene.anims.create({
+			key: SPRITE + "_combo1_recovery",
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: '3_atk_', start: 10, end: 11}),
+			frameRate: 20
+		});
+		this.on('animationstart', (animation, frame) => {
+			if (animation.key === this.id + 'combo1_active'){
+				this.hb = this.scene.add.zone(
+					this.x + (this.facing == 'left' ? -15 : 15), 
+					this.y + this.height - 175, 
+					225, 140
+				);
+				this.scene.physics.add.existing(this.hb, true);
+				this.hb.body.debugBodyColor = 0x00ff00;
+				this.scene.addColision(this.hb, this);
+			}
+		});
+	}
+
+	load_combo2(){
+		this.scene.anims.create({
+			key: SPRITE + "_combo2_start",
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'sp_atk_', start: 0, end: 8}),
+			frameRate: 10
+		});
+		this.scene.anims.create({
+			key: SPRITE + "_combo2_active",
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'sp_atk_', start: 10, end: 12}),
+			frameRate: 10
+		});
+		this.scene.anims.create({
+			key: SPRITE + "_combo2_recovery",
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'sp_atk_', start: 13, end: 16}),
+			frameRate: 20
+		});
+		this.on('animationstart', (animation, frame) => {
+			if (animation.key === this.id + 'combo2_active'){
+				this.hb = this.scene.add.zone(
+					this.x + (this.facing == 'left' ? -15 : 15), 
+					this.y + this.height - 175, 
+					225, 140
+				);
+				this.scene.physics.add.existing(this.hb, true);
+				this.hb.body.debugBodyColor = 0x00ff00;
+				this.scene.addColision(this.hb, this);
+			}
+		});
+	}
+	load_combo3(){
+		this.scene.anims.create({
+			key: SPRITE + "_combo3_start",
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'air_atk_', start: 0, end: 4}),
+			frameRate: 10
+		});
+		this.scene.anims.create({
+			key: SPRITE + "_combo3_active",
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'air_atk_', start: 5, end: 6}),
+			frameRate: 10
+		});
+		this.scene.anims.create({
+			key: SPRITE + "_combo3_recovery",
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'air_atk_', start: 7, end: 8}),
+			frameRate: 10
+		});
+		this.on('animationstart', (animation, frame) => {
+			if (animation.key === this.id + 'combo3_active'){
+				this.hb = this.scene.add.zone(
+					this.x + (this.facing == 'left' ? -15 : 15), 
+					this.y + this.height - 175, 
+					225, 140
+				);
+				this.scene.physics.add.existing(this.hb, true);
+				this.hb.body.debugBodyColor = 0x00ff00;
+				this.scene.addColision(this.hb, this);
 			}
 		});
 	}

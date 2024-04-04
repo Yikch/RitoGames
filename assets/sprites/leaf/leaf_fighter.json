@@ -120,6 +120,30 @@
         "y": 0.5
       }
     },
+	"sp_atk_9": {
+		"frame": {
+		  "x": 0,
+		  "y": 29,
+		  "w": 186,
+		  "h": 35
+		},
+		"rotated": false,
+		"trimmed": true,
+		"spriteSourceSize": {
+		  "x": 102,
+		  "y": 92,
+		  "w": 186,
+		  "h": 35
+		},
+		"sourceSize": {
+		  "w": 288,
+		  "h": 128
+		},
+		"pivot": {
+		  "x": 0.5,
+		  "y": 0.5
+		}
+	  },
     "sp_atk_8": {
       "frame": {
         "x": 186,
@@ -1560,6 +1584,30 @@
         "y": 0.5
       }
     },
+	"3_atk_9": {
+		"frame": {
+		  "x": 480,
+		  "y": 343,
+		  "w": 32,
+		  "h": 42
+		},
+		"rotated": false,
+		"trimmed": true,
+		"spriteSourceSize": {
+		  "x": 122,
+		  "y": 85,
+		  "w": 32,
+		  "h": 42
+		},
+		"sourceSize": {
+		  "w": 288,
+		  "h": 128
+		},
+		"pivot": {
+		  "x": 0.5,
+		  "y": 0.5
+		}
+	},
     "idle_1": {
       "frame": {
         "x": 371,
