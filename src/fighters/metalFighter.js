@@ -40,9 +40,9 @@ export default class MetalFighter extends Fighter {
 	iniAnimations() {
 		this.load_light_atack();
 		this.load_hard_atack();
-		this.load_projectile_atack();
 		this.load_combo1();
 		this.load_combo2();
+		this.load_combo3();
 		this.scene.anims.create({
 			key: SPRITE + "_" + this.STATES.idle,
 			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'idle_', start: 0, end:7}),
@@ -149,38 +149,6 @@ export default class MetalFighter extends Fighter {
 		});
 	}
 
-	load_projectile_atack(){
-		this.scene.anims.create({
-			key: SPRITE + "_projectile_start",
-			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'projectile_cast_', start: 0, end: 2}),
-			frameRate: 10
-		});
-		this.scene.anims.create({
-			key: SPRITE + "_projectile_active",
-			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'projectile_cast_', start: 3, end: 4}),
-			frameRate: 20
-		});
-		this.scene.anims.create({
-			key: SPRITE + "_projectile_recovery",
-			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'projectile_cast_', start: 5, end: 6}),
-			frameRate: 10
-		});
-		this.on('animationstart', (animation, frame) => {
-			if (animation.key === this.id + 'projectile_active'){
-				let knife = new SimpleProjectile(
-								this.scene, 
-								this.x + (this.facing == 'left' ? -100 : 100), 
-								this.y + this.height + 25, 
-								'metal', 'projectile_throw',
-								35, 8,
-								30, this.facing, 5
-							);
-				this.scene.addColision(knife, this);
-				knife.move();
-			}
-		});
-	}
-
 	load_combo1(){
 		this.scene.anims.create({
 			key: SPRITE + "_combo1_start",
@@ -245,6 +213,38 @@ export default class MetalFighter extends Fighter {
 									15, 15, 10
 								);
 				trap.detonate();
+			}
+		});
+	}
+
+	load_combo3(){
+		this.scene.anims.create({
+			key: SPRITE + "_combo3_start",
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'projectile_cast_', start: 0, end: 2}),
+			frameRate: 10
+		});
+		this.scene.anims.create({
+			key: SPRITE + "_combo3_active",
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'projectile_cast_', start: 3, end: 4}),
+			frameRate: 20
+		});
+		this.scene.anims.create({
+			key: SPRITE + "_combo3_recovery",
+			frames: this.scene.anims.generateFrameNames(SPRITE, { prefix: 'projectile_cast_', start: 5, end: 6}),
+			frameRate: 10
+		});
+		this.on('animationstart', (animation, frame) => {
+			if (animation.key === this.id + 'combo3_active'){
+				let knife = new SimpleProjectile(
+								this.scene, 
+								this.x + (this.facing == 'left' ? -100 : 100), 
+								this.y + this.height + 25, 
+								'metal', 'projectile_throw',
+								35, 8,
+								30, this.facing, 5
+							);
+				this.scene.addColision(knife, this);
+				knife.move();
 			}
 		});
 	}

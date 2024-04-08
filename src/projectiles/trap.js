@@ -19,6 +19,7 @@ export default class Trap extends Phaser.GameObjects.Sprite {
 		this.scene.add.existing(this);
 		this.scene.physics.add.existing(this, false);
 		this.body.setSize(width, height);
+		this.body.setOffset(this.width/2 - width/2, this.height - height - 1);
 		this.body.allowGravity = true;
 		this.atlasKey = atlasKey;
 		this.fighter = fighter;

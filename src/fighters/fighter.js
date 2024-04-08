@@ -94,10 +94,6 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		const keys = atackKeys.map((key) => { return "keydown-" + key});
 		this.scene.input.keyboard.on(keys[0], () => this.manageAtack('light'), this);
 		this.scene.input.keyboard.on(keys[1], () => this.manageAtack('hard'), this);
-		if(keys[2] !== null)
-			this.scene.input.keyboard.on(keys[2], this.manageProjectileAttack, this);
-		this.scene.input.keyboard.on(keys[3], this.manageCombo1, this);
-		this.scene.input.keyboard.on(keys[4], this.manageCombo2, this);
 	}
 
 	iniAnimations(){throw new Error('createAnimations() must be implemented');}
@@ -209,42 +205,6 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		this.state = this.STATES.atacking;
 		this.anims.startAnimation(this.id + id + "_start");
 		this.anims.chain(this.id + id + "_active").chain(this.id + id + "_recovery");
-	}
-
-	manageProjectileAttack(){
-		if (!this.can_atack()) return false;
-		if(this.debug)
-			console.log("Projectile from Fighter" + this.id);
-		this.body.setVelocityX(0);
-		this.state = this.STATES.atacking;
-		this.anims.startAnimation(this.id + "projectile_start");
-		this.anims.chain(this.id + "projectile_active")
-				.chain(this.id + "projectile_recovery");
-	}
-
-	manageCombo1(){
-		if (!this.can_atack()) return false;
-		if(this.debug)
-			console.log("Combo1 from Fighter" + this.id);
-		this.body.setVelocityX(0);
-		this.state = this.STATES.atacking;
-		this.anims.startAnimation(this.id + "combo1_start");
-		this.anims.chain(this.id + "combo1_active")
-			.chain(this.id + "combo1_recovery");
-
-	}
-
-	manageCombo2(){
-		if (!this.can_atack()) return false;
-
-		if(this.debug)
-			console.log("Combo2 from Fighter" + this.id);
-		
-		this.state = this.STATES.atacking;
-		this.anims.startAnimation(this.id + "combo2_start");
-		this.anims.chain(this.id + "combo2_active")
-			.chain(this.id + "combo2_recovery");
-
 	}
 
 	// FUNCION EN DESUSO, hay que decidir si usarlo (actualmente se usa el StartAnimation de preupdate para animar el takeHit)
