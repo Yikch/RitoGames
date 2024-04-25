@@ -10,10 +10,11 @@ import Phaser from 'phaser'
  */
 let config = {
     type: Phaser.AUTO,
+    parent: "game",
     width: 1800,
     height: 1000,
     scale: {
-        //mode: Phaser.Scale.FIT,  
+        mode: Phaser.Scale.FIT,  
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
     input: {
