@@ -1,5 +1,5 @@
 header {
-	background-color: #4c74af;
+	background-color: #916e51;
 	color: white;
 	padding: 10px;
 	height: 50px; /* Tamaño fijo para la cabecera */
@@ -15,9 +15,10 @@ header {
 }
 
 .game-area {
-	flex: 1; /* Permite que el área del juego ocupe el espacio restante */
-	background-color: #f0f0f0;
 	display: flex; /* Flexbox para alinear el contenido */
+	flex: 0; /* No permite que el área del juego se expanda */
+    height: 85vh; /* Ocupa el 60% de la altura de la ventana */
+	background-color: #f0f0f0;
 	background-image: url('../assets/background/images/an_orange_city.png'); /* Imagen de fondo */
 	background-size: cover; /* Cubre todo el área del juego */
 	background-position: center; /* Alinea la imagen en el centro */
@@ -30,11 +31,26 @@ header {
 	padding: 20px;
 	border-top: 2px solid #cccccc;
 	text-align: center;
-	background-image: url('../assets/background/images/an_orange_city.png'); /* Imagen de fondo */
+	background-image: url('../assets/background/images/Undersea.png'); /* Imagen de fondo */
 	background-size: cover; /* Cubre todo el área del juego */
-	background-position: center; /* Alinea la imagen en el centro */
-
+	background-position: top; /* Alinea la imagen en el centro */
 }
+
+.fullscreen-button-container {
+	display: flex;
+	justify-content: flex-end; /* Centra el botón horizontalmente */
+	align-items: center; /* Centra verticalmente */
+	flex: 1; /* Ocupa el espacio restante */
+}
+
+.fullscreen-button {
+	padding: 10px 20px; /* Relleno del botón */
+	background-color: #4CAF50; /* Color de fondo */
+	color: white; /* Color del texto */
+	border: none; /* Sin bordes */
+	cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+}
+
 
 body, html {
 	margin: 0;
