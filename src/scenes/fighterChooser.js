@@ -42,9 +42,11 @@ export default class FighterChooserScene extends Phaser.Scene {
 
 	create() {
 		// Display title
+		const {width, height } = this.scale;
+
 		this.screenWidth = this.game.renderer.width;
 		this.screenHeight = this.game.renderer.height;
-		//this.add.image(0, 0, "jungle_bg").setDisplaySize(width,height).setOrigin(0);
+		this.add.image(0, 0, "jungle_bg").setDisplaySize(width,height).setOrigin(0);
 
 		this.iniText();
 		this.iniCursorAndKeys();
