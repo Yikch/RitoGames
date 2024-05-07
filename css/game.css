@@ -18,8 +18,7 @@ header {
 	display: flex; /* Flexbox para alinear el contenido */
 	flex: 0; /* No permite que el área del juego se expanda */
     height: 85vh; /* Ocupa el 60% de la altura de la ventana */
-	background-color: #f0f0f0;
-	background-image: url('../assets/background/images/an_orange_city.png'); /* Imagen de fondo */
+	background-color: #01110c;
 	background-size: cover; /* Cubre todo el área del juego */
 	background-position: center; /* Alinea la imagen en el centro */
 	overflow: hidden; /* Evita barras de desplazamiento */
@@ -27,14 +26,32 @@ header {
 }
 
 .controls-description {
-	background-color: #ffffff;
+	background-color: #01110c;
 	padding: 20px;
-	border-top: 2px solid #cccccc;
 	text-align: center;
 	background-image: url('../assets/background/images/Undersea.png'); /* Imagen de fondo */
 	background-size: cover; /* Cubre todo el área del juego */
 	background-position: top; /* Alinea la imagen en el centro */
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
+
+.players-controls {
+	text-align: center;
+	display: flex;
+	flex-direction: row;
+	align-items: stretch;
+	gap: 40px;
+}
+
+.characters-controls{
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+}
+
 
 .fullscreen-button-container {
 	display: flex;
@@ -51,6 +68,14 @@ header {
 	cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
 }
 
+.rotade-45 {
+    transform: rotate(45deg); /* Gira la imagen 45 grados */
+}
+
+.rotade-minus45 {
+    transform: rotate(-45deg); /* Gira la imagen 45 grados */
+}
+
 
 body, html {
 	margin: 0;
@@ -60,6 +85,7 @@ body, html {
 }
 
 p {
+	color:aquamarine;
 	font-family: fantasy;
 	font-size: x-large;
 	font-weight: 300;
