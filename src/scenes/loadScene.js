@@ -1,5 +1,6 @@
 import Phaser from 'phaser'
 import jungle_bg from '../../assets/background/images/Jungle.png';
+import title from '../../assets/UI/titulo.png';
 import button_selected from '../../assets/UI/PixelArtUIElementsI/UI/Button/Button_selected.png';
 import button_hover from '../../assets/UI/PixelArtUIElementsI/UI/Button/Button_hover.png';
 import button_pressed from '../../assets/UI/PixelArtUIElementsI/UI/Button/Button_pressed.png';
@@ -12,7 +13,7 @@ export default class LoadScene extends Phaser.Scene
 	}
     preload(){
         this.load.image("jungle_bg", jungle_bg)
-
+        this.load.image("title", title)
         this.load.image("button_selected", button_selected)
         this.load.image("button_hover", button_hover)
         this.load.image("button_pressed", button_pressed)

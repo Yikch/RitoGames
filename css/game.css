@@ -1,5 +1,5 @@
 header {
-	background-color: #4CAF50;
+	background-color: #4c74af;
 	color: white;
 	padding: 10px;
 	height: 50px; /* Tamaño fijo para la cabecera */
@@ -22,6 +22,7 @@ header {
 	background-size: cover; /* Cubre todo el área del juego */
 	background-position: center; /* Alinea la imagen en el centro */
 	overflow: hidden; /* Evita barras de desplazamiento */
+	
 }
 
 .controls-description {
@@ -32,6 +33,7 @@ header {
 	background-image: url('../assets/background/images/an_orange_city.png'); /* Imagen de fondo */
 	background-size: cover; /* Cubre todo el área del juego */
 	background-position: center; /* Alinea la imagen en el centro */
+
 }
 
 body, html {
@@ -39,4 +41,12 @@ body, html {
 	padding: 0;
 	overflow-x: hidden;
 	height: 100%;
+}
+
+p {
+	font-family: fantasy;
+	font-size: x-large;
+	font-weight: 300;
+	margin-bottom: 10px;
+	margin-top: 10px;
 }
