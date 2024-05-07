@@ -32,6 +32,11 @@ export default class Fight extends Phaser.Scene {
 		this.playerVictories = playerVictories
     }
 
+	init(data){
+		this.fighter1Id = data.player1;
+		this.fighter2Id = data.player2;
+	}
+
     preload() {
         //this.load.image('player', player);
 		this.load.image('forest_back', forest_back);
@@ -51,19 +56,14 @@ export default class Fight extends Phaser.Scene {
 		this.roundTime = 120;
 		this.iniStage(width, height);
 		this.iniDebug();
-		this.iniFighter1();
-		this.iniFighter2();
+		this.iniFighter1(this.fighter1Id, P1Coords);
+		this.iniFighter2(this.fighter2Id, P2Coords);
 		this.iniGUI();
 
 		this.input.gamepad.once('connected', () => {
 			if(this.input.gamepad.pad1 != null) this.fighter.initPad(this.input.gamepad.pad1);
 			if(this.input.gamepad.pad2 != null) this.fighter2.initPad(this.input.gamepad.pad2);
 		});
-
-		// this.events.once('roundStart', () => {
-		// 	this.roundStart();
-		// }, this);
-		// this.scene.launch('countdown');
 		this.roundStart();
 	}
 
@@ -185,7 +185,7 @@ export default class Fight extends Phaser.Scene {
 
 		for (let i = 0; i < this.numberRounds; i++){
 			i < this.playerVictories[0] 
-				? this.add.circle(400 + i * 50, 130, 10, 0x00ff00) : this.add.circle(400 + i * 50, 130, 10, 0xff0000);
+				? this.add.circle(500 - i * 50, 130, 10, 0x00ff00) : this.add.circle(500 - i * 50, 130, 10, 0xff0000);
 			i < this.playerVictories[1] 
 				? this.add.circle(1300 + i * 50, 130, 10, 0x00ff00) : this.add.circle(1300 + i * 50, 130, 10, 0xff0000);
 		}
@@ -193,9 +193,13 @@ export default class Fight extends Phaser.Scene {
 		this.updateHP(this.fighter2);
 	}
 
-	iniFighter1(){
+	iniFighter1(id){
 		const attackKeysP1 = ['Q', 'E'];
-		this.fighter = new LeafFighter(this, P1Coords.x, P1Coords.y, 1, attackKeysP1);
+		if (id === 'Leaf')
+			this.fighter = new LeafFighter(this, P1Coords.x, P1Coords.y, 1, attackKeysP1);
+		else
+			this.fighter = new MetalFighter(this, P1Coords.x, P1Coords.y, 1, attackKeysP1);
+
 		this.fighter.cursors = this.input.keyboard.addKeys({
 			up: Phaser.Input.Keyboard.KeyCodes.W,
 			down: Phaser.Input.Keyboard.KeyCodes.S,
@@ -206,9 +210,12 @@ export default class Fight extends Phaser.Scene {
 		this.fighter.block();
 	}
 
-	iniFighter2(){
-		const attackKeysP2 = ['Z', 'X'];
-		this.fighter2 = new MetalFighter(this, P2Coords.x, P2Coords.y, 2, attackKeysP2);
+	iniFighter2(id){
+		const attackKeysP2 = ['Z', 'X'];		
+		if (id === 'Leaf')
+			this.fighter2 = new LeafFighter(this, P2Coords.x, P2Coords.y, 2, attackKeysP2);
+		else
+			this.fighter2 = new MetalFighter(this, P2Coords.x, P2Coords.y, 2, attackKeysP2);
 		this.fighter2.cursors = this.input.keyboard.createCursorKeys();
 
 		this.physics.add.collider(this.fighter2, this.floor);

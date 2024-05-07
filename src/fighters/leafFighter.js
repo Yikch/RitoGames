@@ -28,7 +28,7 @@ export default class LeafFighter extends Fighter {
 		return {
 			health: 500,
 			maxHealth: 500,
-			speed: 200,
+			speed: 300,
 			jumpSpeed: -600,
 		}
 	}
