@@ -34,7 +34,7 @@ export default class LoadScene extends Phaser.Scene
         });
 
         this.load.on("complete", ()=>{
-            console.log("donee");
+            console.log("done");
         });
 
     }

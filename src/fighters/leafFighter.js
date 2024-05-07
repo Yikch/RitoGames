@@ -17,8 +17,8 @@ export default class LeafFighter extends Fighter {
 		this.hb = null;
 		this.id = SPRITE + "_";
 		this.setScale(5);
-		this.body.setSize(30, 50);
-		this.body.setOffset(this.width/2 - 15, this.height - 50);
+		this.body.setSize(15, 45);
+		this.body.setOffset(this.width/2 - 6.5, this.height - 45);
 
 		this.anims.play({key :this.id + this.state, repeat: -1});
 	}
@@ -108,7 +108,7 @@ export default class LeafFighter extends Fighter {
 		this.on('animationstart', (animation, frame) => {
 			if (animation.key === this.id + 'light_active'){
 				this.hb = this.scene.add.zone(
-					this.x + (this.facing == 'left' ? -300 : 0), 
+					this.x + (this.facing == 'left' ? -300 : 300), 
 					this.y + this.height + 25, 
 					225, 70
 				);
@@ -200,9 +200,9 @@ export default class LeafFighter extends Fighter {
 		this.on('animationstart', (animation, frame) => {
 			if (animation.key === this.id + 'combo2_active'){
 				this.hb = this.scene.add.zone(
-					this.x + (this.facing == 'left' ? -15 : 15), 
-					this.y + this.height - 175, 
-					225, 140
+					this.x + (this.facing == 'left' ? -400 : 400),
+					this.y + this.height + 35, 
+					650, 75
 				);
 				this.scene.physics.add.existing(this.hb, true);
 				this.hb.body.debugBodyColor = 0x00ff00;
@@ -227,15 +227,27 @@ export default class LeafFighter extends Fighter {
 			frameRate: 10
 		});
 		this.on('animationstart', (animation, frame) => {
+			if (animation.key === this.id + 'combo3_start'){
+				if (this.facing === 'right'){
+					this.body.setVelocityX(-125);
+				}
+				else{
+					this.body.setVelocityX(125);
+				}
+				this.body.setVelocityY(-600);
+			}
 			if (animation.key === this.id + 'combo3_active'){
-				this.hb = this.scene.add.zone(
-					this.x + (this.facing == 'left' ? -15 : 15), 
-					this.y + this.height - 175, 
-					225, 140
+				let arrow = new SimpleProjectile(
+					this.scene, 
+					this.x + (this.facing == 'left' ? -90 : 90), 
+					this.y + this.height + 25, 
+					'leafProjectiles', 'arrow',
+					35, 8,
+					35, this.facing, 10
 				);
-				this.scene.physics.add.existing(this.hb, true);
-				this.hb.body.debugBodyColor = 0x00ff00;
-				this.scene.addColision(this.hb, this);
+				arrow.rotation = this.facing == 'left' ? -Math.PI/4 : Math.PI/4;
+				this.scene.addColision(arrow, this);
+				arrow.moveDiagonal();
 			}
 		});
 	}
