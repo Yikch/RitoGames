@@ -13,7 +13,6 @@ import leafJSON from '../../assets/sprites/leaf/leaf_fighter.json';
 import leafProjectilesJSON from '../../assets/sprites/leaf/projectiles.json';
 import metalProjectilesJSON from '../../assets/sprites/metal/projectile.json'
 import MetalFighter from '../fighters/metalFighter';
-import MetalFighter from '../fighters/leafFighter';
 
 
 import cursorSprite from '../../assets/cursor_default.png'
@@ -43,10 +42,14 @@ export default class FighterChooserScene extends Phaser.Scene {
 	create() {
 		// Display title
 		const {width, height } = this.scale;
+		this.physics.world.drawDebug = false;
+
+		this.player1Fighter = null;
+		this.player2Fighter = null;
 
 		this.screenWidth = this.game.renderer.width;
 		this.screenHeight = this.game.renderer.height;
-		this.add.image(0, 0, "jungle_bg").setDisplaySize(width,height).setOrigin(0);
+		this.add.image(0, 0, "jungle_bg").setDisplaySize(width,height).setOrigin(0).setDepth(-2);
 
 		this.iniText();
 		this.iniCursorAndKeys();
@@ -113,9 +116,11 @@ export default class FighterChooserScene extends Phaser.Scene {
 	}
 
 	iniIcons(){
-		this.fighter1Icon = this.add.image(700, 350, 'Metal');
-		this.fighter2Icon = this.add.image(1100, 350, 'Leaf');
-		// Set up icon interaction
+		this.fighter1Icon = this.add.image(700, 300, 'Metal');
+		this.fighter2Icon = this.add.image(1100, 300, 'Leaf');
+		this.fighter1Icon.setScale(1.5);
+		this.fighter2Icon.setScale(1.5);
+		// Set up icon1.5interaction
 		this.fighter1Icon.setInteractive();
 		this.fighter2Icon.setInteractive();
 	}
@@ -138,29 +143,22 @@ export default class FighterChooserScene extends Phaser.Scene {
 	}
 
 	selectFighter(player, fighter){
-		if (player == 1){
-			if (this.player1Fighter) this.player1Fighter.destroy();
-			if (fighter == 'Metal') 
-				this.player1Fighter = new MetalFighter(this, 400, 500, 1, ['Q', 'E']);
-			else 
-				this.player1Fighter = new LeafFighter(this, 400, 500, 1, ['Q', 'E']);
-
-			this.player1Fighter.cursors = this.player1Keys;
-			this.player1Fighter.block();
-			this.player1Fighter.body.allowGravity = false;
-		}
-		else{
-			if (this.player2Fighter) this.player2Fighter.destroy();
-			if (fighter === 'Metal') 
-				this.player2Fighter = new MetalFighter(this, 1400, 500, 2, ['Z', 'X']);
-			else 
-				this.player2Fighter = new LeafFighter(this, 1400, 500, 2, ['Z', 'X']);
-
-			this.player2Fighter.cursors = this.player2Keys;
-			this.player2Fighter.block();
-			this.player2Fighter.body.allowGravity = false;
+		if (player === 1) {
+			this.selectPlayerFighter(this.player1Fighter, player, fighter, this.player1Keys,  ['Q', 'E'], 400, 500);
+		} else {
+			this.selectPlayerFighter(this.player2Fighter, player, fighter, this.player2Keys,  ['Z', 'X'], 1400, 500);
 		}
 	}
-
+	selectPlayerFighter(playerFighter,player, fighter, playerKeys, atackKeys, x, y) {
+		if (playerFighter) playerFighter.destroy();
+		if (fighter === 'Metal') {
+			playerFighter = new MetalFighter(this, x, y, player, atackKeys);
+		} else {
+			playerFighter = new LeafFighter(this, x, y, player, atackKeys);
+		}
+		playerFighter.cursors = playerKeys;
+		playerFighter.block();
+		playerFighter.body.allowGravity = false;
+	}
 }
 
