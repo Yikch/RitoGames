@@ -54,8 +54,6 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		this.cursors = this.scene.input.keyboard.createCursorKeys();
 		this.gamepad = null;
 
-		
-
 		this.comboManager = new comboManager(this.getCombos());
 		this.iniAtacks(atackKeys);
 
@@ -123,11 +121,14 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 	preUpdate(t, dt) {
 		super.preUpdate(t, dt);
 		if(this.end) return ;
-		if(this.is_atacking() || this.is_recovering() || (this.is_defending() && this.is_overlapping())) return;
+		if(this.is_defending() && this.is_overlapping()) return;
 		let oldState = this.state;
+
 		this.check_collisions();
-		this.update_air();
-		this.check_movement(t);
+		if(!(this.is_atacking() || this.is_recovering())){
+			this.update_air();
+			this.check_movement(t);
+		}
 		if (oldState !== this.state){
 			this.anims.startAnimation(this.id + this.state);
 		}
@@ -142,7 +143,7 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 			this.anims.chain();
 			this.anims.stop();
 			this.body.setVelocityX(0);
-			if(this.going_backwards()){
+			if(this.going_backwards() && !(this.state === this.STATES.atacking)){
 				this.state = this.STATES.defend;
 			}
 			else{

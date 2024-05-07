@@ -212,7 +212,7 @@ export default class Fight extends Phaser.Scene {
 
 	iniFighter1(){
 		const attackKeysP1 = ['Q', 'E', 'F', 'R', 'G'];
-		this.fighter = new MetalFighter(this, P1Coords.x, P1Coords.y, 1, attackKeysP1);
+		this.fighter = new LeafFighter(this, P1Coords.x, P1Coords.y, 1, attackKeysP1);
 		this.fighter.cursors = this.input.keyboard.addKeys({
 			up: Phaser.Input.Keyboard.KeyCodes.W,
 			down: Phaser.Input.Keyboard.KeyCodes.S,
@@ -225,7 +225,7 @@ export default class Fight extends Phaser.Scene {
 
 	iniFighter2(){
 		const attackKeysP2 = ['Z', 'X', 'C', 'V', 'B'];
-		this.fighter2 = new LeafFighter(this, P2Coords.x, P2Coords.y, 2, attackKeysP2);
+		this.fighter2 = new MetalFighter(this, P2Coords.x, P2Coords.y, 2, attackKeysP2);
 		this.fighter2.cursors = this.input.keyboard.createCursorKeys();
 
 		this.physics.add.collider(this.fighter2, this.floor);

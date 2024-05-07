@@ -39,4 +39,18 @@ export default class SimpleProjectile extends Phaser.GameObjects.Sprite {
 			}
 		});
 	}
+
+	moveDiagonal(){
+		this.scene.tweens.add({
+			targets: this,
+			x: (this.direction == 'left' ? this.x - 200 : this.x + 200),
+			y: this.scene.scale.height,
+			duration: 1000 - this.speed * 10,
+			ease: 'Linear',
+			onComplete: () => {
+				this.scene.destroyHB(this);
+				this.destroy();
+			}
+		});
+	}
 }

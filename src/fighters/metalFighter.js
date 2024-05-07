@@ -19,8 +19,8 @@ export default class MetalFighter extends Fighter {
 		this.id = SPRITE + "_";
 
 		this.setScale(5);
-		this.body.setSize(30, 50);
-		this.body.setOffset(this.width/2 - 15, this.height - 50);
+		this.body.setSize(15, 45);
+		this.body.setOffset(this.width/2 - 6.5, this.height - 45);
 
 		this.anims.play({key :this.id + this.state, repeat: -1});
 	}
@@ -108,7 +108,7 @@ export default class MetalFighter extends Fighter {
 		this.on('animationstart', function (animation, frame) {
 			if (animation.key === this.id + "light_active"){
 				this.hb = this.scene.add.zone(
-					this.x + (this.facing == 'left' ? -250 : 100), 
+					this.x + (this.facing == 'left' ? -100 : 100), 
 					this.y + this.height + 70, 
 					250, 80
 				);
@@ -138,7 +138,7 @@ export default class MetalFighter extends Fighter {
 		this.on('animationstart', (animation, frame) => {
 			if (animation.key === this.id + "hard_active"){
 				this.hb = this.scene.add.zone(
-					this.x + (this.facing === 'left' ? -300 : 200), 
+					this.x + (this.facing === 'left' ? -200 : 200), 
 					this.y + this.height, 
 					200, 130
 				);
@@ -168,7 +168,7 @@ export default class MetalFighter extends Fighter {
 		this.on('animationstart', (animation, frame) => {
 			if (animation.key === this.id + 'combo1_active'){
 				this.hb = this.scene.add.zone(
-					this.x + (this.facing === 'left' ? -165 : 65), 
+					this.x + (this.facing === 'left' ? -65 : 65), 
 					this.y + this.height + 42, 
 					945, 300
 				);
