@@ -18,7 +18,7 @@ export default class Menu extends Phaser.Scene
     }
 
     moveToFightScene(){
-        this.scene.start('fight', "from loadScene");
+        this.scene.start('FighterChooser', "from loadScene");
     }
 
     addButton(text, height, action){

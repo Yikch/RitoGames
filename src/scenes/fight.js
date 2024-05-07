@@ -1,17 +1,5 @@
 import Phaser from 'phaser';
 
-import leaf from '../../assets/sprites/leaf/leaf_fighter.png';
-import metal from '../../assets/sprites/metal/metal_fighter.png';
-import leafProjectiles from '../../assets/sprites/leaf/projectiles.png';
-import metalProjectiles from '../../assets/sprites/metal/projectile.png'
-
-
-import metalJSON from '../../assets/sprites/metal/metal_fighter.json';
-import leafJSON from '../../assets/sprites/leaf/leaf_fighter.json';
-import leafProjectilesJSON from '../../assets/sprites/leaf/projectiles.json';
-import metalProjectilesJSON from '../../assets/sprites/metal/projectile.json'
-
-
 import forest_back from '../../assets/background/forest_back.png';
 import forest_mid from '../../assets/background/forest_mid.png';
 import forest_front from '../../assets/background/forest_front.png';
@@ -35,7 +23,7 @@ export default class Fight extends Phaser.Scene {
      * Constructor de la escena
      */
 
-	constructor(numberRounds = 3, playerVictories = [0, 0]) {
+	constructor(numberRounds = 2, playerVictories = [0, 0]) {
 		super({ key: 'fight' });
 		this.numPads = 0;
 
@@ -50,11 +38,6 @@ export default class Fight extends Phaser.Scene {
 		this.load.image('forest_mid', forest_mid);
 		this.load.image('forest_front', forest_front);
 		this.load.image('forest_lights', forest_lights);
-
-		this.load.atlas('metal', metal, metalJSON);
-		this.load.atlas('leaf', leaf, leafJSON);
-		this.load.atlas('leafProjectiles', leafProjectiles, leafProjectilesJSON);
-		this.load.atlas('metalProjectiles', metalProjectiles, metalProjectilesJSON);
     
 	    this.load.script('webfont', 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js');
 	}
@@ -211,7 +194,7 @@ export default class Fight extends Phaser.Scene {
 	}
 
 	iniFighter1(){
-		const attackKeysP1 = ['Q', 'E', 'F', 'R', 'G'];
+		const attackKeysP1 = ['Q', 'E'];
 		this.fighter = new LeafFighter(this, P1Coords.x, P1Coords.y, 1, attackKeysP1);
 		this.fighter.cursors = this.input.keyboard.addKeys({
 			up: Phaser.Input.Keyboard.KeyCodes.W,
@@ -224,7 +207,7 @@ export default class Fight extends Phaser.Scene {
 	}
 
 	iniFighter2(){
-		const attackKeysP2 = ['Z', 'X', 'C', 'V', 'B'];
+		const attackKeysP2 = ['Z', 'X'];
 		this.fighter2 = new MetalFighter(this, P2Coords.x, P2Coords.y, 2, attackKeysP2);
 		this.fighter2.cursors = this.input.keyboard.createCursorKeys();
 

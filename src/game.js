@@ -2,6 +2,7 @@ import Fight from './scenes/fight.js'
 import Countdown from './scenes/countdown.js'
 import LoadScene from './scenes/loadScene.js'
 import MenuScene from './scenes/menu.js'
+import FighterChooserScene from './scenes/fighterChooser.js'
 import Phaser from 'phaser'
 
 /**
@@ -22,7 +23,7 @@ let config = {
     },
     pixelArt: true,
 	//transparent: true,
-    scene: [LoadScene, MenuScene, Fight, Countdown],
+    scene: [LoadScene, MenuScene, FighterChooserScene, Fight, Countdown],
     physics: {
         default: 'arcade',
         arcade: {
