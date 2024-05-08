@@ -60,10 +60,8 @@ export default class Fight extends Phaser.Scene {
 		this.iniFighter2(this.fighter2Id, P2Coords);
 		this.iniGUI();
 
-		this.input.gamepad.once('connected', () => {
-			if(this.input.gamepad.pad1 != null) this.fighter.initPad(this.input.gamepad.pad1);
-			if(this.input.gamepad.pad2 != null) this.fighter2.initPad(this.input.gamepad.pad2);
-		});
+		if(this.input.gamepad.pad1 != null) this.fighter.initPad(this.input.gamepad.pad1);
+		if(this.input.gamepad.pad2 != null) this.fighter2.initPad(this.input.gamepad.pad2);
 		this.roundStart();
 	}
 
@@ -140,7 +138,7 @@ export default class Fight extends Phaser.Scene {
 		if (this.round > this.numberRounds)
 			this.endGame();
 		else{
-			this.scene.restart({numberRounds: this.numberRounds, playerVictories: this.playerVictories});
+			this.scene.restart({numberRounds: this.numberRounds, playerVictories: this.playerVictories, player1: this.fighter1Id, player2: this.fighter2Id});
 		}
 	}
 
