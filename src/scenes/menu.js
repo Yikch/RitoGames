@@ -15,6 +15,21 @@ export default class Menu extends Phaser.Scene
         //this.add.text(this.game.renderer.width/2, this.game.renderer.height/2, "Bellum Primordia", { fontFamily: 'Pixelify Sans',fontSize: 80, color: '#d7b89c' }).setOrigin(0.5, 0.5);
         this.add.image(this.game.renderer.width/2, this.game.renderer.height/2, "title").setOrigin(0.5, 0.5).setScale(1);
         this.addButton("Start Game", this.game.renderer.height/2 + 350, ()=>this.moveToFightScene());
+        const buttonEnt = this.add.image(this.game.renderer.width-100, this.game.renderer.height-100, 'fullscreenEnt', 0).setOrigin(0).setInteractive().setScale(7);
+		const buttonExt = this.add.image(this.game.renderer.width-100, this.game.renderer.height-100, 'fullscreenExt', 0).setOrigin(0).setInteractive().setScale(7);
+        buttonExt.setVisible(false);
+        buttonEnt.on('pointerup', function ()
+        {
+            this.scale.startFullscreen();
+            buttonEnt.setVisible(false);
+            buttonExt.setVisible(true);
+        }, this);     
+        buttonExt.on('pointerup', function ()
+        {
+            this.scale.stopFullscreen();
+            buttonExt.setVisible(false);
+            buttonEnt.setVisible(true);
+        }, this);
     }
 
     moveToFightScene(){
@@ -41,5 +56,7 @@ export default class Menu extends Phaser.Scene
         });
 
     }
+
+    
 }
 

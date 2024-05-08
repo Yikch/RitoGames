@@ -26,9 +26,6 @@
     <div id="game" class="game-area"> </div>
 
     <div class="controls-description">
-        <div class="fullscreen-button-container">
-            <button class="fullscreen-button" onclick="enterFullScreen()">Pantalla Completa</button> <!-- Botón para pantalla completa -->
-        </div>
         <div class="players-controls">
             <div>
                 <p>Player 1:</p>
@@ -114,21 +111,7 @@
                 </p>
             </div>
         </div>
-        
-        
     </div>
-
-    <script>
-        function enterFullScreen() {
-            var gameArea = document.querySelector('.game-area');
-            if (gameArea.requestFullscreen) {
-                gameArea.requestFullscreen(); /* Activa el modo pantalla completa */
-            }
-            else {
-                console.log("El modo de pantalla completa no es compatible en este navegador."); // Mensaje en caso de no compatibilidad
-            }
-        }
-    </script>
 
     <script src="./src/game.js" type="module"></script>
 

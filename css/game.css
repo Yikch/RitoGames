@@ -15,8 +15,6 @@ header {
 }
 
 .game-area {
-	display: flex; /* Flexbox para alinear el contenido */
-	flex: 0; /* No permite que el área del juego se expanda */
     height: 85vh; /* Ocupa el 60% de la altura de la ventana */
 	background-color: #01110c;
 	background-size: cover; /* Cubre todo el área del juego */
@@ -50,22 +48,6 @@ header {
 	display: flex;
 	flex-direction: column;
 	align-items: stretch;
-}
-
-
-.fullscreen-button-container {
-	display: flex;
-	justify-content: flex-end; /* Centra el botón horizontalmente */
-	align-items: center; /* Centra verticalmente */
-	flex: 1; /* Ocupa el espacio restante */
-}
-
-.fullscreen-button {
-	padding: 10px 20px; /* Relleno del botón */
-	background-color: #4CAF50; /* Color de fondo */
-	color: white; /* Color del texto */
-	border: none; /* Sin bordes */
-	cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
 }
 
 .rotade-45 {

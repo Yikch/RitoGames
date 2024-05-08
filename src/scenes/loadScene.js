@@ -5,6 +5,8 @@ import button_selected from '../../assets/UI/PixelArtUIElementsI/UI/Button/Butto
 import button_hover from '../../assets/UI/PixelArtUIElementsI/UI/Button/Button_hover.png';
 import button_pressed from '../../assets/UI/PixelArtUIElementsI/UI/Button/Button_pressed.png';
 import button from '../../assets/UI/PixelArtUIElementsI/UI/Button/Button.png';
+import fullscreenEnt from '../../assets/UI/PixelArtUIElementsI/Icon_Pack/Video/9. Fullscreen Enter.png';
+import fullscreenExt from '../../assets/UI/PixelArtUIElementsI/Icon_Pack/Video/10. Fullscreen Exit.png';
 export default class LoadScene extends Phaser.Scene
 {
     constructor()
@@ -18,6 +20,8 @@ export default class LoadScene extends Phaser.Scene
         this.load.image("button_hover", button_hover)
         this.load.image("button_pressed", button_pressed)
         this.load.image("button", button)
+        this.load.image('fullscreenEnt', fullscreenEnt);
+        this.load.image('fullscreenExt', fullscreenExt);
         
 
         // ME DA ERROR: phaser.js:120866 Error decoding audio:

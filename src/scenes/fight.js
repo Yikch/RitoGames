@@ -65,6 +65,22 @@ export default class Fight extends Phaser.Scene {
 			if(this.input.gamepad.pad2 != null) this.fighter2.initPad(this.input.gamepad.pad2);
 		});
 		this.roundStart();
+
+		const buttonEnt = this.add.image(this.game.renderer.width-100, this.game.renderer.height-100, 'fullscreenEnt', 0).setOrigin(0).setInteractive().setScale(7);
+		const buttonExt = this.add.image(this.game.renderer.width-100, this.game.renderer.height-100, 'fullscreenExt', 0).setOrigin(0).setInteractive().setScale(7);
+        buttonExt.setVisible(false);
+        buttonEnt.on('pointerup', function ()
+        {
+            this.scale.startFullscreen();
+            buttonEnt.setVisible(false);
+            buttonExt.setVisible(true);
+        }, this);     
+        buttonExt.on('pointerup', function ()
+        {
+            this.scale.stopFullscreen();
+            buttonExt.setVisible(false);
+            buttonEnt.setVisible(true);
+        }, this);
 	}
 
 	roundStart(){
