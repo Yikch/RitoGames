@@ -40,17 +40,18 @@ Se ejecuta en web sobre pc con teclado "y gamepad" y en la misma máquina, no ha
 
 ## Mecánicas del juego
 
+(Los controles para estos movimientos se especifican mas adelante)
 | Movimientos básicos |         |         |
 | ------------------- | ------- | ------- |
-| **Puñetazos**       | Debiles | Fuertes |
+| **Ataques**       | Debiles | Fuertes |
 | **Salto**           | Simple  |         |
 | **Bloqueo**         | Simple  |         |
 
-| Ataques especiales |     |
+| Ataques especiales |  Input   |
 | ------------------ | --- |
-| Carta 1            |     |
-| Carta 2            |     |
-| Carta 3            |     |
+| Ataque1         |  Semicirculo adelante + Ataque Débil   |
+| Ataque2         |  Semicirculo adelante + Ataque Fuerte  |
+| Ataque3             |  Semicirculo atrás + Ataque Débil   |
 
 ## Interfaz y controles
 
@@ -58,9 +59,14 @@ Habrá como _mínimo_ las siguientes interfaces:
 
 - Inicio del juego
 
-- Selección de personaje y "mazo de cartas"
+- Selección de personaje
 
 - Menú de opciones y personalización de controles
+
+- Pantalla de pelea
+  - Se mostrará el tiempo restante de la ronda arriba en el centro
+  - La vida del jugador 1 arriba a la izquierda y la del jugador 2 arriba a la derecha
+  - Las rondas de cada jugador se mostrarán debajo de las barras de vida  
 
 - Pantalla de revancha
 
@@ -75,10 +81,32 @@ Habrá como _mínimo_ las siguientes interfaces:
 
 - Se podrá jugar con 1/2 teclados usando una configuración *distinta* en cada uno. Es decir, las teclas para los inputs deben ser distintas debido a que el browser no permite diferenciar teclados.
 
+- La distribución de controles será:
+  
+|  Teclado            | Jugador1| Jugador2|
+| ------------------- | ------- | ------- |
+| **Puñetazo Debil**  |    Q    |    Z    |
+| **Puñetazo Fuerte** |    E    |    X    |
+| **Moverse Derecha** |    D    |    Flecha Derecha    |
+| **Moverse Izquierda** |    A    |    Flecha Izquierda    |
+| **Salto**           |    W    |    Flecha Arriba    |
+| **Bloqueo**         |    Moverse Hacia Atrás    |    Moverse Hacia Atrás    |
+
+
+|  Mando              | Controles|
+| ------------------- | ------- |
+| **Puñetazo Debil**  |    X    |
+| **Puñetazo Fuerte** |    Y    |
+| **Moverse Derecha** |    Joystick    |
+| **Moverse Izquierda** |    Joystick    |
+| **Salto**           |    A    | 
+| **Bloqueo**         |    Moverse Hacia Atrás (joystick)    |
+
 ## Personajes principales
 
 Los personajes seguirán una temática aunque no haya historia para darle cohesión al juego.
-La temática será la lucha de maestros de elementos, donde cada personaje tendrá un elemento temático y sus habilidades seguirán esa temática. 
+La temática será la lucha de maestros de elementos, donde cada personaje tendrá un elemento temático y sus habilidades seguirán esa temática.
+Cada personaje tendrá animaciones para cada una de sus mecánicas y además tendrá animaciones especificas para recibir un ataque y para morir.
 
 Lucha de Elementales (sacado de itch.io): 
 
@@ -90,7 +118,9 @@ Lucha de Elementales (sacado de itch.io):
 
 ![ninja](https://img.itch.zone/aW1nLzgzMjgyMzYuZ2lm/original/yySo5B.gif)
 
-
+- ** Fondos **
+  
+- Fondo de pelea
 > [Parallax Forest by ansimuz](https://ansimuz.itch.io/parallax-forest)
 
 > ##### Arquero de planta
@@ -114,14 +144,6 @@ Lucha de Elementales (sacado de itch.io):
 - [ ] Atack_2
 
 ![](https://img.itch.zone/aW1nLzkwMTIyNjUuZ2lm/original/d3Tfic.gif)
-
-- [ ] SP_atack_1
-
-![](https://img.itch.zone/aW1nLzkwMTIyNjkuZ2lm/original/Ja9zVQ.gif)
-
-- [ ] SP_atack_2
-
-![](https://img.itch.zone/aW1nLzkwMTIyNzMuZ2lm/original/WiYZa1.gif)
 
 - [ ] SP_atack_3
 
