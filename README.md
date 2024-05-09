@@ -43,3 +43,10 @@ Está todo configurado para que se active "GitHub Pages", y se use, en la rama p
 ## VSCode
 
 En la carpeta `.vscode/` hay una configuración para usar Visual Studio Code, tanto para construir el *release* (`npm run build`) como para ejecutar y depurar. Simplemente hay que ejecutar "Run" → "Start debugging..." (or presionar `F5`).
+
+# TODO
+ - Hacer opciones en selección de campeón
+ - Hacer opciones ingame, "pause": volver a la pantalla de selección
+ - Poner animación de inicio de ronda y final de ronda (animacion de morir)
+ - Poner UI de revancha al acabar la partida
+ - Poner sonidos 
