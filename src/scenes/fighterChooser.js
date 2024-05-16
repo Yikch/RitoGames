@@ -48,6 +48,9 @@ export default class FighterChooserScene extends Phaser.Scene {
 		this.player1Fighter = null;
 		this.player2Fighter = null;
 
+		this.player1Dmg = [25, 25, 25, 25, 25];
+		this.player2Dmg = [25, 25, 25, 25, 25];
+
 		this.screenWidth = this.game.renderer.width;
 		this.screenHeight = this.game.renderer.height;
 		this.add.image(0, 0, "jungle_bg").setDisplaySize(width,height).setOrigin(0).setDepth(-2);
@@ -67,6 +70,12 @@ export default class FighterChooserScene extends Phaser.Scene {
             buttonExt.setVisible(false);
             buttonEnt.setVisible(true);
         }, this);
+
+		this.configOpen = false;
+		this.addButton("Config", this.game.renderer.width-100, 100, ()=>this.configDmgPlayer2(), 4);
+
+		this.configOpen1 = false;
+		this.addButton("Config", 100, 100, ()=>this.configDmgPlayer1(), 4);
 
 		this.iniText();
 		this.iniCursorAndKeys();
@@ -269,6 +278,165 @@ export default class FighterChooserScene extends Phaser.Scene {
 		playerFighter.block();
 		playerFighter.body.allowGravity = false;
 		return playerFighter;
+	}
+
+	addButton(text, width, height, action, scale){
+        let button = this.add.image(width, height, "button").setDepth(1).setScale(scale);
+        this.add.text(width, height, text, { fontFamily: 'Pixelify Sans',fontSize: (scale*6), color: '#000000' }).setDepth(1).setOrigin(0.5, 0.5);
+        button.setInteractive();
+
+        button.on("pointerover", ()=>{
+            button.setTexture("button_hover");
+        });
+
+        button.on("pointerout", ()=>{
+            button.setTexture("button");
+        });
+
+        button.on("pointerup", ()=>{
+            button.setTexture("button_pressed");
+            button.setTexture("button_selected");
+            action();
+        });
+		return button;
+    }
+
+	configDmgPlayer1(){
+		if(this.configOpen1){
+			
+			this.box_1.destroy();
+			this.light_1.destroy();
+			this.lightDmg_1.destroy();
+			this.lightPlus1_1.destroy();
+			this.lightMinus1_1.destroy();
+
+			this.hard_1.destroy();
+			this.hardDmg_1.destroy();
+			this.hardPlus1_1.destroy();
+			this.hardMinus1_1.destroy();
+
+			this.combo1_1.destroy();
+			this.combo1Dmg_1.destroy();
+			this.combo1Plus1_1.destroy();
+			this.combo1Minus1_1.destroy();
+
+			this.combo2_1.destroy();
+			this.combo2Dmg_1.destroy();
+			this.combo2Plus1_1.destroy();
+			this.combo2Minus1_1.destroy();
+
+			this.combo3_1.destroy();
+			this.combo3Dmg_1.destroy();
+			this.combo3Plus1_1.destroy();
+			this.combo3Minus1_1.destroy();
+
+			this.configOpen1 = false;
+		}
+		else{
+			this.box_1 = this.add.image(-120, 10, 'boxFrame', 1).setDisplaySize(900, 820).setOrigin(0);
+
+			this.light_1 = this.add.text(120, 270, 'LightAtk:', { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
+			this.lightDmg_1 = this.add.text(270, 270, this.player1Dmg[0], { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
+			this.lightPlus1_1 = this.addButton("Plus", 380, 280, ()=>this.updateDmgPlayer1(this.lightDmg_1, 0, 1), 2.5);
+			this.lightMinus1_1 = this.addButton("Minus", 480, 280, ()=>this.updateDmgPlayer1(this.lightDmg_1, 0, -1), 2.5);
+
+			this.hard_1 = this.add.text(120, 320, 'HardAtk:  ', { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
+			this.hardDmg_1 = this.add.text(270, 320, this.player1Dmg[1], { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
+			this.hardPlus1_1 = this.addButton("Plus", 380, 330, ()=>this.updateDmgPlayer1(this.hardDmg_1, 1, 1), 2.5);
+			this.hardMinus1_1 = this.addButton("Minus", 480, 330, ()=>this.updateDmgPlayer1(this.hardDmg_1, 1, -1), 2.5);
+
+			this.combo1_1 = this.add.text(120, 370, 'Combo1:  ', { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
+			this.combo1Dmg_1 = this.add.text(270, 370, this.player1Dmg[2], { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
+			this.combo1Plus1_1 = this.addButton("Plus", 380, 380, ()=>this.updateDmgPlayer1(this.combo1Dmg_1, 2, 1), 2.5);
+			this.combo1Minus1_1 = this.addButton("Minus", 480, 380, ()=>this.updateDmgPlayer1(this.combo1Dmg_1, 2, -1), 2.5);
+
+			this.combo2_1 = this.add.text(120, 420, 'Combo2:  ', { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
+			this.combo2Dmg_1 = this.add.text(270, 420, this.player1Dmg[3], { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
+			this.combo2Plus1_1 = this.addButton("Plus", 380, 430, ()=>this.updateDmgPlayer1(this.combo2Dmg_1, 3, 1), 2.5);
+			this.combo2Minus1_1 = this.addButton("Minus", 480, 430, ()=>this.updateDmgPlayer1(this.combo2Dmg_1, 3, -1), 2.5);
+
+			this.combo3_1 = this.add.text(120, 470, 'Combo3:  ', { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
+			this.combo3Dmg_1 = this.add.text(270, 470, this.player1Dmg[4], { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
+			this.combo3Plus1_1 = this.addButton("Plus", 380, 480, ()=>this.updateDmgPlayer1(this.combo3Dmg_1, 4, 1), 2.5);
+			this.combo3Minus1_1 = this.addButton("Minus", 480, 480, ()=>this.updateDmgPlayer1(this.combo3Dmg_1, 4, -1), 2.5);
+
+			this.configOpen1 = true;
+		}
+	}
+
+	
+
+	configDmgPlayer2(){
+		if(this.configOpen){
+			
+			this.box.destroy();
+			this.light.destroy();
+			this.lightDmg.destroy();
+			this.lightPlus1.destroy();
+			this.lightMinus1.destroy();
+
+			this.hard.destroy();
+			this.hardDmg.destroy();
+			this.hardPlus1.destroy();
+			this.hardMinus1.destroy();
+
+			this.combo1.destroy();
+			this.combo1Dmg.destroy();
+			this.combo1Plus1.destroy();
+			this.combo1Minus1.destroy();
+
+			this.combo2.destroy();
+			this.combo2Dmg.destroy();
+			this.combo2Plus1.destroy();
+			this.combo2Minus1.destroy();
+
+			this.combo3.destroy();
+			this.combo3Dmg.destroy();
+			this.combo3Plus1.destroy();
+			this.combo3Minus1.destroy();
+
+			this.configOpen = false;
+		}
+		else{
+			this.box = this.add.image(this.game.renderer.width-750, 10, 'boxFrame', 1).setDisplaySize(900, 820).setOrigin(0);
+
+			this.light = this.add.text(this.game.renderer.width-500, 270, 'LightAtk:', { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
+			this.lightDmg = this.add.text(this.game.renderer.width-350, 270, this.player2Dmg[0], { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
+			this.lightPlus1 = this.addButton("Plus", this.game.renderer.width-260, 280, ()=>this.updateDmgPlayer2(this.lightDmg, 0, 1), 2.5);
+			this.lightMinus1 = this.addButton("Minus", this.game.renderer.width-160, 280, ()=>this.updateDmgPlayer2(this.lightDmg, 0, -1), 2.5);
+
+			this.hard = this.add.text(this.game.renderer.width-500, 320, 'HardAtk:  ', { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
+			this.hardDmg = this.add.text(this.game.renderer.width-350, 320, this.player2Dmg[1], { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
+			this.hardPlus1 = this.addButton("Plus", this.game.renderer.width-260, 330, ()=>this.updateDmgPlayer2(this.hardDmg, 1, 1), 2.5);
+			this.hardMinus1 = this.addButton("Minus", this.game.renderer.width-160, 330, ()=>this.updateDmgPlayer2(this.hardDmg, 1, -1), 2.5);
+
+			this.combo1 = this.add.text(this.game.renderer.width-500, 370, 'Combo1:  ', { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
+			this.combo1Dmg = this.add.text(this.game.renderer.width-350, 370, this.player2Dmg[2], { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
+			this.combo1Plus1 = this.addButton("Plus", this.game.renderer.width-260, 380, ()=>this.updateDmgPlayer2(this.combo1Dmg, 2, 1), 2.5);
+			this.combo1Minus1 = this.addButton("Minus", this.game.renderer.width-160, 380, ()=>this.updateDmgPlayer2(this.combo1Dmg, 2, -1), 2.5);
+
+			this.combo2 = this.add.text(this.game.renderer.width-500, 420, 'Combo2:  ', { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
+			this.combo2Dmg = this.add.text(this.game.renderer.width-350, 420, this.player2Dmg[3], { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
+			this.combo2Plus1 = this.addButton("Plus", this.game.renderer.width-260, 430, ()=>this.updateDmgPlayer2(this.combo2Dmg, 3, 1), 2.5);
+			this.combo2Minus1 = this.addButton("Minus", this.game.renderer.width-160, 430, ()=>this.updateDmgPlayer2(this.combo2Dmg, 3, -1), 2.5);
+
+			this.combo3 = this.add.text(this.game.renderer.width-500, 470, 'Combo3:  ', { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
+			this.combo3Dmg = this.add.text(this.game.renderer.width-350, 470, this.player2Dmg[4], { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
+			this.combo3Plus1 = this.addButton("Plus", this.game.renderer.width-260, 480, ()=>this.updateDmgPlayer2(this.combo3Dmg, 4, 1), 2.5);
+			this.combo3Minus1 = this.addButton("Minus", this.game.renderer.width-160, 480, ()=>this.updateDmgPlayer2(this.combo3Dmg, 4, -1), 2.5);
+
+			this.configOpen = true;
+		}
+	}
+
+	updateDmgPlayer1(text, playerDmgIndex, plusOrMinus){
+		this.player1Dmg[playerDmgIndex] += plusOrMinus;
+		text.setText(this.player1Dmg[playerDmgIndex]);
+	}
+
+	updateDmgPlayer2(text, playerDmgIndex, plusOrMinus){
+		this.player2Dmg[playerDmgIndex] += plusOrMinus;
+		text.setText(this.player2Dmg[playerDmgIndex]);
 	}
 }
 
