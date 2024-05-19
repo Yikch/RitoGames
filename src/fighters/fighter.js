@@ -12,7 +12,7 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 	 * @param {number} x Coordenada X
 	 * @param {number} y Coordenada Y
 	 */
-	constructor(scene, x, y, sprite, player, atackKeys) {
+	constructor(scene, x, y, sprite, player, atackKeys, playerDmg) {
 		super(scene, x, y, sprite);
 
 		this.XIndex = 2;
@@ -20,6 +20,8 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		this.hb = [];
 		this.enemyHB = [];
 		this.end = false;
+
+		this.playerDmg = playerDmg;
 
 		this.keys = atackKeys;
 		this.debug = false;
@@ -150,7 +152,24 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 				if(this.debug)
 					console.log("Take Hit from Fighter" + this.id);
 				this.state = this.STATES.takeHit;
-				this.stats.health -= 25;
+				this.hitbox = null;
+				this.enemyHB.forEach((hb) => {
+					if(this.scene.physics.overlap(this, hb)){
+						this.hitbox = hb;
+					}
+					
+				});
+				if(this.hitbox.name === "light"){
+					this.stats.health -= this.playerDmg[0];
+				}else if(this.hitbox.name === "hard"){
+					this.stats.health -= this.playerDmg[1];
+				}else if(this.hitbox.name === "combo1"){
+					this.stats.health -= this.playerDmg[2];
+				}else if(this.hitbox.name === "combo2"){
+					this.stats.health -= this.playerDmg[3];
+				}else if(this.hitbox.name === "combo3"){
+					this.stats.health -= this.playerDmg[4];
+				}
 				this.scene.updateHP(this);
 				if(this.stats.health <= 0){
 					this.scene.gameOver(this);

@@ -11,8 +11,8 @@ export default class LeafFighter extends Fighter {
 	 * @param {number} y Coordenada Y
 	 * @param {string} facing Dirección a la que mira el jugador
 	 */
-	constructor(scene, x, y, player, attackKeys) {
-		super(scene, x, y, SPRITE, player, attackKeys);
+	constructor(scene, x, y, player, attackKeys, playerDmg) {
+		super(scene, x, y, SPRITE, player, attackKeys, playerDmg);
 
 		this.hb = null;
 		this.id = SPRITE + "_";
@@ -112,6 +112,7 @@ export default class LeafFighter extends Fighter {
 					this.y + this.height + 25, 
 					225, 70
 				);
+				this.hb.name = "light"
 				this.scene.physics.add.existing(this.hb, true);
 				this.hb.body.debugBodyColor = 0x00ff00;
 				this.scene.addColision(this.hb, this);
@@ -143,7 +144,7 @@ export default class LeafFighter extends Fighter {
 								this.y + this.height + 25, 
 								'leafProjectiles', 'arrow',
 								35, 8,
-								30, this.facing, 10
+								30, this.facing, 10, "hard"
 							);
 				this.scene.addColision(arrow, this);
 				arrow.move();
@@ -174,6 +175,7 @@ export default class LeafFighter extends Fighter {
 					this.y + this.height - 175, 
 					225, 140
 				);
+				this.hb.name = "combo1"
 				this.scene.physics.add.existing(this.hb, true);
 				this.hb.body.debugBodyColor = 0x00ff00;
 				this.scene.addColision(this.hb, this);
@@ -204,6 +206,7 @@ export default class LeafFighter extends Fighter {
 					this.y + this.height + 35, 
 					650, 75
 				);
+				this.hb.name = "combo2"
 				this.scene.physics.add.existing(this.hb, true);
 				this.hb.body.debugBodyColor = 0x00ff00;
 				this.scene.addColision(this.hb, this);
@@ -243,7 +246,7 @@ export default class LeafFighter extends Fighter {
 					this.y + this.height + 25, 
 					'leafProjectiles', 'arrow',
 					35, 8,
-					35, this.facing, 10
+					35, this.facing, 10, "combo3"
 				);
 				arrow.rotation = this.facing == 'left' ? -Math.PI/4 : Math.PI/4;
 				this.scene.addColision(arrow, this);

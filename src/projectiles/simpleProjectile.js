@@ -12,7 +12,7 @@ export default class SimpleProjectile extends Phaser.GameObjects.Sprite {
 	 * @param {string} direction Dirección a la que se mueve el proyectil
 	 * @param {number} damage Daño del proyectil
 	 */
-	constructor(scene, x, y, atlasKey, frameKey, width, height, speed, direction, damage) {
+	constructor(scene, x, y, atlasKey, frameKey, width, height, speed, direction, damage, name) {
 		super(scene, x, y, atlasKey, frameKey);
 
 		this.setScale(5);
@@ -24,6 +24,7 @@ export default class SimpleProjectile extends Phaser.GameObjects.Sprite {
 		this.scene.physics.add.existing(this, false);
 		this.body.setSize(width, height);
 		this.body.allowGravity = false;
+		this.name = name;
 	}
 
 	//A tween that moves the projectile in the direction it was created

@@ -29,12 +29,14 @@ export default class Fight extends Phaser.Scene {
 
 		this.round = 1;
 		this.numberRounds = numberRounds;
-		this.playerVictories = playerVictories
+		this.playerVictories = playerVictories;
     }
 
 	init(data){
 		this.fighter1Id = data.player1;
 		this.fighter2Id = data.player2;
+		this.player1Dmg = data.player1Dmg;
+		this.player2Dmg = data.player2Dmg;
 	}
 
     preload() {
@@ -210,9 +212,10 @@ export default class Fight extends Phaser.Scene {
 	iniFighter1(id){
 		const attackKeysP1 = ['Q', 'E'];
 		if (id === 'Leaf')
-			this.fighter = new LeafFighter(this, P1Coords.x, P1Coords.y, 1, attackKeysP1);
+			// Se le pasa EL DMG DEL PLAYER CONTRARIO PARA RESTARLO LUEGO AL HEALTH
+			this.fighter = new LeafFighter(this, P1Coords.x, P1Coords.y, 1, attackKeysP1, this.player2Dmg);
 		else
-			this.fighter = new MetalFighter(this, P1Coords.x, P1Coords.y, 1, attackKeysP1);
+			this.fighter = new MetalFighter(this, P1Coords.x, P1Coords.y, 1, attackKeysP1, this.player2Dmg);
 
 		this.fighter.cursors = this.input.keyboard.addKeys({
 			up: Phaser.Input.Keyboard.KeyCodes.W,
@@ -227,9 +230,9 @@ export default class Fight extends Phaser.Scene {
 	iniFighter2(id){
 		const attackKeysP2 = ['Z', 'X'];		
 		if (id === 'Leaf')
-			this.fighter2 = new LeafFighter(this, P2Coords.x, P2Coords.y, 2, attackKeysP2);
+			this.fighter2 = new LeafFighter(this, P2Coords.x, P2Coords.y, 2, attackKeysP2, this.player1Dmg);
 		else
-			this.fighter2 = new MetalFighter(this, P2Coords.x, P2Coords.y, 2, attackKeysP2);
+			this.fighter2 = new MetalFighter(this, P2Coords.x, P2Coords.y, 2, attackKeysP2, this.player1Dmg);
 		this.fighter2.cursors = this.input.keyboard.createCursorKeys();
 
 		this.physics.add.collider(this.fighter2, this.floor);

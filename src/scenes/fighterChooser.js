@@ -117,7 +117,7 @@ export default class FighterChooserScene extends Phaser.Scene {
 						this.selectFighter(1, 'Leaf');
 					}else if (Phaser.Math.Distance.Between(this.cursorsPlayer1.x, this.cursorsPlayer1.y, this.startButton.x, this.startButton.y) < 50) {
 						if (this.player1Fighter && this.player2Fighter) {
-							this.scene.start('fight', {player1: this.player1Id, player2: this.player2Id});
+							this.scene.start('fight', {player1: this.player1Id, player2: this.player2Id, player1Dmg: this.player1Dmg, player2Dmg: this.player2Dmg});
 						}
 					}
 				}
@@ -141,7 +141,7 @@ export default class FighterChooserScene extends Phaser.Scene {
 					}
 					else if (Phaser.Math.Distance.Between(this.cursorsPlayer1.x, this.cursorsPlayer1.y, this.startButton.x, this.startButton.y) < 50) {
 						if (this.player1Fighter && this.player2Fighter) {
-							this.scene.start('fight', {player1: this.player1Id, player2: this.player2Id});
+							this.scene.start('fight', {player1: this.player1Id, player2: this.player2Id, player1Dmg: this.player1Dmg, player2Dmg: this.player2Dmg});
 						}
 					}
 				}
@@ -236,7 +236,7 @@ export default class FighterChooserScene extends Phaser.Scene {
 			}
 			if (Phaser.Math.Distance.Between(this.cursorsPlayer1.x, this.cursorsPlayer1.y, this.startButton.x, this.startButton.y) < 50) {
 				if (this.player1Fighter && this.player2Fighter) {
-					this.scene.start('fight', {player1: this.player1Id, player2: this.player2Id});
+					this.scene.start('fight', {player1: this.player1Id, player2: this.player2Id, player1Dmg: this.player1Dmg, player2Dmg: this.player2Dmg});
 				}
 			}
 		});
@@ -248,7 +248,7 @@ export default class FighterChooserScene extends Phaser.Scene {
 			}
 			if (Phaser.Math.Distance.Between(this.cursorsPlayer2.x, this.cursorsPlayer2.y, this.startButton.x, this.startButton.y) < 50) {
 				if (this.player1Fighter && this.player2Fighter) {
-					this.scene.start('fight', {player1: this.player1Id, player2: this.player2Id});
+					this.scene.start('fight', {player1: this.player1Id, player2: this.player2Id, player1Dmg: this.player1Dmg, player2Dmg: this.player2Dmg});
 				}
 			}
 		});
@@ -257,22 +257,22 @@ export default class FighterChooserScene extends Phaser.Scene {
 
 	selectFighter(player, fighter){
 		if (player === 1) {
-			this.player1Fighter = this.selectPlayerFighter(this.player1Fighter, player, fighter, this.player1Keys,  ['Q', 'E'], 400, 500);
+			this.player1Fighter = this.selectPlayerFighter(this.player1Fighter, player, fighter, this.player1Keys,  ['Q', 'E'], 400, 500, this.player1Dmg);
 			this.player1Advice.setText('');
 			this.player1Id = fighter;
 		} else {
-			this.player2Fighter = this.selectPlayerFighter(this.player2Fighter, player, fighter, this.player2Keys,  ['Z', 'X'], 1400, 500);
+			this.player2Fighter = this.selectPlayerFighter(this.player2Fighter, player, fighter, this.player2Keys,  ['Z', 'X'], 1400, 500, this.player2Dmg);
 			this.player2Advice.setText('');
 			this.player2Id = fighter;
 		}
 	}
 
-	selectPlayerFighter(playerFighter, player, fighter, playerKeys, atackKeys, x, y) {
+	selectPlayerFighter(playerFighter, player, fighter, playerKeys, atackKeys, x, y, playerDmg) {
 		if (playerFighter) playerFighter.destroy();
 		if (fighter === 'Metal') {
-			playerFighter = new MetalFighter(this, x, y, player, atackKeys);
+			playerFighter = new MetalFighter(this, x, y, player, atackKeys, playerDmg);
 		} else {
-			playerFighter = new LeafFighter(this, x, y, player, atackKeys);
+			playerFighter = new LeafFighter(this, x, y, player, atackKeys, playerDmg);
 		}
 		playerFighter.cursors = playerKeys;
 		playerFighter.block();

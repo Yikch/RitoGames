@@ -25,6 +25,7 @@ export default class Trap extends Phaser.GameObjects.Sprite {
 		this.fighter = fighter;
 		this.prefixThrow = prefixThrow;
 		this.prefixDetonate = prefixDetonate;
+		this.name = "combo2";
 	}
 
 	detonate() {

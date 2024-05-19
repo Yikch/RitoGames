@@ -12,8 +12,8 @@ export default class MetalFighter extends Fighter {
 	 * @param {number} y Coordenada Y
 	 * @param {string} facing Dirección a la que mira el jugador
 	 */
-	constructor(scene, x, y, player, attackKeys) {
-		super(scene, x, y, SPRITE, player, attackKeys);
+	constructor(scene, x, y, player, attackKeys, playerDmg) {
+		super(scene, x, y, SPRITE, player, attackKeys, playerDmg);
 
 		this.hb = null;
 		this.id = SPRITE + "_";
@@ -112,6 +112,7 @@ export default class MetalFighter extends Fighter {
 					this.y + this.height + 70, 
 					250, 80
 				);
+				this.hb.name = "light";
 				this.scene.physics.add.existing(this.hb, true);
 				this.hb.body.debugBodyColor = 0x00ff00;
 				this.scene.addColision(this.hb, this);
@@ -142,6 +143,7 @@ export default class MetalFighter extends Fighter {
 					this.y + this.height, 
 					200, 130
 				);
+				this.hb.name = "hard";
 				this.scene.physics.add.existing(this.hb, true);
 				this.hb.body.debugBodyColor = 0x00ff00;
 				this.scene.addColision(this.hb, this);
@@ -172,6 +174,7 @@ export default class MetalFighter extends Fighter {
 					this.y + this.height + 42, 
 					945, 300
 				);
+				this.hb.name = "combo1";
 				this.scene.physics.add.existing(this.hb, true);
 				this.hb.body.debugBodyColor = 0x00ff00;
 				this.scene.addColision(this.hb, this, 300);
@@ -241,7 +244,7 @@ export default class MetalFighter extends Fighter {
 								this.y + this.height + 25, 
 								'metal', 'projectile_throw',
 								35, 8,
-								30, this.facing, 5
+								30, this.facing, 5, "combo3"
 							);
 				this.scene.addColision(knife, this);
 				knife.move();
