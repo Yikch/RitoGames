@@ -23,20 +23,21 @@ export default class Fight extends Phaser.Scene {
      * Constructor de la escena
      */
 
-	constructor(numberRounds = 2, playerVictories = [0, 0]) {
+	constructor() {
 		super({ key: 'fight' });
 		this.numPads = 0;
-
-		this.round = 1;
-		this.numberRounds = numberRounds;
-		this.playerVictories = playerVictories;
     }
 
 	init(data){
+		this.playerVictories = data.playerVictories;
 		this.fighter1Id = data.player1;
 		this.fighter2Id = data.player2;
 		this.player1Dmg = data.player1Dmg;
 		this.player2Dmg = data.player2Dmg;
+		this.numberRounds = data.numberRounds;
+		this.roundTime = data.roundTime;
+		this.dmgModifier = data.dmgModifier;
+		this.hpModifier = data.hpModifier;
 	}
 
     preload() {
@@ -55,11 +56,12 @@ export default class Fight extends Phaser.Scene {
     create() {
 		const {width, height } = this.scale;
 		
-		this.roundTime = 120;
 		this.iniStage(width, height);
 		this.iniDebug();
+		this.modifyDmg();
 		this.iniFighter1(this.fighter1Id, P1Coords);
 		this.iniFighter2(this.fighter2Id, P2Coords);
+		this.modifyHp();
 		this.iniGUI();
 
 		if(this.input.gamepad.pad1 != null) this.fighter.initPad(this.input.gamepad.pad1);
@@ -83,11 +85,52 @@ export default class Fight extends Phaser.Scene {
         }, this);
 	}
 
-	roundStart(){
-		this.startTimer();
-		this.fighter.unblock();
-		this.fighter2.unblock();
+	modifyDmg(){
+		for(let i = 0; i < this.player1Dmg.length; i++)
+			this.player1Dmg[i] *= (this.dmgModifier / 100);
+		for(let i = 0; i < this.player2Dmg.length; i++)
+			this.player2Dmg[i] *= this.dmgModifier / 100;
 	}
+
+	modifyHp(){
+		this.fighter.stats.maxHealth *= this.hpModifier / 100;
+		this.fighter.stats.health *= this.hpModifier / 100;
+		this.fighter2.stats.maxHealth *= this.hpModifier / 100;
+		this.fighter2.stats.health *= this.hpModifier / 100;
+	}
+
+	roundStart(){
+		//Display an image with number 3 delete it after 1 second
+		let self = this;
+		WebFont.load({
+			google: {
+				families: [ 'Pixelify Sans' ]
+			},
+			active: function ()
+			{
+				self.countdownText = self.add.text(self.scale.width / 2 - 100, self.scale.height / 2 - 125, 
+								'3', {fontFamily: 'Pixelify Sans', fontSize: '64px', fill: '#ffffff' });
+				self.countdownText.setScale(4);
+			}
+		});
+		this.time.delayedCall(1000, () => {
+			this.countdownText.setText('2');
+		}, [], this);
+		this.time.delayedCall(2000, () => {
+			this.countdownText.setText('1');
+		}, [], this);
+		this.time.delayedCall(3000, () => {
+			self.countdownText.setScale(2);
+			this.countdownText.setText('Fight!');
+		}, [], this);
+		this.time.delayedCall(4000, () => {
+			this.countdownText.destroy();
+			this.startTimer();
+			this.fighter.unblock();
+			this.fighter2.unblock();
+		}, [], this);
+	}
+
 
 	update (t, dt)
 	{
@@ -142,40 +185,57 @@ export default class Fight extends Phaser.Scene {
 		this.time.addEvent({ delay: 1000 * this.roundTime, 
 			callback: () => {
 				this.time.removeAllEvents();
-				this.gameOver();
+				if (this.fighter.stats.health > this.fighter2.stats.health)
+					this.fighter2.die();
+				else
+					this.fighter.die();
 			}, 
 			callbackScope: this, loop: false
 		});
 	}
 
 	gameOver(player){
-		const pl = player === this.fighter ? 0 : 1;
+		const pl = player === this.fighter ? 1 : 0;
 		this.playerVictories[pl]++;
-		this.round++;
 
-		if (this.round > this.numberRounds)
+		this.fighter.block();
+		this.fighter2.block();
+		if (this.playerVictories[pl] >= this.numberRounds)
 			this.endGame();
 		else{
-			this.scene.restart({numberRounds: this.numberRounds, playerVictories: this.playerVictories, player1: this.fighter1Id, player2: this.fighter2Id});
+			this.time.delayedCall(3000, () => {
+				this.scene.restart({
+					player1: this.fighter1Id, player2: this.fighter2Id,
+					playerVictories: this.playerVictories,
+					player1Dmg: this.player1Dmg, player2Dmg: this.player2Dmg, 
+					numberRounds: this.numberRounds,
+					roundTime: this.roundTime,
+					dmgModifier: 100,
+					hpModifier: this.hpModifier
+				});
+			});
 		}
 	}
 
 	endGame(){
-		this.add.text(400, 300, 'Game Over', { fontSize: '64px', fill: '#ff0000' });
-		
-		if(this.fighter.stats.health > this.fighter2.stats.health)
-			this.add.text(400, 400, 'Player 1 wins', { fontSize: '64px', fill: '#ff0000' });
-		else
-			this.add.text(400, 400, 'Player 2 wins', { fontSize: '64px', fill: '#ff0000' });
-		this.fighter.block();
-		this.fighter2.block();
+		this.time.removeAllEvents();
+		let winner = this.playerVictories[0] >= this.numberRounds ? "Player 1" : "Player 2";
+		this.scene.launch('GameEndPanel', {
+			player1: this.fighter1Id, player2: this.fighter2Id,
+			player1Dmg: this.player1Dmg, player2Dmg: this.player2Dmg, 
+			numberRounds: this.numberRounds,
+			roundTime: this.roundTime,
+			dmgModifier: 100,
+			hpModifier: this.hpModifier,
+			winner: winner
+		});
 	}
 
 	updateHP(fighter){
 		if (fighter === this.fighter)
-			this.hpbar_p1.cantidad = this.fighter.stats.health;
+			this.hpbar_p1.cantidad = 500 * (this.fighter.stats.health / this.fighter.stats.maxHealth);
 		else
-			this.hpbar_p2.cantidad = this.fighter2.stats.health;
+			this.hpbar_p2.cantidad = 500 * (this.fighter2.stats.health / this.fighter2.stats.maxHealth);
 	}
 
 	iniStage(width, height){
@@ -194,10 +254,10 @@ export default class Fight extends Phaser.Scene {
 	iniGUI(){
 
 		this.hpbar_p1 = this.add.graphics();
-		this.hpbar_p1.cantidad = this.fighter.stats.health;
+		this.hpbar_p1.cantidad = 500;
 
 		this.hpbar_p2 = this.add.graphics();
-		this.hpbar_p2.cantidad = this.fighter2.stats.health;
+		this.hpbar_p2.cantidad = 500;
 
 		for (let i = 0; i < this.numberRounds; i++){
 			i < this.playerVictories[0] 
@@ -228,7 +288,8 @@ export default class Fight extends Phaser.Scene {
 	}
 
 	iniFighter2(id){
-		const attackKeysP2 = ['Z', 'X'];		
+		const attackKeysP2 = ['Z', 'X'];	
+			
 		if (id === 'Leaf')
 			this.fighter2 = new LeafFighter(this, P2Coords.x, P2Coords.y, 2, attackKeysP2, this.player1Dmg);
 		else

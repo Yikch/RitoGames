@@ -20,6 +20,8 @@ import gamepadSprite from '../../assets/UI/gamepad.png'
 import start from '../../assets/UI/start.png'
 import LeafFighter from '../fighters/leafFighter';
 
+import ConfigButton from './UI/configButton';
+
 
 export default class FighterChooserScene extends Phaser.Scene {
 	constructor() {
@@ -71,11 +73,25 @@ export default class FighterChooserScene extends Phaser.Scene {
             buttonEnt.setVisible(true);
         }, this);
 
+		this.configSteps = {
+			dmg: [25, 50, 75, 100, 125, 150, 200],
+			hp: [50, 75, 100, 125, 150],
+		}
+		this.configValues = { //the dmg and hp values are the index of the configSteps array
+			dmg: 3,
+			hp: 2,
+			roundNumber: 2,
+			roundTime: 120
+		}
 		this.configOpen = false;
-		this.addButton("Config", this.game.renderer.width-100, 100, ()=>this.configDmgPlayer2(), 4);
-
-		this.configOpen1 = false;
-		this.addButton("Config", 100, 100, ()=>this.configDmgPlayer1(), 4);
+		this.configButton = this.addButton("Config", this.game.renderer.width-100, 100, ()=>this.configUIAction(), 4);
+		this.input.gamepad.on('down', (pad, button, index) => {
+            if (Phaser.Math.Distance.Between(this.configButton.x, this.configButton.y, this.cursorsPlayer1.x, this.cursorsPlayer1.y) < 50) {
+				if (button.index === 0) {
+					this.configUIAction();
+				}
+			}
+        });
 
 		this.iniText();
 		this.iniCursorAndKeys();
@@ -117,7 +133,15 @@ export default class FighterChooserScene extends Phaser.Scene {
 						this.selectFighter(1, 'Leaf');
 					}else if (Phaser.Math.Distance.Between(this.cursorsPlayer1.x, this.cursorsPlayer1.y, this.startButton.x, this.startButton.y) < 50) {
 						if (this.player1Fighter && this.player2Fighter) {
-							this.scene.start('fight', {player1: this.player1Id, player2: this.player2Id, player1Dmg: this.player1Dmg, player2Dmg: this.player2Dmg});
+							this.scene.start('fight', {
+										playerVictories: [0, 0],
+										player1: this.player1Id, player2: this.player2Id, 
+								player1Dmg: this.player1Dmg, player2Dmg: this.player2Dmg, 
+								numberRounds: this.configValues.roundNumber,
+								roundTime: this.configValues.roundTime,
+								dmgModifier:this.configSteps.dmg[this.configValues.dmg],
+								hpModifier: this.configSteps.hp[this.configValues.hp]
+							});
 						}
 					}
 				}
@@ -141,7 +165,15 @@ export default class FighterChooserScene extends Phaser.Scene {
 					}
 					else if (Phaser.Math.Distance.Between(this.cursorsPlayer1.x, this.cursorsPlayer1.y, this.startButton.x, this.startButton.y) < 50) {
 						if (this.player1Fighter && this.player2Fighter) {
-							this.scene.start('fight', {player1: this.player1Id, player2: this.player2Id, player1Dmg: this.player1Dmg, player2Dmg: this.player2Dmg});
+							this.scene.start('fight', {
+										playerVictories: [0, 0],
+										player1: this.player1Id, player2: this.player2Id, 
+								player1Dmg: this.player1Dmg, player2Dmg: this.player2Dmg, 
+								numberRounds: this.configValues.roundNumber,
+								roundTime: this.configValues.roundTime,
+								dmgModifier:this.configSteps.dmg[this.configValues.dmg],
+								hpModifier: this.configSteps.hp[this.configValues.hp]
+							});
 						}
 					}
 				}
@@ -234,10 +266,23 @@ export default class FighterChooserScene extends Phaser.Scene {
 			} else if (Phaser.Math.Distance.Between(this.cursorsPlayer1.x, this.cursorsPlayer1.y, this.fighter2Icon.x, this.fighter2Icon.y) < 50) {
 				this.selectFighter(1, 'Leaf');
 			}
-			if (Phaser.Math.Distance.Between(this.cursorsPlayer1.x, this.cursorsPlayer1.y, this.startButton.x, this.startButton.y) < 50) {
+			else if (Phaser.Math.Distance.Between(this.cursorsPlayer1.x, this.cursorsPlayer1.y, this.startButton.x, this.startButton.y) < 50) {
 				if (this.player1Fighter && this.player2Fighter) {
-					this.scene.start('fight', {player1: this.player1Id, player2: this.player2Id, player1Dmg: this.player1Dmg, player2Dmg: this.player2Dmg});
+					this.scene.start('fight', {
+playerVictories: [0, 0],
+
+								playerVictories: [0, 0],
+								player1: this.player1Id, player2: this.player2Id, 
+								player1Dmg: this.player1Dmg, player2Dmg: this.player2Dmg, 
+								numberRounds: this.configValues.roundNumber,
+								roundTime: this.configValues.roundTime,
+								dmgModifier:this.configSteps.dmg[this.configValues.dmg],
+								hpModifier: this.configSteps.hp[this.configValues.hp]
+							});
 				}
+			}
+			else if (Phaser.Math.Distance.Between(this.configButton.x, this.configButton.y, this.cursorsPlayer1.x, this.cursorsPlayer1.y) < 50) {
+				this.configUIAction();
 			}
 		});
 		this.input.keyboard.on('keydown-Z', () => {
@@ -246,10 +291,21 @@ export default class FighterChooserScene extends Phaser.Scene {
 			} else if (Phaser.Math.Distance.Between(this.cursorsPlayer2.x, this.cursorsPlayer2.y, this.fighter2Icon.x, this.fighter2Icon.y) < 50) {
 				this.selectFighter(2, 'Leaf');
 			}
-			if (Phaser.Math.Distance.Between(this.cursorsPlayer2.x, this.cursorsPlayer2.y, this.startButton.x, this.startButton.y) < 50) {
+			else if (Phaser.Math.Distance.Between(this.cursorsPlayer2.x, this.cursorsPlayer2.y, this.startButton.x, this.startButton.y) < 50) {
 				if (this.player1Fighter && this.player2Fighter) {
-					this.scene.start('fight', {player1: this.player1Id, player2: this.player2Id, player1Dmg: this.player1Dmg, player2Dmg: this.player2Dmg});
+					this.scene.start('fight', {
+								playerVictories: [0, 0],
+								player1: this.player1Id, player2: this.player2Id, 
+								player1Dmg: this.player1Dmg, player2Dmg: this.player2Dmg, 
+								numberRounds: this.configValues.roundNumber,
+								roundTime: this.configValues.roundTime,
+								dmgModifier:this.configSteps.dmg[this.configValues.dmg],
+								hpModifier: this.configSteps.hp[this.configValues.hp]
+							});
 				}
+			}
+			else if (Phaser.Math.Distance.Between(this.configButton.x, this.configButton.y, this.cursorsPlayer1.x, this.cursorsPlayer1.y) < 50) {
+				this.configUIAction();
 			}
 		});
 		
@@ -301,142 +357,76 @@ export default class FighterChooserScene extends Phaser.Scene {
 		return button;
     }
 
-	configDmgPlayer1(){
-		if(this.configOpen1){
-			
-			this.box_1.destroy();
-			this.light_1.destroy();
-			this.lightDmg_1.destroy();
-			this.lightPlus1_1.destroy();
-			this.lightMinus1_1.destroy();
-
-			this.hard_1.destroy();
-			this.hardDmg_1.destroy();
-			this.hardPlus1_1.destroy();
-			this.hardMinus1_1.destroy();
-
-			this.combo1_1.destroy();
-			this.combo1Dmg_1.destroy();
-			this.combo1Plus1_1.destroy();
-			this.combo1Minus1_1.destroy();
-
-			this.combo2_1.destroy();
-			this.combo2Dmg_1.destroy();
-			this.combo2Plus1_1.destroy();
-			this.combo2Minus1_1.destroy();
-
-			this.combo3_1.destroy();
-			this.combo3Dmg_1.destroy();
-			this.combo3Plus1_1.destroy();
-			this.combo3Minus1_1.destroy();
-
-			this.configOpen1 = false;
-		}
-		else{
-			this.box_1 = this.add.image(-120, 10, 'boxFrame', 1).setDisplaySize(900, 820).setOrigin(0);
-
-			this.light_1 = this.add.text(120, 270, 'LightAtk:', { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
-			this.lightDmg_1 = this.add.text(270, 270, this.player1Dmg[0], { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
-			this.lightPlus1_1 = this.addButton("Plus", 380, 280, ()=>this.updateDmgPlayer1(this.lightDmg_1, 0, 1), 2.5);
-			this.lightMinus1_1 = this.addButton("Minus", 480, 280, ()=>this.updateDmgPlayer1(this.lightDmg_1, 0, -1), 2.5);
-
-			this.hard_1 = this.add.text(120, 320, 'HardAtk:  ', { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
-			this.hardDmg_1 = this.add.text(270, 320, this.player1Dmg[1], { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
-			this.hardPlus1_1 = this.addButton("Plus", 380, 330, ()=>this.updateDmgPlayer1(this.hardDmg_1, 1, 1), 2.5);
-			this.hardMinus1_1 = this.addButton("Minus", 480, 330, ()=>this.updateDmgPlayer1(this.hardDmg_1, 1, -1), 2.5);
-
-			this.combo1_1 = this.add.text(120, 370, 'Combo1:  ', { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
-			this.combo1Dmg_1 = this.add.text(270, 370, this.player1Dmg[2], { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
-			this.combo1Plus1_1 = this.addButton("Plus", 380, 380, ()=>this.updateDmgPlayer1(this.combo1Dmg_1, 2, 1), 2.5);
-			this.combo1Minus1_1 = this.addButton("Minus", 480, 380, ()=>this.updateDmgPlayer1(this.combo1Dmg_1, 2, -1), 2.5);
-
-			this.combo2_1 = this.add.text(120, 420, 'Combo2:  ', { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
-			this.combo2Dmg_1 = this.add.text(270, 420, this.player1Dmg[3], { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
-			this.combo2Plus1_1 = this.addButton("Plus", 380, 430, ()=>this.updateDmgPlayer1(this.combo2Dmg_1, 3, 1), 2.5);
-			this.combo2Minus1_1 = this.addButton("Minus", 480, 430, ()=>this.updateDmgPlayer1(this.combo2Dmg_1, 3, -1), 2.5);
-
-			this.combo3_1 = this.add.text(120, 470, 'Combo3:  ', { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
-			this.combo3Dmg_1 = this.add.text(270, 470, this.player1Dmg[4], { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
-			this.combo3Plus1_1 = this.addButton("Plus", 380, 480, ()=>this.updateDmgPlayer1(this.combo3Dmg_1, 4, 1), 2.5);
-			this.combo3Minus1_1 = this.addButton("Minus", 480, 480, ()=>this.updateDmgPlayer1(this.combo3Dmg_1, 4, -1), 2.5);
-
-			this.configOpen1 = true;
-		}
-	}
-
-	
-
-	configDmgPlayer2(){
+	configUIAction(){
 		if(this.configOpen){
-			
-			this.box.destroy();
-			this.light.destroy();
-			this.lightDmg.destroy();
-			this.lightPlus1.destroy();
-			this.lightMinus1.destroy();
-
-			this.hard.destroy();
-			this.hardDmg.destroy();
-			this.hardPlus1.destroy();
-			this.hardMinus1.destroy();
-
-			this.combo1.destroy();
-			this.combo1Dmg.destroy();
-			this.combo1Plus1.destroy();
-			this.combo1Minus1.destroy();
-
-			this.combo2.destroy();
-			this.combo2Dmg.destroy();
-			this.combo2Plus1.destroy();
-			this.combo2Minus1.destroy();
-
-			this.combo3.destroy();
-			this.combo3Dmg.destroy();
-			this.combo3Plus1.destroy();
-			this.combo3Minus1.destroy();
-
+			this.box.destroy()
+			this.dmgModifier.destroy()
+			this.dmgValue.destroy()
+			this.dmgPlus.destroy()
+			this.dmgMinus.destroy()
+			this.HPModifier.destroy()
+			this.HPValue.destroy()
+			this.HPPlus.destroy()
+			this.HPMinus.destroy()
+			this.roundNumberModifier.destroy()
+			this.roundNumberValue.destroy()
+			this.roundNumberPlus.destroy()
+			this.roundNumberMinus.destroy()
+			this.roundTimeModifier.destroy()
+			this.roundTimeValue.destroy()
+			this.roundTimePlus.destroy()
+			this.roundTimeMinus.destroy()
 			this.configOpen = false;
 		}
 		else{
-			this.box = this.add.image(this.game.renderer.width-750, 10, 'boxFrame', 1).setDisplaySize(900, 820).setOrigin(0);
+			this.box = this.add.image(this.game.renderer.width-750, 10, 'boxFrame', 1).setDisplaySize(900, 620).setOrigin(0);
+			this.dmgModifier = this.add.text(this.game.renderer.width-500, 230, 'Dmg :', { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
+			this.dmgValue = this.add.text(this.game.renderer.width-350, 230, this.configSteps.dmg[this.configValues.dmg] + "%", { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
+			this.dmgPlus = new ConfigButton(this, this.game.renderer.width-125, 245, "+", ()=>this.updateDmg(this.dmgValue, 1), 2);
+			this.dmgMinus = new ConfigButton(this, this.game.renderer.width-215, 245,"-", ()=>this.updateDmg(this.dmgValue, -1), 2);
 
-			this.light = this.add.text(this.game.renderer.width-500, 270, 'LightAtk:', { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
-			this.lightDmg = this.add.text(this.game.renderer.width-350, 270, this.player2Dmg[0], { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
-			this.lightPlus1 = this.addButton("Plus", this.game.renderer.width-260, 280, ()=>this.updateDmgPlayer2(this.lightDmg, 0, 1), 2.5);
-			this.lightMinus1 = this.addButton("Minus", this.game.renderer.width-160, 280, ()=>this.updateDmgPlayer2(this.lightDmg, 0, -1), 2.5);
+			this.HPModifier = this.add.text(this.game.renderer.width-500, 280, 'HP :', { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
+			this.HPValue = this.add.text(this.game.renderer.width-350, 280, this.configSteps.hp[this.configValues.hp] + "%", { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
+			this.HPPlus = new ConfigButton(this, this.game.renderer.width-125, 295, "+", ()=>this.updateHP(this.HPValue, 1), 2);
+			this.HPMinus = new ConfigButton(this, this.game.renderer.width-215, 295,"-", ()=>this.updateHP(this.HPValue, -1), 2);
 
-			this.hard = this.add.text(this.game.renderer.width-500, 320, 'HardAtk:  ', { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
-			this.hardDmg = this.add.text(this.game.renderer.width-350, 320, this.player2Dmg[1], { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
-			this.hardPlus1 = this.addButton("Plus", this.game.renderer.width-260, 330, ()=>this.updateDmgPlayer2(this.hardDmg, 1, 1), 2.5);
-			this.hardMinus1 = this.addButton("Minus", this.game.renderer.width-160, 330, ()=>this.updateDmgPlayer2(this.hardDmg, 1, -1), 2.5);
+			this.roundNumberModifier = this.add.text(this.game.renderer.width-500, 330, 'Round Nº:', { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
+			this.roundNumberValue = this.add.text(this.game.renderer.width-320, 330, this.configValues.roundNumber, { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
+			this.roundNumberPlus = new ConfigButton(this, this.game.renderer.width-125, 345, "+", ()=>this.updateroundNumber(this.roundNumberValue, 1), 2);
+			this.roundNumberMinus = new ConfigButton(this, this.game.renderer.width-215, 345,"-", ()=>this.updateroundNumber(this.roundNumberValue, -1), 2);
 
-			this.combo1 = this.add.text(this.game.renderer.width-500, 370, 'Combo1:  ', { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
-			this.combo1Dmg = this.add.text(this.game.renderer.width-350, 370, this.player2Dmg[2], { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
-			this.combo1Plus1 = this.addButton("Plus", this.game.renderer.width-260, 380, ()=>this.updateDmgPlayer2(this.combo1Dmg, 2, 1), 2.5);
-			this.combo1Minus1 = this.addButton("Minus", this.game.renderer.width-160, 380, ()=>this.updateDmgPlayer2(this.combo1Dmg, 2, -1), 2.5);
-
-			this.combo2 = this.add.text(this.game.renderer.width-500, 420, 'Combo2:  ', { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
-			this.combo2Dmg = this.add.text(this.game.renderer.width-350, 420, this.player2Dmg[3], { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
-			this.combo2Plus1 = this.addButton("Plus", this.game.renderer.width-260, 430, ()=>this.updateDmgPlayer2(this.combo2Dmg, 3, 1), 2.5);
-			this.combo2Minus1 = this.addButton("Minus", this.game.renderer.width-160, 430, ()=>this.updateDmgPlayer2(this.combo2Dmg, 3, -1), 2.5);
-
-			this.combo3 = this.add.text(this.game.renderer.width-500, 470, 'Combo3:  ', { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
-			this.combo3Dmg = this.add.text(this.game.renderer.width-350, 470, this.player2Dmg[4], { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
-			this.combo3Plus1 = this.addButton("Plus", this.game.renderer.width-260, 480, ()=>this.updateDmgPlayer2(this.combo3Dmg, 4, 1), 2.5);
-			this.combo3Minus1 = this.addButton("Minus", this.game.renderer.width-160, 480, ()=>this.updateDmgPlayer2(this.combo3Dmg, 4, -1), 2.5);
+			this.roundTimeModifier = this.add.text(this.game.renderer.width-500, 370, 'Round Time :', { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
+			this.roundTimeValue = this.add.text(this.game.renderer.width-330, 370, this.configValues.roundTime, { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#000000' })
+			this.roundTimePlus = new ConfigButton(this, this.game.renderer.width-125, 385, "+", ()=>this.updateroundTime(this.roundTimeValue, 10), 2);
+			this.roundTimeMinus = new ConfigButton(this, this.game.renderer.width-215, 385,"-", ()=>this.updateroundTime(this.roundTimeValue, -10), 2);
 
 			this.configOpen = true;
 		}
 	}
 
-	updateDmgPlayer1(text, playerDmgIndex, plusOrMinus){
-		this.player1Dmg[playerDmgIndex] += plusOrMinus;
-		text.setText(this.player1Dmg[playerDmgIndex]);
+	updateroundTime(text, number){
+		this.configValues.roundTime += number;
+		this.configValues.roundTime = Phaser.Math.Clamp(this.configValues.roundTime, 10, 300);
+		text.setText(this.configValues.roundTime);
 	}
 
-	updateDmgPlayer2(text, playerDmgIndex, plusOrMinus){
-		this.player2Dmg[playerDmgIndex] += plusOrMinus;
-		text.setText(this.player2Dmg[playerDmgIndex]);
+	updateroundNumber(text, number){
+		this.configValues.roundNumber += number;
+		this.configValues.roundNumber = Phaser.Math.Clamp(this.configValues.roundNumber, 1, 10);
+		text.setText(this.configValues.roundNumber);
 	}
+
+	updateHP(text, index){
+		this.configValues.hp += index;
+		this.configValues.hp = Phaser.Math.Clamp(this.configValues.hp, 0, this.configSteps.hp.length-1);
+		text.setText(this.configSteps.hp[this.configValues.hp] + "%");
+	}
+
+	updateDmg(text, index){
+		this.configValues.dmg += index;
+		this.configValues.dmg = Phaser.Math.Clamp(this.configValues.dmg, 0, this.configSteps.dmg.length-1);
+		text.setText(this.configSteps.dmg[this.configValues.dmg] + "%");
+	}
+
 }
 

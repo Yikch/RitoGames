@@ -137,6 +137,11 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		
 	}
 
+	die(){
+		this.anims.play(this.id + "death");
+		this.scene.gameOver(this);
+	}
+
 	check_collisions(){
 		if(this.is_defending() && !this.is_overlapping()){
 			this.state = this.STATES.recovering;
@@ -172,8 +177,8 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 				}
 				this.scene.updateHP(this);
 				if(this.stats.health <= 0){
-					this.scene.gameOver(this);
 					this.anims.chain(this.id + "death");
+					this.scene.gameOver(this);
 				}
 			}
 		}
@@ -225,35 +230,6 @@ export default class Fighter extends Phaser.Physics.Arcade.Sprite {
 		this.state = this.STATES.atacking;
 		this.anims.startAnimation(this.id + id + "_start");
 		this.anims.chain(this.id + id + "_active").chain(this.id + id + "_recovery");
-	}
-
-	// FUNCION EN DESUSO, hay que decidir si usarlo (actualmente se usa el StartAnimation de preupdate para animar el takeHit)
-	// punshing representa la velocidad de push causado por un combo o ataque que pueda generar un push, por defecto es 0
-	manageTakeHit(pushing = 0){
-		if(this.golpeado) return false;
-		if(this.debug)
-			console.log("Take Hit from Fighter" + this.id);
-		this.golpeado = true;
-		this.blocked = true;
-
-		this.anims.chain();
-		this.anims.stop();
-		if(pushing === 0){
-			this.body.setVelocityX(0);
-		}
-		else{
-			this.body.setVelocityX(this.facing === 'left' ? pushing : -pushing);
-		}
-		this.state = this.STATES.takeHit;
-		this.playAnimation(this.id + this.STATES.takeHit);
-		this.on('animationcomplete', (animation, frame) => {
-			if (animation.key === this.id + this.STATES.takeHit){
-				this.golpeado = false;
-				this.blocked = false;
-				this.body.setVelocityX(0);
-				this.updateAnimation(this.STATES.idle, this.state);
-			}
-		});
 	}
 
 	load_animation_events(){
