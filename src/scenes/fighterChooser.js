@@ -100,6 +100,10 @@ export default class FighterChooserScene extends Phaser.Scene {
 		this.iniIcons();
 	}
 
+	init(data) {
+		this.create();
+	}
+
 	update() {
 		// Keyboard input
 		if (this.player1Keys.up.isDown && this.cursorsPlayer1.y > 0) { this.cursorsPlayer1.y -= 10; }
