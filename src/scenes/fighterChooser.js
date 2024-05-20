@@ -100,9 +100,6 @@ export default class FighterChooserScene extends Phaser.Scene {
 		this.iniIcons();
 	}
 
-	init(data) {
-		this.create();
-	}
 
 	update() {
 		// Keyboard input
@@ -138,8 +135,8 @@ export default class FighterChooserScene extends Phaser.Scene {
 					}else if (Phaser.Math.Distance.Between(this.cursorsPlayer1.x, this.cursorsPlayer1.y, this.startButton.x, this.startButton.y) < 50) {
 						if (this.player1Fighter && this.player2Fighter) {
 							this.scene.start('fight', {
-										playerVictories: [0, 0],
-										player1: this.player1Id, player2: this.player2Id, 
+								playerVictories: [0, 0],
+								player1: this.player1Id, player2: this.player2Id, 
 								player1Dmg: this.player1Dmg, player2Dmg: this.player2Dmg, 
 								numberRounds: this.configValues.roundNumber,
 								roundTime: this.configValues.roundTime,
@@ -186,15 +183,26 @@ export default class FighterChooserScene extends Phaser.Scene {
 	}
 
 	iniText(){
-		let self = this; // Para usarlo en active
+		this.timer = this.add.text(500, 56, '')
+		this.player1Tag = this.add.text(315, 850, '');
+		this.player1Advice = this.add.text(290, 700, '');
+		this.player2Tag = this.add.text(1330, 850, '');
+		this.player2Advice = this.add.text(1300, 700, '');
+		this.gamepadText = this.add.text(600, 900, '');
+		let self = this;
 		WebFont.load({
 			google: {
 				families: [ 'Pixelify Sans' ]
 			},
-			active: function () // se llama a esta función cuando está cargada
+			active: function ()
 			{
-				self.timer = self.add.text(500, 56, 'Choose your fighter',
-								{ fontFamily: 'Pixelify Sans',fontSize: 80, color: '#ff0000' })
+				self.timer.destroy();
+				self.player1Tag.destroy();
+				self.player1Advice.destroy();
+				self.player2Tag.destroy();
+				self.player2Advice.destroy();
+				self.gamepadText.destroy();
+				self.timer = self.add.text(500, 56, 'Choose your fighter',{ fontFamily: 'Pixelify Sans',fontSize: 80, color: '#ff0000' })
 				self.player1Tag = self.add.text(315, 850, 'Player 1', { fontFamily: 'Pixelify Sans',fontSize: 40, color: '#ff0000' });
 				self.player1Advice = self.add.text(290, 700, '      Press Q to \nselect a fighter!', { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#ffffff' });
 				self.player2Tag = self.add.text(1330, 850, 'Player 2', { fontFamily: 'Pixelify Sans',fontSize: 40, color: '#0000FF' });
@@ -202,7 +210,6 @@ export default class FighterChooserScene extends Phaser.Scene {
 				self.gamepadText = self.add.text(600, 900, 'PRESS ANY BUTTON TO CONNECT A GAMEPAD', { fontFamily: 'Pixelify Sans',fontSize: 30, color: '#ffffff' });
 			}
 		});
-
 	}
 
 	iniCursorAndKeys(){
