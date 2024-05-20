@@ -25,7 +25,7 @@ export default class Trap extends Phaser.GameObjects.Sprite {
 		this.fighter = fighter;
 		this.prefixThrow = prefixThrow;
 		this.prefixDetonate = prefixDetonate;
-		this.name = "combo2";
+		
 	}
 
 	detonate() {
@@ -46,6 +46,7 @@ export default class Trap extends Phaser.GameObjects.Sprite {
 					this.y + this.height - 10, 
 					350, 110
 				);
+				this.hb.name = "combo2";
 				this.scene.physics.add.existing(this.hb, true);
 				this.hb.body.debugBodyColor = 0x00ff00;
 				this.scene.addColision(this.hb, this.fighter);
