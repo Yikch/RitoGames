@@ -152,10 +152,10 @@ export default class FighterChooserScene extends Phaser.Scene {
 				if(!this.player2Fighter)
 					this.player2Advice.text = '      Press A to \nselect a fighter!';
 				const stick = pad2.leftStick;
-				if (stick.x < -0.1 && this.cursorsPlayer1.x > 0) { this.cursorsPlayer1.x -= 10; }
-				if (stick.x > 0.1 && this.cursorsPlayer1.x < this.screenWidth - 10) { this.cursorsPlayer1.x += 10; }
-				if (stick.y < -0.1 && this.cursorsPlayer1.y > 0) { this.cursorsPlayer1.y -= 10; }
-				if (stick.y > 0.1 && this.cursorsPlayer1.y < this.screenHeight - 10) { this.cursorsPlayer1.y += 10; }
+				if (stick.x < -0.1 && this.cursorsPlayer2.x > 0) { this.cursorsPlayer2.x -= 10; }
+				if (stick.x > 0.1 && this.cursorsPlayer2.x < this.screenWidth - 10) { this.cursorsPlayer2.x += 10; }
+				if (stick.y < -0.1 && this.cursorsPlayer2.y > 0) { this.cursorsPlayer2.y -= 10; }
+				if (stick.y > 0.1 && this.cursorsPlayer2.y < this.screenHeight - 10) { this.cursorsPlayer2.y += 10; }
 				//check for button presses
 				if (pad2.A) {
 					if (Phaser.Math.Distance.Between(this.cursorsPlayer2.x, this.cursorsPlayer2.y, this.fighter1Icon.x, this.fighter1Icon.y) < 50) {
@@ -163,11 +163,11 @@ export default class FighterChooserScene extends Phaser.Scene {
 					} else if (Phaser.Math.Distance.Between(this.cursorsPlayer2.x, this.cursorsPlayer2.y, this.fighter2Icon.x, this.fighter2Icon.y) < 50) {
 						this.selectFighter(2, 'Leaf');
 					}
-					else if (Phaser.Math.Distance.Between(this.cursorsPlayer1.x, this.cursorsPlayer1.y, this.startButton.x, this.startButton.y) < 50) {
+					else if (Phaser.Math.Distance.Between(this.cursorsPlayer2.x, this.cursorsPlayer2.y, this.startButton.x, this.startButton.y) < 50) {
 						if (this.player1Fighter && this.player2Fighter) {
 							this.scene.start('fight', {
-										playerVictories: [0, 0],
-										player1: this.player1Id, player2: this.player2Id, 
+								playerVictories: [0, 0],
+								player1: this.player1Id, player2: this.player2Id, 
 								player1Dmg: this.player1Dmg, player2Dmg: this.player2Dmg, 
 								numberRounds: this.configValues.roundNumber,
 								roundTime: this.configValues.roundTime,
@@ -269,8 +269,6 @@ export default class FighterChooserScene extends Phaser.Scene {
 			else if (Phaser.Math.Distance.Between(this.cursorsPlayer1.x, this.cursorsPlayer1.y, this.startButton.x, this.startButton.y) < 50) {
 				if (this.player1Fighter && this.player2Fighter) {
 					this.scene.start('fight', {
-playerVictories: [0, 0],
-
 								playerVictories: [0, 0],
 								player1: this.player1Id, player2: this.player2Id, 
 								player1Dmg: this.player1Dmg, player2Dmg: this.player2Dmg, 
